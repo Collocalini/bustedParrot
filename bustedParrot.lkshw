@@ -1,0 +1,14 @@
+Version of workspace file format:
+               2
+Time of storage:
+               "Fri Feb  6 09:50:09 SAMT 2015"
+Name of the workspace:
+               "bustedParrot"
+File paths of contained packages:
+               ["bustedParrot/bustedParrot.cabal"]
+Maybe file path of an active package:
+               Just "bustedParrot/bustedParrot.cabal"
+Maybe name of an active executable:
+               Nothing
+Version Control System configurations for packages:
+               fromList []

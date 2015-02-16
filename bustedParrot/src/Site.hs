@@ -1,0 +1,83 @@
+{-# LANGUAGE OverloadedStrings #-}
+
+------------------------------------------------------------------------------
+-- | This module is where all the routes and handlers are defined for your
+-- site. The 'app' function is the initializer that combines everything
+-- together and is exported by this module.
+module Site
+  ( app
+  ) where
+
+------------------------------------------------------------------------------
+import           Data.ByteString (ByteString)
+import qualified Data.ByteString.Char8 as B
+import           Snap.Core
+import           Snap.Snaplet
+import           Snap.Snaplet.Heist
+import           Snap.Snaplet.Session.Backends.CookieSession
+import           Snap.Util.FileServe
+------------------------------------------------------------------------------
+import           Application
+import           Heist
+import qualified Heist.Compiled as C
+import           Data.Monoid
+import           Control.Monad.State
+import           Control.Applicative
+
+import qualified Main_page as MP
+import qualified Post as P
+import qualified Archive as A
+------------------------------------------------------------------------------
+-- | The application's routes.
+routes :: State MP.Routes [(ByteString, Handler App App ())]
+routes = do
+    (MP.Routes {MP.postsT=postsT}) <- get
+    return $ [ ("", MP.main_pageT_Handler postsT)
+              ,("archive.html", A.archive_Handler postsT)
+              ,("static", serveDirectory "static")
+             ] ++ generate_postN_response postsT
+
+
+
+generate_postN_response :: [MP.PostT] -> [(ByteString, Handler App App ())]
+generate_postN_response p = map (\x@(MP.PostT {MP.number=n}) ->
+    (B.pack $ "post" ++ (show n) ++ ".html",
+     P.post_Handler x))  p
+
+
+
+
+
+
+{-- ================================================================================================
+================================================================================================ --}
+{-
+main_css_Handler :: Snap ()
+main_css_Handler = do
+    index <- liftIO $ readFile "./static/select_folder.html"
+    writeBS $ B.fromString index
+-----------------------------------------------------------------------------------------------------
+-}
+
+------------------------------------------------------------------------------
+-- | Compose all the compiled splices imported from the handler modules
+allCompiledSplices :: Monad n => Splices (C.Splice n)
+allCompiledSplices = mconcat []
+
+------------------------------------------------------------------------------
+-- | The application initializer.
+app :: State MP.Routes (SnapletInit App App)
+app = do
+    r<- routes
+    return (makeSnaplet "app" "A snap demo application." Nothing $ do
+    h <- nestSnaplet "" heist $ heistInit "templates"
+    addConfig h $ mempty { hcCompiledSplices = allCompiledSplices }
+    s <- nestSnaplet "sess" sess $
+           initCookieSessionManager "site_key.txt" "sess" (Just 3600)
+    addRoutes r
+    return $ App h s)
+
+--------------------------------------------------------------------------------
+-- | Our glorious index page
+--indexHandler :: Handler App App ()
+--indexHandler = render "index"
