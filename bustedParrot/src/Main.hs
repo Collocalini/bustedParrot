@@ -27,6 +27,7 @@ import           Site
 import           Control.Monad.State
 
 import qualified Main_page as MP
+import qualified Page as Pa
 
 
 #ifdef DEVELOPMENT
@@ -113,7 +114,8 @@ getConf = commandLineAppConfig defaultConfig
 getActions :: Config Snap AppConfig -> IO (Snap (), IO ())
 getActions conf = do
     p<-MP.postsT_h_io
+    pa<-Pa.pagesT_h_io
     (msgs, site, cleanup) <- runSnaplet
-        (appEnvironment =<< getOther conf) $ evalState app (MP.Routes {MP.postsT = p})
+        (appEnvironment =<< getOther conf) $ evalState app (MP.Routes {MP.postsT = p, MP.pagesT=pa})
     hPutStrLn stderr $ T.unpack msgs
     return (site, cleanup)

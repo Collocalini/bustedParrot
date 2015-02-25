@@ -50,6 +50,6 @@ executable bustedParrot
     main-is: Main.hs
     buildable: True
     hs-source-dirs: src src/handlers
-    other-modules: Archive Main_page Post
+    other-modules: Archive Main_page Page Post
     ghc-options: -fwarn-unused-imports
  

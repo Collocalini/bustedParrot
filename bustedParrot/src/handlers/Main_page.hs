@@ -22,6 +22,7 @@ import System.Directory
 import Data.List
 import Data.Monoid
 import Control.Monad
+import qualified Page as Pa
 ------------------------------------------------------------------------------
 import           Application
 --------------------------------------------------------------------------------
@@ -33,7 +34,8 @@ data PostT = PostT {
 
 
 data Routes = Routes {
-postsT :: [PostT]
+ postsT :: [PostT]
+,pagesT :: [Pa.PageT]
 }
 
 
