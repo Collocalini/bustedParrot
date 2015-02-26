@@ -78,7 +78,7 @@ main_pageT_Handler p = renderWithSplices "main_page/main_posts"
    (splicesFrom_main_postsT_h) $ head p
    ),
    ("posts_h" ##
-   (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) $ take 10 $ tail p
+   (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) $ take 9 $ tail p
    )]
    )
 
