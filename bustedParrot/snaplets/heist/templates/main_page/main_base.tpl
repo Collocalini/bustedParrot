@@ -14,6 +14,9 @@
 
 <apply template="main_top"/>
 
+<apply template="main_nailed_stuff"/>
+
+
 <apply-content/>
 
 <apply template="main_bottom"/>

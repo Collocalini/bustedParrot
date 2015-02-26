@@ -53,6 +53,7 @@ pagesT_h_io = do
 
      s2p :: String -> IO PageT
      s2p s = do
+       --putStrLn $ "pages/page" ++ s ++ ".html"
        (Right s'@(DocumentFile {dfDoc=(TT.HtmlDocument {TT.docContent=docContent})})) <-
                                                         getDoc $ "pages/page" ++ s ++ ".html"
        return $ PageT {pageT=docContent, name=s}
@@ -69,11 +70,11 @@ pagesT_h_io = do
 page_Handler :: PageT -> Handler App App ()
 page_Handler p = renderWithSplices "post/post_base"
    (
-   splicesFrom_post_h p
+   splicesFrom_page_h p
    )
 
 
 
-splicesFrom_post_h :: Monad n => PageT -> Splices (I.Splice n)
-splicesFrom_post_h t = do
+splicesFrom_page_h :: Monad n => PageT -> Splices (I.Splice n)
+splicesFrom_page_h t = do
   "post_h"  ## return (pageT t)

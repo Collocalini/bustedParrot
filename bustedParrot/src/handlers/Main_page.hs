@@ -105,7 +105,7 @@ splicesFrom_main_postsT_h t = do
     ,"main_post_h_view_full_link"  ## I.textSplice $ T.pack $ ""
     ]-}
   step1 _ =
-    ["main_post_h_view_full_caption"  ## I.textSplice "Читать дальше"
+    ["main_post_h_view_full_caption"  ## I.textSplice "Читать дальше / Read more"
     ,"main_post_h_view_full_style"  ## I.textSplice ""
     ,"main_post_h_view_full_link"  ## I.textSplice $ T.pack $ "post" ++ show (number t) ++ ".html"    ]
 

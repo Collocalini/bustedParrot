@@ -36,8 +36,8 @@ routes = do
     return $ [ ("", MP.main_pageT_Handler postsT)
               ,("archive.html", A.archive_Handler postsT)
               ,("static", serveDirectory "static")
-             ] ++ generate_postN_response postsT
-               ++ generate_pageWTWR_response pagesT
+             ] ++ (generate_postN_response postsT)
+               ++ (generate_pageWTWR_response pagesT)
 
 
 
