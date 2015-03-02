@@ -8,7 +8,7 @@
 </span>
 
 <span class="top_r">
-  <a href="static/contact_me.html" align="right">h-o-k-u-m@yandex.ru</a>
+  <a href="static/contact_me.html" align="right">Связаться со мной / Contact me</a>
 </span>
 
 </div>
