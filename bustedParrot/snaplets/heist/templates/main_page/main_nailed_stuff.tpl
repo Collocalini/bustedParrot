@@ -4,14 +4,25 @@
 
 <div class="nailed_stuff_h">
 
-<div style="padding: 0%;">
-<pre>
-<a href="post1.html" >Грубая модель аналеммы / A crude model of analemma</a>
-<a href="post6.html" >Субтитры для How to train your dragon 2</a>
-<a href="post9.html" >Субтитры для "Мой маленький пони", серии 1,2,3,11</a>
-</pre>
-</div>
+	<div style="padding: 0%;">
+	<pre>
+		<a href="post1.html" >Грубая модель аналеммы / A crude model of analemma</a>
+		<a href="post6.html" >Субтитры для How to train your dragon 2</a>
+		<a href="post9.html" >Субтитры для "Мой маленький пони", серии 1,2,3,11</a>
+	</pre>
+	</div>
 
 </div>
-  
+
+
+
+
+<div style="padding: 1%;" align="center">
+<img src="https://upload.wikimedia.org/wikipedia/en/7/7a/RepoGeneticOperaOfficialPoster.jpg" style="width:auto;height:10%;" align="middle">
+
+<span style="font-size: 1.4em;">
+Дурбазол дня, желающие могут причаститься в обмене.
+</span>
+</div>
+
 </div>
