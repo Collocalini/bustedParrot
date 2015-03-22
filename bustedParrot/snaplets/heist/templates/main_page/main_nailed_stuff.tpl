@@ -14,15 +14,4 @@
 
 </div>
 
-
-
-
-<div style="padding: 1%;" align="center">
-<img src="https://upload.wikimedia.org/wikipedia/en/7/7a/RepoGeneticOperaOfficialPoster.jpg" style="width:auto;height:10%;" align="middle">
-
-<span style="font-size: 1.4em;">
-Дурбазол дня, желающие могут причаститься в обмене.
-</span>
-</div>
-
 </div>
