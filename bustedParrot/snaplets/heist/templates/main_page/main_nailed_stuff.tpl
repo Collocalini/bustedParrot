@@ -14,4 +14,7 @@
 
 </div>
 
+<p align='center'> <a href='https://upload.wikimedia.org/wikipedia/commons/d/d5/Beriev_Be-200ChS_AN2301895.jpg'> <img src='https://upload.wikimedia.org/wikipedia/commons/d/d5/Beriev_Be-200ChS_AN2301895.jpg' style='width:25%;height:auto;' /></a></p> <div align='center'>Картинка дня (не моя) / Picture of the day (not mine)</div>
+
+
 </div>
