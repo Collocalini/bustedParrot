@@ -4,7 +4,7 @@
 
 <div class="nailed_stuff_h">
 
-<a href='post24.html'> <img src='https://upload.wikimedia.org/wikipedia/commons/d/d5/Beriev_Be-200ChS_AN2301895.jpg' style='width:12.5%;height:auto;' /></a>
+<a href='post24.html'> <img src='static/Beriev_Be-200ChS_AN2301895.jpg' style='width:12.5%;height:auto;' /></a>
 
 	<div style="display: inline-block;padding: 0%;">
 	<pre>
