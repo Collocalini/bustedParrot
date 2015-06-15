@@ -4,7 +4,7 @@
 
 <div class="nailed_stuff_h">
 
-<a href='post24.html'> <img src='static/Beriev_Be-200ChS_AN2301895.jpg' style='width:12.5%;height:auto;' /></a>
+<a href='post24.html'> <img src='static/be200_29-05-2015.jpg' style='width:12.5%;height:auto;' /></a>
 
 	<div style="display: inline-block;padding: 0%;">
 	<pre>
@@ -18,5 +18,5 @@
 
 </div>
 </div>
-<a href='post25.html'> <img src='static/shaman_site_hat_making-of.png' style='width:100%;height:auto;' /></a>
+<p align="center"><a href='post26.html'> <img src='static/doodle_jets_glimpse.jpg' style='width:75%;height:auto;' /></a></p>
 
