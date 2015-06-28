@@ -18,5 +18,5 @@
 
 </div>
 </div>
-<p align="center"><a href='post26.html'> <img src='static/doodle_jets_glimpse.jpg' style='width:75%;height:auto;' /></a></p>
+<p align="center"><a href='post29.html'> <img src='static/pony_implicit_to_site_top.jpg' style='width:100%;height:auto;' /></a></p>
 
