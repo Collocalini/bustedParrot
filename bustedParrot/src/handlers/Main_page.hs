@@ -7,7 +7,7 @@ module Main_page
     main_pageT_Handler
    ,splicesFrom_main_postsT_h
    ,postsT_h_io
-   ,Routes(..)
+  -- ,Routes(..)
    ,PostT(..)
   ) where
 
@@ -33,10 +33,7 @@ data PostT = PostT {
 }
 
 
-data Routes = Routes {
- postsT :: [PostT]
-,pagesT :: [Pa.PageT]
-}
+
 
 
 

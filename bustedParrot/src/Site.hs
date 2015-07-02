@@ -6,6 +6,7 @@
 -- together and is exported by this module.
 module Site
   ( app
+   ,Routes(..)
   ) where
 
 ------------------------------------------------------------------------------
@@ -28,17 +29,28 @@ import qualified Main_page as MP
 import qualified Post as P
 import qualified Page as Pa
 import qualified Archive as A
+import qualified Dipper as D
 ------------------------------------------------------------------------------
+
+
+data Routes = Routes {
+ postsT :: [MP.PostT]
+,pagesT :: [Pa.PageT]
+,dippersT :: [D.Dippers]
+}
+
+
+
 -- | The application's routes.
-routes :: State MP.Routes [(ByteString, Handler App App ())]
+routes :: State Routes [(ByteString, Handler App App ())]
 routes = do
-    (MP.Routes {MP.postsT=postsT, MP.pagesT=pagesT}) <- get
+    (Routes {postsT=postsT, pagesT=pagesT, dippersT=dippersT}) <- get
     return $ [ ("", MP.main_pageT_Handler postsT)
               ,("archive.html", A.archive_Handler postsT)
               ,("static", serveDirectory "static")
              ] ++ (generate_postN_response postsT)
                ++ (generate_pageWTWR_response pagesT)
-
+               ++ (generate_dippers_pageN_response dippersT)
 
 
 generate_postN_response :: [MP.PostT] -> [(ByteString, Handler App App ())]
@@ -52,6 +64,8 @@ generate_pageWTWR_response p = map (\x@(Pa.PageT {Pa.name=n}) ->
     (B.pack $ "page" ++ n ++ ".html",
      Pa.page_Handler x))  p
 
+generate_dippers_pageN_response :: [D.Dippers] -> [(ByteString, Handler App App ())]
+generate_dippers_pageN_response p = [(B.pack "page_my_pictures.html", D.dippersT_Handler $ head p)]
 
 
 {-- ================================================================================================
@@ -71,7 +85,7 @@ allCompiledSplices = mconcat []
 
 ------------------------------------------------------------------------------
 -- | The application initializer.
-app :: State MP.Routes (SnapletInit App App)
+app :: State Routes (SnapletInit App App)
 app = do
     r<- routes
     return (makeSnaplet "app" "A snap demo application." Nothing $ do

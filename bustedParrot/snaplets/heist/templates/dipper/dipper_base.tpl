@@ -17,6 +17,6 @@
 
 <apply-content/>
 
-<apply template="post_bottom"/>
+
 </body>
 </html>
