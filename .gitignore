@@ -1,3 +1,5 @@
 bustedParrot/dist/
 bustedParrot/.cabal-sandbox/
 bustedParrot/cabal.sandbox.config
+bustedParrot.lkshs
+bustedParrot.lkshw
