@@ -1,3 +1,4 @@
 
-<p align="center"><a href='post29.html'> <img src='static/pony_implicit_to_site_top.jpg' style='width:100%;height:auto;' /></a></p>
+<p align="center"><a href='post30.html'> <img src='static/intention_craft_top.png' style='width:75%;height:auto;'/></a></p>
 
+<ignore></ignore>
