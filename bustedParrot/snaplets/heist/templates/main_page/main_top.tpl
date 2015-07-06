@@ -14,7 +14,7 @@
 
 </span>
 
-<span><a href="page_my_pictures.html"> <img src="static/dipper.gif" alt="busted parrot" style="height:8em; 
+<span><a href="page_my_pictures.html"> <img src="static/dipper.gif" alt="we need to go dipper" style="height:8em; 
    width:auto; float: right; vertical-align: top;" > </a> </span>
 
 

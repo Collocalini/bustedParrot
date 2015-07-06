@@ -15,16 +15,25 @@
 
 <apply template="dipper_top"/>
 
-<div align="center">
+<a href="${dipper_url}"> <img src="${dipper_url}" class="${image_style}"> </a>
 
-<entries>
-  <span>
-   <apply template="dipper_entry" />
-  </span>
-</entries>
 
-</div>  
+<references>
 
+<div class="post_h">
+  <apply template="dipper_reference" />
+</div>
+
+</references>
+
+<ignore>
+</ignore>
+ 
 
 </body>
 </html>
+
+
+
+
+

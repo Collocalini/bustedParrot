@@ -9,6 +9,9 @@ module Main_page
    ,postsT_h_io
   -- ,Routes(..)
    ,PostT(..)
+   ,isPostFile
+   ,number2post
+   ,number_from_post_name
   ) where
 
 ------------------------------------------------------------------------------
@@ -46,8 +49,8 @@ data PostT = PostT {
 postsT_h_io :: IO [PostT]
 postsT_h_io = do
    l<- getDirectoryContents "posts"
-   mapM s2p $ reverse $ sort $ ff $ filter f l
-   where
+   mapM number2post $ reverse $ sort $ number_from_post_name $ filter isPostFile l
+{-   where
      f :: FilePath -> Bool
      f ('p':'o':'s':'t':_) = True
      f _ = False
@@ -62,9 +65,25 @@ postsT_h_io = do
      ff fp = map (read . n . (drop 4)) fp
        where
          n x = (take ((length x)-5) ) x
+-}
+
+isPostFile :: FilePath -> Bool
+isPostFile ('p':'o':'s':'t':_) = True
+isPostFile _ = False
 
 
 
+number2post :: Int -> IO PostT
+number2post s = do
+   (Right s'@(DocumentFile {dfDoc=(TT.HtmlDocument {TT.docContent=docContent})})) <-
+                                                getDoc $ "posts/post" ++ show s ++ ".html"
+   return $ PostT {postT=docContent, number=s}
+
+
+number_from_post_name :: [FilePath] -> [Int]
+number_from_post_name fp = map (read . n . (drop 4)) fp
+   where
+    n x = (take ((length x)-5) ) x
 
 
 
@@ -104,7 +123,7 @@ splicesFrom_main_postsT_h t = do
   step1 _ =
     ["main_post_h_view_full_caption"  ## I.textSplice "Читать дальше / Read more"
     ,"main_post_h_view_full_style"  ## I.textSplice ""
-    ,"main_post_h_view_full_link"  ## I.textSplice $ T.pack $ "post" ++ show (number t) ++ ".html"    ]
+    ,"main_post_h_view_full_link"  ## I.textSplice $ T.pack $ "/post" ++ show (number t) ++ ".html"    ]
 
 
 

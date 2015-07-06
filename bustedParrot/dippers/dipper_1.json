@@ -1,93 +1,93 @@
 [
 
  {
-   "miniature_json" : "static/thumbnails/intention_craft.jpg"
-  ,"url_json"       : "static/intention_craft.jpg"
+   "miniature_json" : "/static/thumbnails/intention_craft.jpg"
+  ,"url_json"       : "/static/intention_craft.jpg"
   ,"name_json"      : ""
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "static/thumbnails/pony_implicit_to_site.jpg"
-  ,"url_json"       : "static/pony_implicit_to_site.jpg"
+   "miniature_json" : "/static/thumbnails/pony_implicit_to_site.jpg"
+  ,"url_json"       : "/static/pony_implicit_to_site.jpg"
   ,"name_json"      : ""
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "static/thumbnails/doodle_jets_landscape.jpg"
-  ,"url_json"       : "static/doodle_jets_landscape.jpg"
+   "miniature_json" : "/static/thumbnails/doodle_jets_landscape.jpg"
+  ,"url_json"       : "/static/doodle_jets_landscape.jpg"
   ,"name_json"      : ""
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "static/thumbnails/doodle_jet1.JPG"
-  ,"url_json"       : "static/doodle_jet1.JPG"
+   "miniature_json" : "/static/thumbnails/doodle_jet1.JPG"
+  ,"url_json"       : "/static/doodle_jet1.JPG"
   ,"name_json"      : ""
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "static/thumbnails/doodle_jet2.JPG"
-  ,"url_json"       : "static/doodle_jet2.JPG"
+   "miniature_json" : "/static/thumbnails/doodle_jet2.JPG"
+  ,"url_json"       : "/static/doodle_jet2.JPG"
   ,"name_json"      : ""
   ,"comment_json"   : ""
  }
 
 
 ,{
-   "miniature_json" : "static/thumbnails/be200_29-05-2015.jpg"
+   "miniature_json" : "/static/thumbnails/be200_29-05-2015.jpg"
   ,"url_json"       : "https://yadi.sk/d/1cQBtefOgxpon"
   ,"name_json"      : ""
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "static/thumbnails/dla_otmeli_otsil.jpg"
-  ,"url_json"       : "static/dla_otmeli_otsil.jpg"
+   "miniature_json" : "/static/thumbnails/dla_otmeli_otsil.jpg"
+  ,"url_json"       : "/static/dla_otmeli_otsil.jpg"
   ,"name_json"      : ""
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "static/shaman.jpg"
-  ,"url_json"       : "static/shaman.jpg"
+   "miniature_json" : "/static/shaman.jpg"
+  ,"url_json"       : "/static/shaman.jpg"
   ,"name_json"      : ""
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "static/thumbnails/from_shaman_turn_table.jpg"
-  ,"url_json"       : "static/from_shaman_turn_table.jpg"
+   "miniature_json" : "/static/thumbnails/from_shaman_turn_table.jpg"
+  ,"url_json"       : "/static/from_shaman_turn_table.jpg"
   ,"name_json"      : ""
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "static/thumbnails/crazy_colors.jpg"
-  ,"url_json"       : "static/crazy_colors.jpg"
+   "miniature_json" : "/static/thumbnails/crazy_colors.jpg"
+  ,"url_json"       : "/static/crazy_colors.jpg"
   ,"name_json"      : ""
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "static/thumbnails/iofkastrezsOtsil.png"
-  ,"url_json"       : "static/iofkastrezsOtsil.png"
+   "miniature_json" : "/static/thumbnails/iofkastrezsOtsil.png"
+  ,"url_json"       : "/static/iofkastrezsOtsil.png"
   ,"name_json"      : ""
   ,"comment_json"   : ""
  }
 
 
 ,{
-   "miniature_json" : "static/thumbnails/nwn2-sz_call_me_potter.jpg"
-  ,"url_json"       : "static/nwn2-sz_call_me_potter.jpg"
+   "miniature_json" : "/static/thumbnails/nwn2-sz_call_me_potter.jpg"
+  ,"url_json"       : "/static/nwn2-sz_call_me_potter.jpg"
   ,"name_json"      : ""
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "static/collage_desktop1.jpg"
+   "miniature_json" : "/static/collage_desktop1.jpg"
   ,"url_json"       : "https://yadi.sk/i/t1syhcskfbkkd"
   ,"name_json"      : ""
   ,"comment_json"   : ""

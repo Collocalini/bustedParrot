@@ -1,5 +1,17 @@
 
 
+.img_fit_width {
+   height:auto; 
+   width:100%;
+}
+
+.img_fit_heihgt {
+   height:100%; 
+   width:auto;
+}
+
+
+
 .top_l_img {
    height:8em; 
    width:auto%

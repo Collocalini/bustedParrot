@@ -12,6 +12,7 @@ module Site
 ------------------------------------------------------------------------------
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString.Char8 as B
+import qualified Data.Text as T
 import           Snap.Core
 import           Snap.Snaplet
 import           Snap.Snaplet.Heist
@@ -37,6 +38,7 @@ data Routes = Routes {
  postsT :: [MP.PostT]
 ,pagesT :: [Pa.PageT]
 ,dippersT :: [D.Dippers]
+,dippers_references :: [(D.Dipper,[MP.PostT])]
 }
 
 
@@ -44,13 +46,18 @@ data Routes = Routes {
 -- | The application's routes.
 routes :: State Routes [(ByteString, Handler App App ())]
 routes = do
-    (Routes {postsT=postsT, pagesT=pagesT, dippersT=dippersT}) <- get
+    (Routes { postsT=postsT
+             ,pagesT=pagesT
+             ,dippersT=dippersT
+             ,dippers_references=dippers_references}) <- get
+
     return $ [ ("", MP.main_pageT_Handler postsT)
               ,("archive.html", A.archive_Handler postsT)
               ,("static", serveDirectory "static")
              ] ++ (generate_postN_response postsT)
                ++ (generate_pageWTWR_response pagesT)
                ++ (generate_dippers_pageN_response dippersT)
+               ++ (generate_dippers_individual_page_response dippers_references)
 
 
 generate_postN_response :: [MP.PostT] -> [(ByteString, Handler App App ())]
@@ -66,6 +73,18 @@ generate_pageWTWR_response p = map (\x@(Pa.PageT {Pa.name=n}) ->
 
 generate_dippers_pageN_response :: [D.Dippers] -> [(ByteString, Handler App App ())]
 generate_dippers_pageN_response p = [(B.pack "page_my_pictures.html", D.dippersT_Handler $ head p)]
+
+
+generate_dippers_individual_page_response :: [(D.Dipper,[MP.PostT])] -> [(ByteString, Handler App App ())]
+generate_dippers_individual_page_response p = map step1 p
+   where
+   step1 :: (D.Dipper,[MP.PostT]) -> (ByteString, Handler App App ())
+   step1 a@(d,_) =
+      (
+       B.pack $ T.unpack $ D.page_url d
+      ,D.dipperT_individual_page_Handler a
+      )
+
 
 
 {-- ================================================================================================
