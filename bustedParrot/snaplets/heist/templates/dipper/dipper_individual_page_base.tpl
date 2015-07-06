@@ -13,9 +13,13 @@
 <body>
 
 
-<apply template="dipper_top"/>
+<apply template="dipper_individual_page_top"/>
 
-<a href="${dipper_url}"> <img src="${dipper_url}" class="${image_style}"> </a>
+<div align="middle">
+<a href="${dipper_url}" > <img src="${dipper_url_img}"  class="${image_style}"> </a>
+<p></p>
+<auto_caption />
+</div>
 
 
 <references>

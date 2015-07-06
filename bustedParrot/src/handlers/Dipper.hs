@@ -39,10 +39,17 @@ import Data.Monoid
 import Control.Monad
 import Control.Applicative
 import qualified Data.ByteString.Lazy as B
+import qualified Codec.Picture as CPic
+
 ------------------------------------------------------------------------------
 import           Application
 --------------------------------------------------------------------------------
 import Main_page
+
+
+
+
+
 
 
 
@@ -54,6 +61,7 @@ data Dipper = Dipper {
  ,page_url :: T.Text
  ,url :: T.Text
  ,comment :: Maybe T.Text
+ ,isVertical :: Bool
 } deriving (Show)
 
 
@@ -80,7 +88,7 @@ dippersT_h_io :: IO Dippers
 dippersT_h_io = do
    l<- getDirectoryContents "dippers"
    d <- mapM s2p $ ff $ filter f l
-   return $ concat d
+   mapM dipper_check_orientation $ concat d
    where
      f :: FilePath -> Bool
      f ('d':'i':'p':'p':'e':'r':'_':_) = True
@@ -118,7 +126,7 @@ give_dipper s dj@(Dipper_json {miniature_json = m
    Just $ Dipper {
      miniature = maybe_miniature
     ,name      = maybe_name
-    ,page_url  = T.pack $ Fp.replaceExtension (T.unpack u) ".html"
+    ,page_url  = T.pack $ Fp.replaceExtension (Fp.takeFileName $ T.unpack u) ".html"
     ,url       = u
     ,comment   = maybe_comment
     }
@@ -134,6 +142,64 @@ give_dipper s dj@(Dipper_json {miniature_json = m
    maybe_comment
      |c == "" = Nothing
      |otherwise = Just c
+
+
+
+
+dipper_check_orientation :: Dipper -> IO Dipper
+dipper_check_orientation d
+   |link_is_local $ url d = do
+       img <- loadImage $ T.unpack $ url d
+       case img of
+          Nothing  -> ioError (userError "image loading error")
+          Just img -> return $ (\de -> de {isVertical=image_is_vertical img}) d
+
+   |otherwise = return $ (\de -> de {isVertical=False}) d
+
+
+
+
+{-- ================================================================================================
+================================================================================================ --}
+loadImage :: FilePath -> IO (Maybe (CPic.DynamicImage))
+loadImage name = do image <- CPic.readImage $ Fp.normalise ("./" ++ name)
+                    case image of
+                      (Left s) -> do
+                                    print s
+                                    return Nothing
+
+                      (Right d) ->
+                                 do
+                                    return $ Just d
+
+  where
+  fmt :: CPic.DynamicImage -> Maybe (CPic.Image CPic.PixelRGB8)
+  fmt (CPic.ImageRGB8 i) = Just i
+  fmt (_) = Nothing
+----------------------------------------------------------------------------------------------------
+
+image_is_vertical :: CPic.DynamicImage -> Bool
+image_is_vertical  (CPic.ImageRGB8
+                     (CPic.Image {
+                        CPic.imageWidth = w
+                       ,CPic.imageHeight = h
+                     })
+                   ) = h > w
+
+image_is_vertical  (CPic.ImageRGBA8
+                     (CPic.Image {
+                        CPic.imageWidth = w
+                       ,CPic.imageHeight = h
+                     })
+                   ) = h > w
+
+image_is_vertical  (CPic.ImageYCbCr8
+                     (CPic.Image {
+                        CPic.imageWidth = w
+                       ,CPic.imageHeight = h
+                     })
+                   ) = h > w
+
 
 
 
@@ -190,16 +256,35 @@ dippersT_Handler p = renderWithSplices "dipper/dipper_base"
 
 
 
+link_is_local :: T.Text -> Bool
+link_is_local l = T.isPrefixOf "/static/" l
+   --where
+
+
 
 splicesFrom_dippers :: Monad n => Dipper -> Splices (I.Splice n)
 splicesFrom_dippers t = do
    mconcat $ [
-     "dipper_url"        ## I.textSplice $ url       t
+     "dipper_url"        ## I.textSplice $ url t
+    ,"dipper_url_img"    ## dipper_url_img_case
     ,"page_url"          ## I.textSplice $ page_url t
     ,"dipper_miniature"  ## I.textSplice $ M.fromJust $ miniature t
-    ,"image_style"       ## I.textSplice $ "img_fit_width"
+    ,"image_style"       ## image_style_case
+    ,"auto_caption"      ## auto_caption_case
     ]
+   where
+   dipper_url_img_case
+      |link_is_local (url t) =  I.textSplice $ url t
+      |otherwise             =  I.textSplice $ M.fromJust $ miniature t
 
+   image_style_case
+      |(isVertical t)              = I.textSplice $ "img_fit_height"
+      |not $ link_is_local (url t) = I.textSplice $ "img_miniature"
+      |otherwise                   = I.textSplice $ "img_fit_width"
+
+   auto_caption_case
+      |link_is_local (url t) =  I.textSplice $ ""
+      |otherwise             =  I.textSplice $ "Нажми для полного размера / Click for full size"
 
 
 

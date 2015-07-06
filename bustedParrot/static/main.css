@@ -5,7 +5,12 @@
    width:100%;
 }
 
-.img_fit_heihgt {
+
+.img_miniature {
+   
+}
+
+.img_fit_height {
    height:100%; 
    width:auto;
 }

@@ -3,7 +3,7 @@
 <div class="arrow_box_dipper">
 
 <span >
-  <a href="/"><img  src="/static/logo.jpg" alt="busted parrot" align="top" class="top_l_img"> </a>
+  <a href="/page_my_pictures.html"><img  src="/static/dipper.gif" alt="back" align="top" class="top_l_img"> </a>
 
 <ul style="display: inline-block;">
   <li style="display:inline;font-size: 2.0em;"> Противопопугайный сайт:</li>
@@ -18,7 +18,7 @@
   <div>сортировку по тематическим</div>
   <div>разделам, перекрёстные ссылки</div>
   <div>уже есть</div>
-  
+
 </span>
 
 </div>
