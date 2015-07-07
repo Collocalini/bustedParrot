@@ -16,7 +16,7 @@
 module Dipper (
   Dipper(..)
  ,Dippers
- ,dippersT_h_io
+ ,dippersT_io
  ,dippersT_Handler
  ,give_dippers_references
  ,dipperT_individual_page_Handler
@@ -26,7 +26,7 @@ import Data.Aeson
 import GHC.Generics
 import qualified Data.Maybe as M
 import qualified Data.Text as T
-import qualified Text.XmlHtml as TT
+--import qualified Text.XmlHtml as TT
 import           Snap.Snaplet (Handler)
 import           Snap.Snaplet.Heist
 import           Heist
@@ -34,9 +34,9 @@ import qualified Heist.Interpreted as I
 import System.Directory
 import qualified System.FilePath.Posix as Fp
 import Data.List
-import qualified Data.Maybe as DM
+--import qualified Data.Maybe as DM
 import Data.Monoid
-import Control.Monad
+--import Control.Monad
 import Control.Applicative
 import qualified Data.ByteString.Lazy as B
 import qualified Codec.Picture as CPic
@@ -84,11 +84,12 @@ instance ToJSON Dipper_json
 
 
 
-dippersT_h_io :: IO Dippers
-dippersT_h_io = do
+dippersT_io :: IO Dippers
+dippersT_io = do
    l<- getDirectoryContents "dippers"
-   d <- mapM s2p $ ff $ filter f l
+   d <- mapM number2dipper $ number_from_dipper_name $ filter isDipperFile l
    mapM dipper_check_orientation $ concat d
+   {--mapM number2post $ reverse $ sort $ number_from_post_name $ filter isPostFile l
    where
      f :: FilePath -> Bool
      f ('d':'i':'p':'p':'e':'r':'_':_) = True
@@ -107,18 +108,43 @@ dippersT_h_io = do
      ff fp = map (n . (drop 7)) fp
        where
          n x = (take ((length x)-5) ) x
+--}
+
+
+isDipperFile :: FilePath -> Bool
+isDipperFile ('d':'i':'p':'p':'e':'r':'_':_) = True
+isDipperFile _ = False
+
+
+
+number2dipper :: String -> IO Dippers
+number2dipper s = do
+   d <- eitherDecode <$> B.readFile ("dippers/dipper_" ++ s ++ ".json"):: IO (Either String Dippers_json)
+   case d of
+      Left err -> do putStrLn err
+                     return []
+      Right dl -> return $ M.catMaybes $ map (give_dipper s) dl
+
+
+number_from_dipper_name :: [FilePath] -> [String]
+number_from_dipper_name fp = map (n . (drop 7)) fp
+       where
+         n x = (take ((length x)-5) ) x
+
+{-
+-}
 
 
 
 
 give_dipper :: String -> Dipper_json -> Maybe Dipper
-give_dipper s dj@(Dipper_json {miniature_json = _
+give_dipper _   (Dipper_json {miniature_json = _
                              ,name_json      = _
                              ,url_json       = ""
                              ,comment_json   = _
                              }) = Nothing
 
-give_dipper s dj@(Dipper_json {miniature_json = m
+give_dipper _   (Dipper_json {miniature_json = m
                              ,name_json      = n
                              ,url_json       = u
                              ,comment_json   = c
@@ -129,6 +155,7 @@ give_dipper s dj@(Dipper_json {miniature_json = m
     ,page_url  = T.pack $ Fp.replaceExtension (Fp.takeFileName $ T.unpack u) ".html"
     ,url       = u
     ,comment   = maybe_comment
+    ,isVertical = False
     }
    where
    maybe_miniature
@@ -171,11 +198,6 @@ loadImage name = do image <- CPic.readImage $ Fp.normalise ("./" ++ name)
                       (Right d) ->
                                  do
                                     return $ Just d
-
-  where
-  fmt :: CPic.DynamicImage -> Maybe (CPic.Image CPic.PixelRGB8)
-  fmt (CPic.ImageRGB8 i) = Just i
-  fmt (_) = Nothing
 ----------------------------------------------------------------------------------------------------
 
 image_is_vertical :: CPic.DynamicImage -> Bool
@@ -199,6 +221,8 @@ image_is_vertical  (CPic.ImageYCbCr8
                        ,CPic.imageHeight = h
                      })
                    ) = h > w
+
+image_is_vertical  _ = False
 
 
 
@@ -233,7 +257,7 @@ dippers_references d posts = map (dipper_is_found_in posts) d
 
 give_dippers_references :: IO [(Dipper,[PostT])]
 give_dippers_references = do
-   d   <- dippersT_h_io
+   d   <- dippersT_io
    ps  <- give_all_posts
    pTs <- mapM step1 $ dippers_references d ps
    return $ zip d pTs
@@ -243,6 +267,18 @@ give_dippers_references = do
 
 
 
+{-
+give_dippers_tags :: IO [(Dipper,[PostT])]
+give_dippers_tags = do
+   d   <- dippersT_io
+   ps  <- give_all_posts
+   pTs <- mapM step1 $ dippers_references d ps
+   return $ zip d pTs
+   where
+   step1 :: [String] -> IO [PostT]
+   step1 s = mapM number2post $ reverse $ sort $ number_from_post_name s
+
+-}
 
 
 
@@ -293,7 +329,6 @@ dipperT_individual_page_Handler :: (Dipper,[PostT]) -> Handler App App ()
 dipperT_individual_page_Handler (d,sl) = renderWithSplices "dipper/dipper_individual_page_base"
    $ mconcat [
 
-    --splicesFrom_dipper_individual_page d
     splicesFrom_dippers d
 
    ,("references" ##
@@ -304,16 +339,7 @@ dipperT_individual_page_Handler (d,sl) = renderWithSplices "dipper/dipper_indivi
 
 
 
-{-
-splicesFrom_dipper_individual_page :: Monad n => Dipper -> Splices (I.Splice n)
-splicesFrom_dipper_individual_page t = do
-   mconcat $ [
-     "dipper_url"  ## I.textSplice $ url      t
-    ,"page_url"    ## I.textSplice $ page_url t
-    ,"image_style" ## I.textSplice $ "img_fit_width"
-    ]
 
--}
 
 
 

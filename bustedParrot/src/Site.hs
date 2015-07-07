@@ -13,7 +13,7 @@ module Site
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Text as T
-import           Snap.Core
+--import           Snap.Core
 import           Snap.Snaplet
 import           Snap.Snaplet.Heist
 import           Snap.Snaplet.Session.Backends.CookieSession
@@ -24,7 +24,7 @@ import           Heist
 import qualified Heist.Compiled as C
 import           Data.Monoid
 import           Control.Monad.State
-import           Control.Applicative
+--import           Control.Applicative
 
 import qualified Main_page as MP
 import qualified Post as P

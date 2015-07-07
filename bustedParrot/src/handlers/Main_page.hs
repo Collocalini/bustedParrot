@@ -24,8 +24,8 @@ import qualified Heist.Interpreted as I
 import System.Directory
 import Data.List
 import Data.Monoid
-import Control.Monad
-import qualified Page as Pa
+--import Control.Monad
+--import qualified Page as Pa
 ------------------------------------------------------------------------------
 import           Application
 --------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ isPostFile _ = False
 
 number2post :: Int -> IO PostT
 number2post s = do
-   (Right s'@(DocumentFile {dfDoc=(TT.HtmlDocument {TT.docContent=docContent})})) <-
+   (Right (DocumentFile {dfDoc=(TT.HtmlDocument {TT.docContent=docContent})})) <-
                                                 getDoc $ "posts/post" ++ show s ++ ".html"
    return $ PostT {postT=docContent, number=s}
 

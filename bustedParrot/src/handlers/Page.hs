@@ -19,16 +19,16 @@ module Page (
 ,PageT(..)
 ) where
 
-import qualified Data.Text as T
+--import qualified Data.Text as T
 import qualified Text.XmlHtml as TT
 import           Snap.Snaplet (Handler)
 import           Snap.Snaplet.Heist
 import           Heist
 import qualified Heist.Interpreted as I
 import System.Directory
-import Data.List
+{-import Data.List
 import Data.Monoid
-import Control.Monad
+import Control.Monad-}
 ------------------------------------------------------------------------------
 import           Application
 --------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ pagesT_h_io = do
      s2p :: String -> IO PageT
      s2p s = do
        --putStrLn $ "pages/page" ++ s ++ ".html"
-       (Right s'@(DocumentFile {dfDoc=(TT.HtmlDocument {TT.docContent=docContent})})) <-
+       (Right (DocumentFile {dfDoc=(TT.HtmlDocument {TT.docContent=docContent})})) <-
                                                         getDoc $ "pages/page" ++ s ++ ".html"
        return $ PageT {pageT=docContent, name=s}
 
