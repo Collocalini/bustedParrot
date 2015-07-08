@@ -51,7 +51,7 @@
  }
 
 ,{
-   "miniature_json" : "/static/shaman.jpg"
+   "miniature_json" : "/static/thumbnails/shaman.jpg"
   ,"url_json"       : "/static/shaman.jpg"
   ,"name_json"      : ""
   ,"comment_json"   : ""

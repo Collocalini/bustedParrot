@@ -1,4 +1,4 @@
 
-<a href="${page_url}"> <img src="${dipper_miniature}" align="middle"> </a>
+<a href="${page_url}"> <img src="${dipper_miniature}" align="middle" > </a>
 
 

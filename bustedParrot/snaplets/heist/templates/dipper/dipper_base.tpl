@@ -18,7 +18,7 @@
 <div align="center">
 
 <entries>
-  <span>
+  <span class="img_miniature">
    <apply template="dipper_entry" />
   </span>
 </entries>
