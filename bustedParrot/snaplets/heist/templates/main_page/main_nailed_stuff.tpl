@@ -1,4 +1,4 @@
 
-<p align="center"><a href='post30.html'> <img src='static/intention_craft_top.png' style='width:75%;height:auto;'/></a></p>
+<p align="center"> <img src='/static/ponify_all_things_xkcd_soon.png' style='width:100%;height:auto;'/></p>
 
-<ignore></ignore>
+<ignore><a href=''></a></ignore>

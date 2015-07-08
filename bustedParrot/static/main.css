@@ -7,7 +7,8 @@
 
 
 .img_miniature {
-   
+   display: inline-block;
+   padding: 1em;
 }
 
 .img_fit_height {
