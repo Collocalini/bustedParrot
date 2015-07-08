@@ -13,7 +13,7 @@ module Site
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Text as T
---import           Snap.Core
+import           Snap.Core
 import           Snap.Snaplet
 import           Snap.Snaplet.Heist
 import           Snap.Snaplet.Session.Backends.CookieSession
@@ -73,7 +73,7 @@ generate_pageWTWR_response p = map (\x@(Pa.PageT {Pa.name=n}) ->
 
 generate_dippers_pageN_response :: [D.Dippers] -> [(ByteString, Handler App App ())]
 generate_dippers_pageN_response p = [(B.pack "page_my_pictures.html", D.dippersT_Handler $ head p)]
-
+   --as <- getsRequest (rqParam "a")
 
 generate_dippers_individual_page_response :: [(D.Dipper,[MP.PostT])] -> [(ByteString, Handler App App ())]
 generate_dippers_individual_page_response p = map step1 p
@@ -87,15 +87,16 @@ generate_dippers_individual_page_response p = map step1 p
 
 
 
-{-- ================================================================================================
-================================================================================================ --}
-{-
-main_css_Handler :: Snap ()
-main_css_Handler = do
-    index <- liftIO $ readFile "./static/select_folder.html"
-    writeBS $ B.fromString index
------------------------------------------------------------------------------------------------------
--}
+generate_dippers_tags_response :: [D.Dippers] -> [(ByteString, Handler App App ())]
+generate_dippers_tags_response p = --[(B.pack "page_my_pictures.html", D.dippersT_Handler $ head p)]
+   [(B.pack "/tags/:test" , handler)]
+   where
+   handler = do
+     param <- getParam "test"
+     maybe (writeBS "must specify echo/param in URL")
+            writeBS param
+
+
 
 ------------------------------------------------------------------------------
 -- | Compose all the compiled splices imported from the handler modules

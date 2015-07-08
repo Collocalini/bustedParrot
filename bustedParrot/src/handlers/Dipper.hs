@@ -87,28 +87,34 @@ instance ToJSON Dipper_json
 dippersT_io :: IO Dippers
 dippersT_io = do
    l<- getDirectoryContents "dippers"
-   d <- mapM number2dipper $ number_from_dipper_name $ filter isDipperFile l
+   d <- mapM dipper_from_name_suffix $ number_from_dipper_name $ filter isDipperFile l
    mapM dipper_check_orientation $ concat d
-   {--mapM number2post $ reverse $ sort $ number_from_post_name $ filter isPostFile l
-   where
-     f :: FilePath -> Bool
-     f ('d':'i':'p':'p':'e':'r':'_':_) = True
-     f _ = False
-
-     s2p :: String -> IO Dippers
-     s2p s = do
-       d <- eitherDecode <$> B.readFile ("dippers/dipper_" ++ s ++ ".json"):: IO (Either String Dippers_json)
-       case d of
-        Left err -> do putStrLn err
-                       return []
-        Right dl -> return $ M.catMaybes $ map (give_dipper s) dl
 
 
-     ff :: [FilePath] -> [String]
-     ff fp = map (n . (drop 7)) fp
-       where
-         n x = (take ((length x)-5) ) x
---}
+
+
+
+
+
+dippersT_for_tag_io :: IO [(String, Dippers)]
+dippersT_for_tag_io = do
+   l<- getDirectoryContents "tags"
+   d <- mapM (\s-> dipper_from_name $ Fp.combine "tags" s) l
+   --d1<- mapM (mapM dipper_check_orientation) d
+   return $ zip l d
+
+   --dipper_from_name $ Fp.combine "tags" l
+
+
+
+
+
+
+
+
+
+
+
 
 
 isDipperFile :: FilePath -> Bool
@@ -117,13 +123,24 @@ isDipperFile _ = False
 
 
 
-number2dipper :: String -> IO Dippers
-number2dipper s = do
+dipper_from_name_suffix :: String -> IO Dippers
+dipper_from_name_suffix s = do
    d <- eitherDecode <$> B.readFile ("dippers/dipper_" ++ s ++ ".json"):: IO (Either String Dippers_json)
    case d of
       Left err -> do putStrLn err
                      return []
-      Right dl -> return $ M.catMaybes $ map (give_dipper s) dl
+      Right dl -> return $ M.catMaybes $ map give_dipper dl
+
+
+
+dipper_from_name :: String -> IO Dippers
+dipper_from_name s = do
+   d <- eitherDecode <$> B.readFile s :: IO (Either String Dippers_json)
+   case d of
+      Left err -> do putStrLn err
+                     return []
+      Right dl -> return $ M.catMaybes $ map give_dipper dl
+
 
 
 number_from_dipper_name :: [FilePath] -> [String]
@@ -137,14 +154,14 @@ number_from_dipper_name fp = map (n . (drop 7)) fp
 
 
 
-give_dipper :: String -> Dipper_json -> Maybe Dipper
-give_dipper _   (Dipper_json {miniature_json = _
+give_dipper :: Dipper_json -> Maybe Dipper
+give_dipper     (Dipper_json {miniature_json = _
                              ,name_json      = _
                              ,url_json       = ""
                              ,comment_json   = _
                              }) = Nothing
 
-give_dipper _   (Dipper_json {miniature_json = m
+give_dipper     (Dipper_json {miniature_json = m
                              ,name_json      = n
                              ,url_json       = u
                              ,comment_json   = c
@@ -237,6 +254,14 @@ give_all_posts = do
    return $ zip files $ map T.pack r
 
 
+{-
+give_all_tags :: IO [(String, Dippers)]
+give_all_tags = do
+   l<- getDirectoryContents "tags"
+   --let files = sort $ filter isPostFile l
+   r<- mapM (\n-> readFile ("tags/" ++ n)) l
+   return $ zip files $ map T.pack r
+-}
 
 
 dipper_is_found_in :: [(String, T.Text)] -> Dipper -> [String]
@@ -248,6 +273,10 @@ dipper_is_found_in posts
     ,url       = u
     ,comment   = _
     })  = (\(l,_) -> l) $ unzip $ filter (\(_,t) -> T.isInfixOf u t) posts
+
+
+
+
 
 dippers_references :: Dippers -> [(String, T.Text)] -> [[String]]
 dippers_references d posts = map (dipper_is_found_in posts) d
@@ -267,18 +296,64 @@ give_dippers_references = do
 
 
 
-{-
-give_dippers_tags :: IO [(Dipper,[PostT])]
+
+dipper_has_tag :: Dipper -> Dipper -> Bool
+dipper_has_tag (Dipper {miniature = mt  -- tag
+                       ,name      = nt
+                       ,url       = ut
+                       ,comment   = ct
+                       })
+               (Dipper {miniature = m   -- dipper
+                       ,name      = n
+                       ,url       = u
+                       ,comment   = c
+                       })
+   |name_match = True
+   |otherwise = False
+   where
+   miniature_match
+      |mt == Nothing = True
+      |m  == mt      = True
+      |otherwise     = False
+
+   name_match
+      |n == nt   = True
+      |otherwise = False
+
+   url_match
+      |u == ut   = True
+      |otherwise = False
+
+   comment_match
+      |ct == Nothing = True
+      |c  == ct      = True
+      |otherwise     = False
+
+
+
+
+dipper_is_found_in_tags :: [(String, Dippers)] -> Dipper -> [String]
+dipper_is_found_in_tags tags dipper  =
+   (\(l,_) -> l) $ unzip $ filter (\(_,t) ->  any dipper_has_tag' t) tags
+   where
+   dipper_has_tag' = \tt-> dipper_has_tag tt dipper
+
+
+
+
+
+give_dippers_tags :: IO [(Dipper,[String])]
 give_dippers_tags = do
    d   <- dippersT_io
-   ps  <- give_all_posts
-   pTs <- mapM step1 $ dippers_references d ps
-   return $ zip d pTs
-   where
-   step1 :: [String] -> IO [PostT]
-   step1 s = mapM number2post $ reverse $ sort $ number_from_post_name s
+   ps  <- dippersT_for_tag_io
+   return $ zip d $ map (dipper_is_found_in_tags ps) d
 
--}
+
+
+
+give_dippers_of_a_tag :: String -> [(Dipper,[String])] -> Dippers
+give_dippers_of_a_tag tag dippers_with_tags =
+   (\(l,_) -> l) $ unzip $ filter (\(_,t)-> elem tag t) dippers_with_tags
 
 
 
