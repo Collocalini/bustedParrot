@@ -19,7 +19,12 @@ module Dipper (
  ,dippersT_io
  ,dippersT_Handler
  ,give_dippers_references
+ ,give_dippers_tags
  ,dipperT_individual_page_Handler
+ ,tag_c_groups_from_request_string
+ ,tags_from_c_group
+ ,operator_from_tag_name
+ ,dippers_from_request_string
 ) where
 
 import Data.Aeson
@@ -62,7 +67,7 @@ data Dipper = Dipper {
  ,url :: T.Text
  ,comment :: Maybe T.Text
  ,isVertical :: Bool
-} deriving (Show)
+} deriving (Show,Eq)
 
 
 data Dipper_json = Dipper_json {
@@ -71,6 +76,9 @@ data Dipper_json = Dipper_json {
  ,url_json :: T.Text
  ,comment_json :: T.Text
 } deriving (Show,Generic)
+
+
+data Tag_operator = Or|And|Not|None
 
 
 type Dippers_json = [Dipper_json]
@@ -99,9 +107,16 @@ dippersT_io = do
 dippersT_for_tag_io :: IO [(String, Dippers)]
 dippersT_for_tag_io = do
    l<- getDirectoryContents "tags"
-   d <- mapM (\s-> dipper_from_name $ Fp.combine "tags" s) l
+   let only_files = filter (\s-> not $ ((head s) == '.') || ((take 2 s) == ".." )) l
+   d <- mapM (\s-> dipper_from_name $ "tags/" ++ s) $ only_files
+
    --d1<- mapM (mapM dipper_check_orientation) d
-   return $ zip l d
+   {-putStrLn "------------------------------------------"
+   putStrLn $ unlines $ filter (\s-> not $ ((head s) == '.') || ((take 2 s) == ".." )) l
+   putStrLn $ show d
+   putStrLn "------------------------------------------"
+   -}
+   return $ zip only_files d
 
    --dipper_from_name $ Fp.combine "tags" l
 
@@ -169,7 +184,7 @@ give_dipper     (Dipper_json {miniature_json = m
    Just $ Dipper {
      miniature = maybe_miniature
     ,name      = maybe_name
-    ,page_url  = T.pack $ Fp.replaceExtension (Fp.takeFileName $ T.unpack u) ".html"
+    ,page_url  = T.pack $ "/" ++ Fp.replaceExtension (Fp.takeFileName $ T.unpack u) ".html"
     ,url       = u
     ,comment   = maybe_comment
     ,isVertical = False
@@ -309,23 +324,26 @@ dipper_has_tag (Dipper {miniature = mt  -- tag
                        ,comment   = c
                        })
    |name_match = True
+   |miniature_match && url_match = True
    |otherwise = False
    where
    miniature_match
-      |mt == Nothing = True
+     -- |mt == Nothing = True
       |m  == mt      = True
       |otherwise     = False
 
    name_match
+      |nt == Nothing = False
       |n == nt   = True
       |otherwise = False
 
    url_match
       |u == ut   = True
+      |ut == "*" = True
       |otherwise = False
 
    comment_match
-      |ct == Nothing = True
+    --  |ct == Nothing = True
       |c  == ct      = True
       |otherwise     = False
 
@@ -354,6 +372,74 @@ give_dippers_tags = do
 give_dippers_of_a_tag :: String -> [(Dipper,[String])] -> Dippers
 give_dippers_of_a_tag tag dippers_with_tags =
    (\(l,_) -> l) $ unzip $ filter (\(_,t)-> elem tag t) dippers_with_tags
+
+
+
+dippers_from_request_string :: String -> [(Dipper,[String])] -> Dippers
+dippers_from_request_string r dt =
+   dippers_from_d_group $
+     map (dippers_from_c_group' . operator_and_tag . tags_from_c_group) $
+     tag_c_groups_from_request_string r
+   where
+   operator_and_tag :: [String] -> [(Tag_operator, String)]
+   operator_and_tag t = zip (map operator_from_tag_name t) t
+
+   dippers_from_c_group' :: [(Tag_operator, String)] -> Dippers
+   dippers_from_c_group' ot = dippers_from_c_group ot dt
+
+
+{-                                                                                                -}
+
+
+dippers_from_d_group :: [Dippers] -> Dippers
+dippers_from_d_group c = foldl' union [] c
+
+
+
+dippers_from_c_group :: [(Tag_operator, String)] -> [(Dipper,[String])] -> Dippers
+dippers_from_c_group c dt = foldl' op_and
+                                   (give_dippers_of_a_tag (snd $ head c) dt)
+                                   c
+   where
+   op_and :: Dippers -> (Tag_operator, String) -> Dippers
+   op_and p (Not, t) = (\\)      p $ give_dippers_of_a_tag t dt
+   op_and p (_  , t) = intersect p $ give_dippers_of_a_tag t dt
+
+
+
+operator_from_tag_name :: String -> Tag_operator
+operator_from_tag_name s = s2op $ head $ words $ map dash2space s
+   where
+   dash2space :: Char -> Char
+   dash2space '-' = ' '
+   dash2space  x  =  x
+
+   s2op :: String -> Tag_operator
+   s2op "not" = Not
+   s2op "and" = And
+   s2op "or"  = Or
+   s2op  _    = None
+
+
+
+
+tags_from_c_group :: String -> [String]
+tags_from_c_group s = words $ map dot2space s
+   where
+   dot2space :: Char -> Char
+   dot2space '.' = ' '
+   dot2space  x  =  x
+
+
+
+
+--conjunctive groups from disjunctive normal form
+tag_c_groups_from_request_string :: String -> [String]
+tag_c_groups_from_request_string s = words $ map understroke2space s
+   where
+   understroke2space :: Char -> Char
+   understroke2space '_' = ' '
+   understroke2space  x  =  x
 
 
 

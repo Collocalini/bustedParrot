@@ -13,7 +13,9 @@ module Site
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Text as T
+import qualified Data.Map as DMap
 import           Snap.Core
+--import           Snap.Http.Server
 import           Snap.Snaplet
 import           Snap.Snaplet.Heist
 import           Snap.Snaplet.Session.Backends.CookieSession
@@ -39,6 +41,7 @@ data Routes = Routes {
 ,pagesT :: [Pa.PageT]
 ,dippersT :: [D.Dippers]
 ,dippers_references :: [(D.Dipper,[MP.PostT])]
+,dippers_tags :: [(D.Dipper,[String])]
 }
 
 
@@ -49,7 +52,8 @@ routes = do
     (Routes { postsT=postsT
              ,pagesT=pagesT
              ,dippersT=dippersT
-             ,dippers_references=dippers_references}) <- get
+             ,dippers_references=dippers_references
+             ,dippers_tags=dippers_tags}) <- get
 
     return $ [ ("", MP.main_pageT_Handler postsT)
               ,("archive.html", A.archive_Handler postsT)
@@ -58,7 +62,7 @@ routes = do
                ++ (generate_pageWTWR_response pagesT)
                ++ (generate_dippers_pageN_response dippersT)
                ++ (generate_dippers_individual_page_response dippers_references)
-
+               ++ (generate_dippers_tags_response dippers_tags)
 
 generate_postN_response :: [MP.PostT] -> [(ByteString, Handler App App ())]
 generate_postN_response p = map (\x@(MP.PostT {MP.number=n}) ->
@@ -87,14 +91,26 @@ generate_dippers_individual_page_response p = map step1 p
 
 
 
-generate_dippers_tags_response :: [D.Dippers] -> [(ByteString, Handler App App ())]
+generate_dippers_tags_response :: [(D.Dipper,[String])] -> [(ByteString, Handler App App ())]
 generate_dippers_tags_response p = --[(B.pack "page_my_pictures.html", D.dippersT_Handler $ head p)]
-   [(B.pack "/tags/:test" , handler)]
+   [(B.pack "/tagged/:tag" , handler)]
    where
    handler = do
-     param <- getParam "test"
-     maybe (writeBS "must specify echo/param in URL")
-            writeBS param
+     tags <- getParams
+     D.dippersT_Handler $ D.dippers_from_request_string (
+        B.unpack $ B.concat $ DMap.findWithDefault [] "tag" tags
+        ) p
+
+
+     {-writeBS $ B.pack $ show  p
+     writeBS $ B.pack $ show $ D.dippers_from_request_string (
+        B.unpack $ B.concat $ DMap.findWithDefault [] "tag" tags
+        ) p
+
+
+     return ()-}
+     --maybe (writeBS "must specify echo/param in URL")
+     --       (writeBS $ B.concat) param
 
 
 

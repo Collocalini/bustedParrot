@@ -117,11 +117,13 @@ getActions conf = do
     pa<-Pa.pagesT_h_io
     d <-D.dippersT_io
     dr<-D.give_dippers_references
+    dt<-D.give_dippers_tags
     (msgs, site, cleanup) <- runSnaplet
         (appEnvironment =<< getOther conf) $ evalState app (Routes { postsT   = p
                                                                     ,pagesT   = pa
                                                                     ,dippersT = [d]
                                                                     ,dippers_references = dr
+                                                                    ,dippers_tags = dt
                                                                     })
     hPutStrLn stderr $ T.unpack msgs
     return (site, cleanup)
