@@ -15,6 +15,8 @@
 
 <apply template="dipper_top"/>
 
+<apply template="dipper_tags"/>
+
 <div align="center">
 
 <entries>

@@ -1,4 +1,18 @@
+.tag {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0px;
+  color: #000000;
+  padding: 0.1em;
+  background: #e5f6fc;
+  border: solid #1f628d 2px;
+  text-decoration: none;
+}
 
+.tag:hover {
+  background: #ffffff;
+  text-decoration: none;
+}
 
 .img_fit_width {
    height:auto; 

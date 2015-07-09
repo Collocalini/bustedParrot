@@ -60,7 +60,7 @@ routes = do
               ,("static", serveDirectory "static")
              ] ++ (generate_postN_response postsT)
                ++ (generate_pageWTWR_response pagesT)
-               ++ (generate_dippers_pageN_response dippersT)
+               ++ (generate_dippers_pageN_response dippersT dippers_tags)
                ++ (generate_dippers_individual_page_response dippers_references)
                ++ (generate_dippers_tags_response dippers_tags)
 
@@ -75,8 +75,9 @@ generate_pageWTWR_response p = map (\x@(Pa.PageT {Pa.name=n}) ->
     (B.pack $ "page" ++ n ++ ".html",
      Pa.page_Handler x))  p
 
-generate_dippers_pageN_response :: [D.Dippers] -> [(ByteString, Handler App App ())]
-generate_dippers_pageN_response p = [(B.pack "page_my_pictures.html", D.dippersT_Handler $ head p)]
+generate_dippers_pageN_response :: [D.Dippers] -> [(D.Dipper,[String])] -> [(ByteString, Handler App App ())]
+generate_dippers_pageN_response p dt =
+   [(B.pack "page_my_pictures.html", D.dippersT_Handler (head p) $ D.give_all_used_tags dt)]
    --as <- getsRequest (rqParam "a")
 
 generate_dippers_individual_page_response :: [(D.Dipper,[MP.PostT])] -> [(ByteString, Handler App App ())]
@@ -97,9 +98,14 @@ generate_dippers_tags_response p = --[(B.pack "page_my_pictures.html", D.dippers
    where
    handler = do
      tags <- getParams
-     D.dippersT_Handler $ D.dippers_from_request_string (
-        B.unpack $ B.concat $ DMap.findWithDefault [] "tag" tags
-        ) p
+     D.dippersT_Handler (dippers_from_request_string' tags) $
+        D.give_all_used_tags p
+
+   dippers_from_request_string' tags = D.dippers_from_request_string
+           (
+           B.unpack $ B.concat $ DMap.findWithDefault [] "tag" tags
+           ) p
+
 
 
      {-writeBS $ B.pack $ show  p

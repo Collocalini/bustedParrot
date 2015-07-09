@@ -2,9 +2,9 @@
 
 <tags>
 
-<div class="">
+<div style="display: inline-block;">
    <a href="${tag_url}">
-      <div class="">
+      <div class="tag">
          <tag /> 
       </div>
    </a>

@@ -25,6 +25,7 @@ module Dipper (
  ,tags_from_c_group
  ,operator_from_tag_name
  ,dippers_from_request_string
+ ,give_all_used_tags
 ) where
 
 import Data.Aeson
@@ -269,14 +270,7 @@ give_all_posts = do
    return $ zip files $ map T.pack r
 
 
-{-
-give_all_tags :: IO [(String, Dippers)]
-give_all_tags = do
-   l<- getDirectoryContents "tags"
-   --let files = sort $ filter isPostFile l
-   r<- mapM (\n-> readFile ("tags/" ++ n)) l
-   return $ zip files $ map T.pack r
--}
+
 
 
 dipper_is_found_in :: [(String, T.Text)] -> Dipper -> [String]
@@ -368,6 +362,10 @@ give_dippers_tags = do
 
 
 
+give_all_used_tags ::[(Dipper,[String])] -> [String]
+give_all_used_tags dippers_with_tags = foldl' union [] $ snd $ unzip dippers_with_tags
+
+
 
 give_dippers_of_a_tag :: String -> [(Dipper,[String])] -> Dippers
 give_dippers_of_a_tag tag dippers_with_tags =
@@ -444,11 +442,16 @@ tag_c_groups_from_request_string s = words $ map understroke2space s
 
 
 
-dippersT_Handler :: Dippers -> Handler App App ()
-dippersT_Handler p = renderWithSplices "dipper/dipper_base"
-   ("entries" ##
+dippersT_Handler :: Dippers -> [String] -> Handler App App ()
+dippersT_Handler p tags = renderWithSplices "dipper/dipper_base"
+   $ mconcat $ [
+   ("tags" ##
+   (I.mapSplices $ I.runChildrenWith . splices_from_tag) tags
+   )
+  ,("entries" ##
    (I.mapSplices $ I.runChildrenWith . splicesFrom_dippers) p
    )
+   ]
 
 
 
@@ -484,6 +487,14 @@ splicesFrom_dippers t = do
       |otherwise             =  I.textSplice $ "Нажми для полного размера / Click for full size"
 
 
+
+
+splices_from_tag :: Monad n => String -> Splices (I.Splice n)
+splices_from_tag tag = do
+   mconcat $ [
+     "tag_url"        ## I.textSplice $ T.pack $ "/tagged/" ++ tag
+    ,"tag"            ## I.textSplice $ T.pack $ tag
+    ]
 
 
 dipperT_individual_page_Handler :: (Dipper,[PostT]) -> Handler App App ()
