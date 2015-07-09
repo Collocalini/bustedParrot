@@ -103,7 +103,7 @@ generate_dippers_tags_response p = --[(B.pack "page_my_pictures.html", D.dippers
 
    dippers_from_request_string' tags = D.dippers_from_request_string
            (
-           B.unpack $ B.concat $ DMap.findWithDefault [] "tag" tags
+           reverse $ drop 5 $ reverse $ B.unpack $ B.concat $ DMap.findWithDefault [] "tag" tags
            ) p
 
 

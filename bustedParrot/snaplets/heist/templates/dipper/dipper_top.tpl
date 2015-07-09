@@ -14,10 +14,7 @@
 </span>
 
 <span class="top_r">
-  <div>Планирую добавить сюда</div>
-  <div>сортировку по тематическим</div>
-  <div>разделам, перекрёстные ссылки</div>
-  <div>уже есть</div>
+  <img  src="/static/rarity_eyes_closed.png" alt="" align="middle" class="top_r_img">
   
 </span>
 

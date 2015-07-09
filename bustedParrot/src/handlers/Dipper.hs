@@ -492,7 +492,8 @@ splicesFrom_dippers t = do
 splices_from_tag :: Monad n => String -> Splices (I.Splice n)
 splices_from_tag tag = do
    mconcat $ [
-     "tag_url"        ## I.textSplice $ T.pack $ "/tagged/" ++ tag
+     "tag_url"        ## I.textSplice $ T.pack $ "/tagged/" ++ tag ++ ".html"
+    ,"tag_style"        ## I.textSplice $ T.pack $ "tag"
     ,"tag"            ## I.textSplice $ T.pack $ tag
     ]
 

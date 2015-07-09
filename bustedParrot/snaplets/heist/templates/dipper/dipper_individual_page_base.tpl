@@ -15,6 +15,8 @@
 
 <apply template="dipper_individual_page_top"/>
 
+
+
 <div align="middle">
 <a href="${dipper_url}" > <img src="${dipper_url_img}"  class="${image_style}"> </a>
 <p></p>
