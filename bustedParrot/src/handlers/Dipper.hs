@@ -442,8 +442,8 @@ tag_c_groups_from_request_string s = words $ map understroke2space s
 
 
 
-dippersT_Handler :: Dippers -> [String] -> Handler App App ()
-dippersT_Handler p tags = renderWithSplices "dipper/dipper_base"
+dippersT_Handler :: Dippers -> [String] -> (Int, Int) -> Handler App App ()
+dippersT_Handler p tags (page_number, total_pages) = renderWithSplices "dipper/dipper_base"
    $ mconcat $ [
    ("tags" ##
    (I.mapSplices $ I.runChildrenWith . splices_from_tag) tags

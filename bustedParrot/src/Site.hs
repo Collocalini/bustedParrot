@@ -14,6 +14,9 @@ import           Data.ByteString (ByteString)
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Text as T
 import qualified Data.Map as DMap
+import Data.List
+import Data.Maybe
+import qualified Data.Char as C
 import           Snap.Core
 --import           Snap.Http.Server
 import           Snap.Snaplet
@@ -44,7 +47,7 @@ data Routes = Routes {
 ,dippers_tags :: [(D.Dipper,[String])]
 }
 
-
+max_items_per_page = 2
 
 -- | The application's routes.
 routes :: State Routes [(ByteString, Handler App App ())]
@@ -77,7 +80,7 @@ generate_pageWTWR_response p = map (\x@(Pa.PageT {Pa.name=n}) ->
 
 generate_dippers_pageN_response :: [D.Dippers] -> [(D.Dipper,[String])] -> [(ByteString, Handler App App ())]
 generate_dippers_pageN_response p dt =
-   [(B.pack "page_my_pictures.html", D.dippersT_Handler (head p) $ D.give_all_used_tags dt)]
+   [(B.pack "page_my_pictures.html", D.dippersT_Handler (head p) (D.give_all_used_tags dt) (1,1) )]
    --as <- getsRequest (rqParam "a")
 
 generate_dippers_individual_page_response :: [(D.Dipper,[MP.PostT])] -> [(ByteString, Handler App App ())]
@@ -93,22 +96,66 @@ generate_dippers_individual_page_response p = map step1 p
 
 
 generate_dippers_tags_response :: [(D.Dipper,[String])] -> [(ByteString, Handler App App ())]
-generate_dippers_tags_response p = --[(B.pack "page_my_pictures.html", D.dippersT_Handler $ head p)]
-   [(B.pack "/tagged/:tag" , handler)]
+generate_dippers_tags_response p = [(route , handler)]
    where
+
+   route = B.pack "/tagged/:tag"
+
    handler = do
      tags <- getParams
-     D.dippersT_Handler (dippers_from_request_string' tags) $
-        D.give_all_used_tags p
+     D.dippersT_Handler (dippers_from_request_string' tags)
+                        (D.give_all_used_tags p)
+       (fromMaybe 1 $ request_page_number tags,
+          (fromIntegral $ length $ items $ dippers_from_request_string'' tags) / (fromIntegral max_items_per_page))
 
-   dippers_from_request_string' tags = D.dippers_from_request_string
+
+   dippers_on_page_n :: Int -> D.Dippers -> D.Dippers
+   dippers_on_page_n i d
+      |i<=1 = take max_items_per_page d
+      |(fromIntegral i)<=total_pages = snd $ unzip $ head $ drop (i-1) $
+                                       groupBy (\(n,_) (n1,_)-> n==n1) $ items d
+      |otherwise = take max_items_per_page $ reverse d
+      where
+      total_items tags = length $ items tags
+      total_pages = (fromIntegral total_items) / (fromIntegral max_items_per_page)
+   items d = zip (concat $ map (replicate max_items_per_page) [1..]) d
+
+   dippers_from_request_string' tags =
+           dippers_on_page_n (fromMaybe 1 $ request_page_number tags)
+                             (dippers_from_request_string'' tags)
+
+
+
+
+
+   dippers_from_request_string'' tags = D.dippers_from_request_string
            (
-           reverse $ drop 5 $ reverse $ B.unpack $ B.concat $ DMap.findWithDefault [] "tag" tags
+           request_tags_only tags
            ) p
 
 
 
-     {-writeBS $ B.pack $ show  p
+
+
+
+   request tags = reverse $ drop 5 $ reverse $ B.unpack $ B.concat $
+                                                                  DMap.findWithDefault [] "tag" tags
+
+   request_page_number tags = try_read $ reverse $ takeWhile C.isDigit $ reverse $ request tags
+      where
+      try_read :: String -> Maybe Int
+      try_read [] = Nothing
+      try_read x  = Just $ sane $ read x
+
+      sane i
+         |i<=1 = 1
+         |otherwise = i
+
+
+   request_tags_only tags = reverse $ dropWhile C.isDigit $ reverse $ request tags
+
+
+   {-  writeBS $ B.pack $ show  p
      writeBS $ B.pack $ show $ D.dippers_from_request_string (
         B.unpack $ B.concat $ DMap.findWithDefault [] "tag" tags
         ) p

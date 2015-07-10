@@ -28,5 +28,15 @@
 </div>  
 
 
+<apply template="dipper_pages"/>
+
+
+
+
 </body>
 </html>
+
+
+
+
+
