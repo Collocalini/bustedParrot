@@ -21,6 +21,34 @@
 
 
 
+.page {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0px;
+  color: #000000;
+  padding: 0.1em;
+  background: #d5dafa;
+  //border: solid #1f628d 2px;
+  text-decoration: none;
+}
+
+.page:hover {
+  background: none;
+  text-decoration: none;
+}
+
+.page_current {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0px;
+  color: #000000;
+  padding: 0.1em;
+  background: #a2def4;
+  border: solid #1f628d 2px;
+  text-decoration: none;
+}
+
+
 .tag_selected {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;

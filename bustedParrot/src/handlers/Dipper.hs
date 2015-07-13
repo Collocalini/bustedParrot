@@ -442,14 +442,18 @@ tag_c_groups_from_request_string s = words $ map understroke2space s
 
 
 
-dippersT_Handler :: Dippers -> [String] -> (Int, Int) -> Handler App App ()
-dippersT_Handler p tags (page_number, total_pages) = renderWithSplices "dipper/dipper_base"
+dippersT_Handler :: Dippers -> [String] -> Int -> [String] -> Handler App App ()
+dippersT_Handler p tags page_number links = renderWithSplices "dipper/dipper_base"
    $ mconcat $ [
    ("tags" ##
    (I.mapSplices $ I.runChildrenWith . splices_from_tag) tags
    )
   ,("entries" ##
    (I.mapSplices $ I.runChildrenWith . splicesFrom_dippers) p
+   )
+  ,("pages" ##
+   (I.mapSplices $ I.runChildrenWith . splices_from_page_number page_number)
+      $ zip [1..length links] (links)
    )
    ]
 
@@ -496,6 +500,25 @@ splices_from_tag tag = do
     ,"tag_style"        ## I.textSplice $ T.pack $ "tag"
     ,"tag"            ## I.textSplice $ T.pack $ tag
     ]
+
+
+splices_from_page_number :: Monad n => Int -> (Int, String) -> Splices (I.Splice n)
+splices_from_page_number number (page, link)
+   |page == number= responce_current_page
+   |otherwise = responce_other_page
+   where
+   responce_current_page = do
+       mconcat $ [
+         "page_url"        ## I.textSplice $ T.pack $ link
+        ,"page_style"        ## I.textSplice $ T.pack $ "page_current"
+        ,"page"            ## I.textSplice $ T.pack $ show $ page
+        ]
+   responce_other_page = do
+       mconcat $ [
+         "page_url"        ## I.textSplice $ T.pack $ link
+        ,"page_style"        ## I.textSplice $ T.pack $ "page"
+        ,"page"            ## I.textSplice $ T.pack $ show $ page
+        ]
 
 
 dipperT_individual_page_Handler :: (Dipper,[PostT]) -> Handler App App ()

@@ -121,7 +121,7 @@ getActions conf = do
     (msgs, site, cleanup) <- runSnaplet
         (appEnvironment =<< getOther conf) $ evalState app (Routes { postsT   = p
                                                                     ,pagesT   = pa
-                                                                    ,dippersT = [d]
+                                                                    ,dippersT = d
                                                                     ,dippers_references = dr
                                                                     ,dippers_tags = dt
                                                                     })

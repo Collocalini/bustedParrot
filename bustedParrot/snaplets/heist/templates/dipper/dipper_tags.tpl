@@ -8,7 +8,7 @@
 </div>
 
 <div style="display: inline-block;width:2em;">
-   <a href="/page_my_pictures.html">
+   <a href="/dippers_1.html">
       <div class="tag" align="middle">
          .
       </div>
