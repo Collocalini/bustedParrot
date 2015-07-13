@@ -1,6 +1,21 @@
 [
 
  {
+   "miniature_json" : "/static/thumbnails/xkcd_ponified_sky_ru.png"
+  ,"url_json"       : "/static/xkcd_ponified_sky_ru.png"
+  ,"name_json"      : ""
+  ,"comment_json"   : ""
+ }
+
+,{
+   "miniature_json" : "/static/thumbnails/xkcd_ponified_sky_en.png"
+  ,"url_json"       : "/static/xkcd_ponified_sky_en.png"
+  ,"name_json"      : ""
+  ,"comment_json"   : ""
+ }
+
+
+,{
    "miniature_json" : "/static/thumbnails/intention_craft.jpg"
   ,"url_json"       : "/static/intention_craft.jpg"
   ,"name_json"      : ""

@@ -1,4 +1,4 @@
 
-<p align="center"> <img src='/static/ponify_all_things_xkcd_soon.png' style='width:100%;height:auto;'/></p>
+<p align="center"> <a href='/post32.html'><img src='/static/xkcd_ponified_sky.gif' title='Подпись в посте 32 / Caption is in post32' style='width:100%;height:auto;'/></a></p>
 
-<ignore><a href=''></a></ignore>
+<ignore></ignore>
