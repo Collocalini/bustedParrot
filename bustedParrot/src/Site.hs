@@ -48,7 +48,7 @@ data Routes = Routes {
 }
 
 max_items_per_page:: Int
-max_items_per_page = 2
+max_items_per_page = 50
 
 -- | The application's routes.
 routes :: State Routes [(ByteString, Handler App App ())]
@@ -84,7 +84,9 @@ generate_dippers_pageN_response p dt = zip routes responces
    where
    links = map ((\x-> "/dippers_" ++ x ++ ".html").show) total_responces
    routes = map B.pack links
-   responce i t = D.dippersT_Handler (give_page i p) (D.give_all_used_tags dt) i links
+   responce i t
+      |total_pages'>1= D.dippersT_Handler (give_page i p) (D.give_all_used_tags dt) i links
+      |otherwise     = D.dippersT_Handler (give_page i p) (D.give_all_used_tags dt) i []
    responces = map (\x-> responce x total_pages') total_responces
    total_responces = [1.. total_pages']
    total_pages' = (total_pages p)
@@ -118,10 +120,12 @@ generate_dippers_tags_response p = [(route , handler)]
        (links tags (dippers_from_request_string'' tags))
 
 
-   links tags d = map (\x-> "/tagged/"
+   links tags d
+      |(total_pages d) > 1 = map (\x-> "/tagged/"
                          ++ (request_with_no_page_number tags)
                          ++ (show x)
                          ++ ".html") [1..total_pages d]
+      |otherwise = []
 
    dippers_on_page_n :: Int -> D.Dippers -> D.Dippers
    dippers_on_page_n i d
