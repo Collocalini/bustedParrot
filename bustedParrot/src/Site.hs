@@ -76,13 +76,13 @@ generate_postN_response p = map (\x@(MP.PostT {MP.number=n}) ->
 
 generate_pageWTWR_response :: [Pa.PageT] -> [(ByteString, Handler App App ())]
 generate_pageWTWR_response p = map (\x@(Pa.PageT {Pa.name=n}) ->
-    (B.pack $ "/page" ++ n ++ ".html",
+    (B.pack $ "/pages/page" ++ n ++ ".html",
      Pa.page_Handler x))  p
 
 generate_dippers_pageN_response :: D.Dippers -> [(D.Dipper,[String])] -> [(ByteString, Handler App App ())]
 generate_dippers_pageN_response p dt = zip routes responces
    where
-   links = map ((\x-> "/dippers_" ++ x ++ ".html").show) total_responces
+   links = map ((\x-> "/dippers/dippers_" ++ x ++ ".html").show) total_responces
    routes = map B.pack links
    responce i t
       |total_pages'>1= D.dippersT_Handler (give_page i p) (D.give_all_used_tags dt) i links
@@ -100,7 +100,7 @@ generate_dippers_individual_page_response p = map step1 p
    step1 :: (D.Dipper,[MP.PostT]) -> (ByteString, Handler App App ())
    step1 a@(d,_) =
       (
-       B.pack $ T.unpack $ D.page_url d
+       B.pack $ ("/individual_dippers/" ++)  $ T.unpack $ D.page_url d
       ,D.dipperT_individual_page_Handler a
       )
 

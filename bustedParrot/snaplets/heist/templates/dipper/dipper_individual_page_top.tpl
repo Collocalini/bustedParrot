@@ -3,7 +3,7 @@
 <div class="arrow_box_dipper">
 
 <span >
-  <a href="/dippers_1.html"><img  src="/static/dipper.gif" alt="back" align="top" class="top_l_img"> </a>
+  <a href="/dippers/dippers_1.html"><img  src="/static/dipper.gif" alt="back" align="top" class="top_l_img"> </a>
 
 <ul style="display: inline-block;">
   <li style="display:inline;font-size: 2.0em;"> Противопопугайный сайт:</li>

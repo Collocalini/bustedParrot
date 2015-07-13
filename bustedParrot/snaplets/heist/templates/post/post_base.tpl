@@ -7,7 +7,7 @@
 
 </script>
 <meta charset="UTF-8" />
-<link href="static/main.css" rel="stylesheet" type="text/css" />
+<link href="/static/main.css" rel="stylesheet" type="text/css" />
 <title>Противопопугайный сайт / Never Parrot</title>
 </head>
 <body>

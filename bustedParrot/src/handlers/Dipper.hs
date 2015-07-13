@@ -471,7 +471,7 @@ splicesFrom_dippers t = do
    mconcat $ [
      "dipper_url"        ## I.textSplice $ url t
     ,"dipper_url_img"    ## dipper_url_img_case
-    ,"page_url"          ## I.textSplice $ page_url t
+    ,"page_url"          ## I.textSplice $ T.pack $ ("/individual_dippers" ++) $ T.unpack $ page_url t
     ,"dipper_miniature"  ## I.textSplice $ M.fromJust $ miniature t
     ,"image_style"       ## image_style_case
     ,"auto_caption"      ## auto_caption_case

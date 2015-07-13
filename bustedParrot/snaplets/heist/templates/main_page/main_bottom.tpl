@@ -8,7 +8,7 @@
 </span>
 
 <span class="top_r">
-  <a href="static/contact_me.html" align="right">Связаться со мной / Contact me</a>
+  <a href="/pages/page_contact_me.html" align="right">Связаться со мной / Contact me</a>
 </span>
 
 </div>
