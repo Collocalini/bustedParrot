@@ -1,6 +1,20 @@
 [
 
  {
+   "miniature_json" : "/static/thumbnails/addon_implicit_this_is_how_equestria_was_made_ru.png"
+  ,"url_json"       : "/static/addon_implicit_this_is_how_equestria_was_made_ru.png"
+  ,"name_json"      : ""
+  ,"comment_json"   : ""
+ }
+
+,{
+   "miniature_json" : "/static/thumbnails/addon_implicit_this_is_how_equestria_was_made_en.png"
+  ,"url_json"       : "/static/addon_implicit_this_is_how_equestria_was_made_en.png"
+  ,"name_json"      : ""
+  ,"comment_json"   : ""
+ }
+
+,{
    "miniature_json" : "/static/thumbnails/xkcd_ponified_sky_ru.png"
   ,"url_json"       : "/static/xkcd_ponified_sky_ru.png"
   ,"name_json"      : ""
