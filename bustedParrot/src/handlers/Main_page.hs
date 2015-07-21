@@ -46,10 +46,7 @@ main_pageT_HandlerM p = do
        (splicesFrom_main_postsT_h) $ head p
        ),
        ("posts_h" ##
-       {-(I.mapSplices $ I.runChildrenWith . (\f -> splicesFrom_main_postsT_h_M f nm))
-          $ take 9 $ tail p-}
-       (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) $ take 9 $ tail p
-
+         (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) $ take 9 $ tail p
        )
        ,insertLinks $ Just nm]
        )

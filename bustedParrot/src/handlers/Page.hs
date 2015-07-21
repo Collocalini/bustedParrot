@@ -15,31 +15,35 @@
 
 module Page (
  page_Handler
+,page_HandlerM
 ,pagesT_h_io
-,PageT(..)
+
 ) where
 
---import qualified Data.Text as T
 import qualified Text.XmlHtml as TT
+import System.Directory
+
+
+
 import           Snap.Snaplet (Handler)
 import           Snap.Snaplet.Heist
 import           Heist
 import qualified Heist.Interpreted as I
-import System.Directory
-{-import Data.List
+import Control.Monad.State
+import qualified Data.Maybe as M
 import Data.Monoid
-import Control.Monad-}
+import qualified Data.Map as Dm
 ------------------------------------------------------------------------------
 import           Application
 --------------------------------------------------------------------------------
---import Main_page
+
+import Site_state
+import Nodes
+import InsertLinks
+import Page_common
 
 
 
-data PageT = PageT {
- pageT :: Template
-,name :: String
-}
 
 
 pagesT_h_io :: IO [PageT]
@@ -66,11 +70,22 @@ pagesT_h_io = do
 
 
 
+page_HandlerM :: PageT -> State Routes (Handler App App ())
+page_HandlerM p = do
+   (Routes {node_map=nm}) <- get
+   return $ renderWithSplices "post/post_base" $ mconcat
+      [
+      splicesFrom_page_h p
+     ,insertLinks $ Just nm
+      ]
+
+
 
 page_Handler :: PageT -> Handler App App ()
 page_Handler p = renderWithSplices "post/post_base"
    (
    splicesFrom_page_h p
+
    )
 
 

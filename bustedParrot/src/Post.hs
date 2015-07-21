@@ -25,7 +25,6 @@ import           Snap.Snaplet.Heist
 import           Heist
 import qualified Heist.Interpreted as I
 import Control.Monad.State
-import qualified Data.Maybe as M
 import Data.Monoid
 import qualified Data.Map as Dm
 ------------------------------------------------------------------------------
@@ -33,8 +32,6 @@ import           Application
 --------------------------------------------------------------------------------
 import Main_page_common
 import Site_state
-import NodesM
-import Nodes
 import InsertLinks
 
 

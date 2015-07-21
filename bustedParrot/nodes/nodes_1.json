@@ -14,6 +14,42 @@
    "node_json" : ["faq"]
   ,"link_json" : "/pages/page_faq.html"
  }
+
+,{
+   "node_json" : ["archive"]
+  ,"link_json" : "/archive.html"
+ }
+
+,{
+   "node_json" : ["main_css"]
+  ,"link_json" : "/static/main.css"
+ }
+
+,{
+   "node_json" : ["logo"]
+  ,"link_json" : "/static/logo.jpg"
+ }
+
+,{
+   "node_json" : ["dipper_logo"]
+  ,"link_json" : "/static/dipper.gif"
+ }
+
+
+,{
+   "node_json" : ["addon_implicit_this_is_how_equestria_was_made_top.png"]
+  ,"link_json" : "/static/addon_implicit_this_is_how_equestria_was_made_top.png"
+ }
+
+
+
+,{
+   "node_json" : ["post33"]
+  ,"link_json" : "/post33.html"
+ }
+
+
+
 ]
 
 

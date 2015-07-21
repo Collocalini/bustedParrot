@@ -28,31 +28,11 @@ module Main_page_common (
 import           Heist
 import qualified Text.XmlHtml as TT
 import qualified Data.Text as T
-import qualified Text.XmlHtml as TT
-import           Snap.Snaplet (Handler)
-import           Snap.Snaplet.Heist
-import           Heist
 import qualified Heist.Interpreted as I
 import System.Directory
 import Data.List
 import Data.Monoid
 import Nodes
---import InsertLinks
-
-{-
-import qualified Data.Text as T
-import qualified Text.XmlHtml as TT
-import           Snap.Snaplet (Handler)
-import           Snap.Snaplet.Heist
-import qualified Heist.Interpreted as I
-import System.Directory
-import Data.List
-import Data.Monoid
-import           Application
--}
---import Control.Monad
---import qualified Page as Pa
-------------------------------------------------------------------------------
 
 
 
@@ -93,38 +73,6 @@ number_from_post_name fp = map (read . n . (drop 4)) fp
 
 
 
-{-
-
-splicesFrom_main_postsT_h_M :: Monad n => PostT -> Node_map -> Splices (I.Splice n)
-splicesFrom_main_postsT_h_M t nm = do
-   mconcat $ (["post_h"  ## return [head $ postT t]
-      ,insertLinks $ Just nm
-      ] ++ step1 (tail $ postT t) )
-  where
-  step1 [] =
-    ["main_post_h_view_full_caption"  ## I.textSplice ""
-    ,"main_post_h_view_full_style"  ## I.textSplice "display:none"
-    ,"main_post_h_view_full_link"  ## I.textSplice $ T.pack $ "/"
-    ]
-  step1 [_] =
-    ["main_post_h_view_full_caption"  ## I.textSplice ""
-    ,"main_post_h_view_full_style"  ## I.textSplice "display:none"
-    ,"main_post_h_view_full_link"  ## I.textSplice $ T.pack $ "/"
-    ]
-  {-step1 [_,_] =
-    ["main_post_h_view_full_caption"  ## I.textSplice ""
-    ,"main_post_h_view_full_style"  ## I.textSplice "display:none"
-    ,"main_post_h_view_full_link"  ## I.textSplice $ T.pack $ ""
-    ]-}
-  step1 _ =
-    ["main_post_h_view_full_caption"  ## I.textSplice "Читать дальше / Read more"
-    ,"main_post_h_view_full_style"  ## I.textSplice ""
-    ,"main_post_h_view_full_link"  ## I.textSplice $ T.pack $ "/post" ++ show (number t) ++ ".html"    ]
-
-
--}
-
-
 
 
 
@@ -151,7 +99,7 @@ splicesFrom_main_postsT_h t = do
   step1 _ =
     ["main_post_h_view_full_caption"  ## I.textSplice "Читать дальше / Read more"
     ,"main_post_h_view_full_style"  ## I.textSplice ""
-    ,"main_post_h_view_full_link"  ## I.textSplice $ T.pack $ "/post" ++ show (number t) ++ ".html"    ]
+    ,"main_post_h_view_full_link"  ## I.textSplice $ post_node_link' (number t) ]
 
 
 

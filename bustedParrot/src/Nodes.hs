@@ -20,6 +20,23 @@ module Nodes (
 ,nodesT_io
 ,node_to_link
 ,nodes_to_map
+,link_is_local
+,page_node_link
+,post_node_link
+,page_node_link'
+,post_node_link'
+,dippers_pageN_node_link
+,dippers_pageN_node_link'
+,dippers_pageN_node_link''
+,dipper_page_node_link'
+,individual_dipper_node_link
+,individual_dipper_node_link'
+,individual_dipper_node_link''
+,tagged_node_link
+,tagged_node_link'
+,tagged_node_link''
+,tagged_tag_link
+,tagged_tag
 ) where
 
 
@@ -32,7 +49,8 @@ import qualified Data.Text as T
 import System.Directory
 import Control.Applicative
 import qualified Data.ByteString.Lazy as B
-
+import qualified Data.ByteString.Char8 as B8
+import qualified System.FilePath.Posix as Fp
 
 
 type Node_map = Dm.Map T.Text T.Text
@@ -134,6 +152,73 @@ node_to_link n nm = Dm.findWithDefault "" n nm
 
 
 
+page_node_link :: String -> B8.ByteString
+page_node_link n = B8.pack $ "/pages/page" ++ n ++ ".html"
+
+page_node_link' :: String -> T.Text
+page_node_link' n = T.pack $ "/pages/page" ++ n ++ ".html"
+
+
+
+post_node_link :: Int -> B8.ByteString
+post_node_link n = B8.pack $ "/post" ++ (show n) ++ ".html"
+
+post_node_link' :: Int -> T.Text
+post_node_link' n = T.pack $ "/post" ++ (show n) ++ ".html"
+
+
+dippers_pageN_node_link :: Int -> B8.ByteString
+dippers_pageN_node_link n = B8.pack $ "/dippers/dippers_" ++ (show n) ++ ".html"
+
+dippers_pageN_node_link' :: Int -> T.Text
+dippers_pageN_node_link' n = T.pack $ "/dippers/dippers_" ++ (show n) ++ ".html"
+
+dippers_pageN_node_link'' :: Int -> String
+dippers_pageN_node_link'' n = "/dippers/dippers_" ++ (show n) ++ ".html"
+
+
+dipper_page_node_link' :: T.Text -> T.Text
+dipper_page_node_link' u = T.pack $ "/" ++ Fp.replaceExtension (Fp.takeFileName $ T.unpack u) ".html"
+
+
+
+individual_dipper_node_link :: String -> B8.ByteString
+individual_dipper_node_link ('/':n) = B8.pack $ "/individual_dippers/" ++ n
+individual_dipper_node_link n = B8.pack $ "/individual_dippers/" ++ n
+
+individual_dipper_node_link' :: String -> T.Text
+individual_dipper_node_link' ('/':n) = T.pack $ "/individual_dippers/" ++ n
+individual_dipper_node_link' n = T.pack $ "/individual_dippers/" ++ n
+
+individual_dipper_node_link'' :: String -> String
+individual_dipper_node_link'' ('/':n) = "/individual_dippers/" ++ n
+individual_dipper_node_link'' n = "/individual_dippers/" ++ n
+
+
+tagged_node_link :: String -> Int -> B8.ByteString
+tagged_node_link n p = B8.pack $ "/tagged/" ++ n ++ (show p) ++ ".html"
+
+tagged_node_link' :: String -> Int -> T.Text
+tagged_node_link' n p = T.pack $ "/tagged/" ++ n ++ (show p) ++ ".html"
+
+tagged_node_link'' :: String -> Int -> String
+tagged_node_link'' n p = "/tagged/" ++ n ++ (show p) ++ ".html"
+
+
+
+tagged_tag_link :: B8.ByteString
+tagged_tag_link = B8.pack $ "/tagged/:tag"
+
+
+tagged_tag :: B8.ByteString
+tagged_tag = B8.pack $ "tag"
+
+
+
+
+link_is_local :: T.Text -> Bool
+link_is_local l = T.isPrefixOf "/static/" l
+
 nodes_to_map :: Nodes -> Node_map
 nodes_to_map nodes = Dm.fromList $ concat $ map node_to_list nodes
    where
@@ -141,6 +226,7 @@ nodes_to_map nodes = Dm.fromList $ concat $ map node_to_list nodes
       node = n
      ,link = l
               }) = zip n $ repeat l
+
 
 
 

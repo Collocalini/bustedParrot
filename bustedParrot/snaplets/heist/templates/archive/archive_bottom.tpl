@@ -2,7 +2,7 @@
 
 
 <div class="">
-  <a href="/pages/page_contact_me.html" align="right">Связаться со мной / Contact me</a>
+  <a href='${contact_me}' align="right">Связаться со мной / Contact me</a>
 </div>
 
 

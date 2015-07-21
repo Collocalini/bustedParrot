@@ -18,9 +18,11 @@ module Dipper (
  ,Dippers
  ,dippersT_io
  ,dippersT_Handler
+ ,dippersT_HandlerM
  ,give_dippers_references
  ,give_dippers_tags
  ,dipperT_individual_page_Handler
+ ,dipperT_individual_page_HandlerM
  ,tag_c_groups_from_request_string
  ,tags_from_c_group
  ,operator_from_tag_name
@@ -46,11 +48,15 @@ import Data.Monoid
 import Control.Applicative
 import qualified Data.ByteString.Lazy as B
 import qualified Codec.Picture as CPic
-
+import Control.Monad.State
 ------------------------------------------------------------------------------
 import           Application
 --------------------------------------------------------------------------------
 import Main_page_common
+import Nodes
+import qualified Site_state as S
+import Dipper_common
+import InsertLinks
 
 
 
@@ -58,17 +64,6 @@ import Main_page_common
 
 
 
-
-
-
-data Dipper = Dipper {
-  miniature :: Maybe T.Text
- ,name :: Maybe T.Text
- ,page_url :: T.Text
- ,url :: T.Text
- ,comment :: Maybe T.Text
- ,isVertical :: Bool
-} deriving (Show,Eq)
 
 
 data Dipper_json = Dipper_json {
@@ -83,7 +78,7 @@ data Tag_operator = Or|And|Not|None
 
 
 type Dippers_json = [Dipper_json]
-type Dippers = [Dipper]
+
 
 
 instance FromJSON Dipper_json
@@ -185,7 +180,7 @@ give_dipper     (Dipper_json {miniature_json = m
    Just $ Dipper {
      miniature = maybe_miniature
     ,name      = maybe_name
-    ,page_url  = T.pack $ "/" ++ Fp.replaceExtension (Fp.takeFileName $ T.unpack u) ".html"
+    ,page_url  = dipper_page_node_link' u
     ,url       = u
     ,comment   = maybe_comment
     ,isVertical = False
@@ -442,6 +437,28 @@ tag_c_groups_from_request_string s = words $ map understroke2space s
 
 
 
+dippersT_HandlerM :: Dippers -> [String] -> Int -> [String] -> State S.Routes (Handler App App ())
+dippersT_HandlerM p tags page_number links = do
+   (S.Routes {S.node_map=nm}) <- get
+   return $ renderWithSplices "dipper/dipper_base"
+       $ mconcat $ [
+       ("tags" ##
+       (I.mapSplices $ I.runChildrenWith . splices_from_tag) tags
+       )
+      ,("entries" ##
+       (I.mapSplices $ I.runChildrenWith . splicesFrom_dippers) p
+       )
+      ,("pages" ##
+       (I.mapSplices $ I.runChildrenWith . splices_from_page_number page_number)
+          $ zip [1..length links] (links)
+       )
+      ,insertLinks $ Just nm
+       ]
+
+
+
+
+
 dippersT_Handler :: Dippers -> [String] -> Int -> [String] -> Handler App App ()
 dippersT_Handler p tags page_number links = renderWithSplices "dipper/dipper_base"
    $ mconcat $ [
@@ -460,9 +477,7 @@ dippersT_Handler p tags page_number links = renderWithSplices "dipper/dipper_bas
 
 
 
-link_is_local :: T.Text -> Bool
-link_is_local l = T.isPrefixOf "/static/" l
-   --where
+
 
 
 
@@ -471,7 +486,7 @@ splicesFrom_dippers t = do
    mconcat $ [
      "dipper_url"        ## I.textSplice $ url t
     ,"dipper_url_img"    ## dipper_url_img_case
-    ,"page_url"          ## I.textSplice $ T.pack $ ("/individual_dippers" ++) $ T.unpack $ page_url t
+    ,"page_url"          ## I.textSplice $ individual_dipper_node_link' $ T.unpack $ page_url t
     ,"dipper_miniature"  ## I.textSplice $ M.fromJust $ miniature t
     ,"image_style"       ## image_style_case
     ,"auto_caption"      ## auto_caption_case
@@ -496,7 +511,7 @@ splicesFrom_dippers t = do
 splices_from_tag :: Monad n => String -> Splices (I.Splice n)
 splices_from_tag tag = do
    mconcat $ [
-     "tag_url"        ## I.textSplice $ T.pack $ "/tagged/" ++ tag ++ ".html"
+     "tag_url"        ## I.textSplice $ tagged_node_link' tag 1
     ,"tag_style"        ## I.textSplice $ T.pack $ "tag"
     ,"tag"            ## I.textSplice $ T.pack $ tag
     ]
@@ -519,6 +534,28 @@ splices_from_page_number number (page, link)
         ,"page_style"        ## I.textSplice $ T.pack $ "page"
         ,"page"            ## I.textSplice $ T.pack $ show $ page
         ]
+
+
+
+
+
+dipperT_individual_page_HandlerM :: (Dipper,[PostT]) -> State S.Routes (Handler App App ())
+dipperT_individual_page_HandlerM (d,sl) = do
+   (S.Routes {S.node_map=nm}) <- get
+   return $ renderWithSplices "dipper/dipper_individual_page_base"
+       $ mconcat [
+
+        splicesFrom_dippers d
+
+       ,("references" ##
+         (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) sl
+        )
+       ,insertLinks $ Just nm
+       ]
+
+
+
+
 
 
 dipperT_individual_page_Handler :: (Dipper,[PostT]) -> Handler App App ()

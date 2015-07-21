@@ -51,7 +51,7 @@ executable bustedParrot
     main-is: Main.hs
     buildable: True
     hs-source-dirs: src src/handlers
-    other-modules: Archive Dipper InsertLinks Main_page
-                   Main_page_common Nodes NodesM Page Post Site_state
+    other-modules: Archive Dipper Dipper_common InsertLinks Main_page
+                   Main_page_common Nodes NodesM Page Page_common Post Site_state
     ghc-options: -fwarn-unused-imports
  

@@ -29,15 +29,17 @@ import           Heist
 import qualified Heist.Compiled as C
 import           Data.Monoid
 import           Control.Monad.State
---import           Control.Applicative
+import           Control.Applicative
 
 import qualified Main_page as MP
 import qualified Main_page_common as MPC
 import qualified Post as P
 import qualified Page as Pa
+import qualified Page_common as PaC
 import qualified Archive as A
 import qualified Dipper as D
 import Site_state
+import Nodes
 ------------------------------------------------------------------------------
 
 
@@ -54,33 +56,36 @@ routes = do
 
    post_r<- generate_postN_responseM
    main_page_r<- MP.main_pageT_HandlerM postsT
+   archive_r<-A.archive_HandlerM postsT
+   pagewtwr_r<- generate_pageWTWR_responseM
+   dippers_pn_r<- generate_dippers_pageN_responseM
+   dippers_ip_r<- generate_dippers_individual_page_responseM
+   dippers_tags<- generate_dippers_tags_responseM
 
    return $ concat
       [
         (routes_pure postsT pagesT dippersT dippers_references dippers_tags)
+       ,[ ("", main_page_r )
+         ,("/archive.html", archive_r)
+         ]
        ,post_r
-       ,[(B.pack "", main_page_r )]
+       ,pagewtwr_r
+       ,dippers_pn_r
+       ,dippers_ip_r
+       ,dippers_tags
       ]
 
    where
    routes_pure postsT pagesT dippersT dippers_references dippers_tags =
       [ --("", MP.main_pageT_Handler postsT)
-        ("/archive.html", A.archive_Handler postsT)
-       ,("/static", serveDirectory "static") ]
+       -- ("/archive.html", A.archive_Handler postsT)
+        ("/static", serveDirectory "static")
+       ]
        -- ++ (generate_postN_response postsT)
-         ++ (generate_pageWTWR_response pagesT)
-         ++ (generate_dippers_pageN_response dippersT dippers_tags)
-         ++ (generate_dippers_individual_page_response dippers_references)
-         ++ (generate_dippers_tags_response dippers_tags)
-
-
-
-
-
-generate_postN_response :: [MPC.PostT] -> [(ByteString, Handler App App ())]
-generate_postN_response p = map (\x@(MPC.PostT {MPC.number=n}) ->
-    (B.pack $ "/post" ++ (show n) ++ ".html",
-     P.post_Handler x))  p
+       --  ++ (generate_pageWTWR_response pagesT)
+       --  ++ (generate_dippers_pageN_response dippersT dippers_tags)
+       --  ++ (generate_dippers_individual_page_response dippers_references)
+       --  ++ (generate_dippers_tags_response dippers_tags)
 
 
 
@@ -91,20 +96,26 @@ generate_postN_responseM = do
    phl<- mapM (\x -> P.post_HandlerM x) p
    return $ zip (r p) phl
    where
-   r p = map (\MPC.PostT {MPC.number=n} -> B.pack $ "/post" ++ (show n) ++ ".html") p
+   r p = map (\MPC.PostT {MPC.number=n} -> post_node_link n) p
 
 
 
 
-generate_pageWTWR_response :: [Pa.PageT] -> [(ByteString, Handler App App ())]
-generate_pageWTWR_response p = map (\x@(Pa.PageT {Pa.name=n}) ->
-    (B.pack $ "/pages/page" ++ n ++ ".html",
-     Pa.page_Handler x))  p
 
+generate_pageWTWR_responseM :: State Routes [(ByteString, Handler App App ())]
+generate_pageWTWR_responseM = do
+   (Routes { pagesT=p}) <- get
+   phl<- mapM (\x -> Pa.page_HandlerM x) p
+   return $ zip (r p) phl
+   where
+   r p = map (\PaC.PageT {PaC.name=n} -> page_node_link n) p
+
+
+{-
 generate_dippers_pageN_response :: D.Dippers -> [(D.Dipper,[String])] -> [(ByteString, Handler App App ())]
 generate_dippers_pageN_response p dt = zip routes responces
    where
-   links = map ((\x-> "/dippers/dippers_" ++ x ++ ".html").show) total_responces
+   links = map dippers_pageN_node_link'' total_responces
    routes = map B.pack links
    responce i t
       |total_pages'>1= D.dippersT_Handler (give_page i p) (D.give_all_used_tags dt) i links
@@ -112,9 +123,32 @@ generate_dippers_pageN_response p dt = zip routes responces
    responces = map (\x-> responce x total_pages') total_responces
    total_responces = [1.. total_pages']
    total_pages' = (total_pages p)
+-}
 
 
 
+generate_dippers_pageN_responseM :: State Routes [(ByteString, Handler App App ())]
+generate_dippers_pageN_responseM = do
+   (Routes { dippersT=dippersT
+            ,dippers_tags=dippers_tags}) <- get
+   dr<- responces dippersT dippers_tags
+   return $ zip (routes dippersT) dr
+   --return [("", D.dippersT_Handler (give_page 1 dippersT) (D.give_all_used_tags dippers_tags) 1 [] )]
+   where
+   links p = map dippers_pageN_node_link'' (total_responces p)
+   routes p = map B.pack $ links p
+   responce i t p dt
+      |total_pages' p >1= D.dippersT_HandlerM (give_page i p) (D.give_all_used_tags dt) i $ links p
+      |otherwise     = D.dippersT_HandlerM (give_page i p) (D.give_all_used_tags dt) i []
+   --responces :: D.Dippers -> [(D.Dipper,[String])] -> State Routes [ Handler App App ()]
+   responces p dt = mapM (\x-> responce x total_pages' p dt) $ total_responces p
+   total_responces p = [1.. total_pages' p]
+   total_pages' p = (total_pages p)
+
+
+
+
+{-
 
 generate_dippers_individual_page_response :: [(D.Dipper,[MPC.PostT])] -> [(ByteString, Handler App App ())]
 generate_dippers_individual_page_response p = map step1 p
@@ -122,17 +156,33 @@ generate_dippers_individual_page_response p = map step1 p
    step1 :: (D.Dipper,[MPC.PostT]) -> (ByteString, Handler App App ())
    step1 a@(d,_) =
       (
-       B.pack $ ("/individual_dippers/" ++)  $ T.unpack $ D.page_url d
+       individual_dipper_node_link  $ T.unpack $ D.page_url d
       ,D.dipperT_individual_page_Handler a
       )
 
+-}
+
+generate_dippers_individual_page_responseM :: State Routes [(ByteString, Handler App App ())]
+generate_dippers_individual_page_responseM = do
+   (Routes {dippers_references=dippers_references}) <- get
+
+   mapM step1 dippers_references
+   where
+   step1 :: (D.Dipper,[MPC.PostT]) -> State Routes (ByteString, Handler App App ())
+   step1 a@(d,_) = do
+      idp<- D.dipperT_individual_page_HandlerM a
+      return (
+         individual_dipper_node_link  $ T.unpack $ D.page_url d
+        ,idp
+        )
 
 
+{-
 generate_dippers_tags_response :: [(D.Dipper,[String])] -> [(ByteString, Handler App App ())]
 generate_dippers_tags_response p = [(route , handler)]
    where
 
-   route = B.pack "/tagged/:tag"
+   route = tagged_tag_link
 
    handler = do
      tags <- getParams
@@ -143,10 +193,9 @@ generate_dippers_tags_response p = [(route , handler)]
 
 
    links tags d
-      |(total_pages d) > 1 = map (\x-> "/tagged/"
-                         ++ (request_with_no_page_number tags)
-                         ++ (show x)
-                         ++ ".html") [1..total_pages d]
+      |(total_pages d) > 1 = map (tagged_node_link''
+                                       (request_with_no_page_number tags)
+                                  ) [1..total_pages d]
       |otherwise = []
 
    dippers_on_page_n :: Int -> D.Dippers -> D.Dippers
@@ -171,9 +220,66 @@ generate_dippers_tags_response p = [(route , handler)]
            ) p
 
 
+-}
+
+
+generate_dippers_tags_responseM :: State Routes [(ByteString, Handler App App ())]
+generate_dippers_tags_responseM = do
+   s@(Routes {dippers_tags=dippers_tags}) <- get
+   return [(route , handler dippers_tags s)]
+   where
+
+   route = tagged_tag_link
+
+   handler :: [(D.Dipper,[String])] -> Routes ->  Handler App App ()
+   handler p s = do
+     tags <- getParams
+     evalState
+       (
+       D.dippersT_HandlerM (dippers_from_request_string' tags p)
+                           (D.give_all_used_tags p)
+                           (fromMaybe 1 $ request_page_number tags)
+                           (links tags (dippers_from_request_string'' tags p))
+       )
+       s
+
+
+
+
+   links tags d
+      |(total_pages d) > 1 = map (tagged_node_link''
+                                       (request_with_no_page_number tags)
+                                  ) [1..total_pages d]
+      |otherwise = []
+
+   dippers_on_page_n :: Int -> D.Dippers -> D.Dippers
+   dippers_on_page_n i d
+      |i<=1 = take max_items_per_page d
+      |(fromIntegral i)<=total_pages d = give_page i d
+      |otherwise = take max_items_per_page $ reverse d
+      where
+
+
+   dippers_from_request_string' tags p =
+           dippers_on_page_n (fromMaybe 1 $ request_page_number tags)
+                             (dippers_from_request_string'' tags p)
+
+
+
+
+
+   dippers_from_request_string'' tags p = D.dippers_from_request_string
+           (
+           request_with_no_page_number tags
+           ) p
+
+
+
+
+
 
 request tags = reverse $ drop 5 $ reverse $ B.unpack $ B.concat $
-                                                                  DMap.findWithDefault [] "tag" tags
+                                                                  DMap.findWithDefault [] tagged_tag tags
 
 request_page_number tags = try_read $ reverse $ takeWhile C.isDigit $ reverse $ request tags
   where
@@ -215,7 +321,4 @@ app = do
     addRoutes r
     return $ App h s)
 
---------------------------------------------------------------------------------
--- | Our glorious index page
---indexHandler :: Handler App App ()
---indexHandler = render "index"
+

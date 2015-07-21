@@ -7,7 +7,7 @@
 
 </script>
 <meta charset="UTF-8" />
-<link href="static/main.css" rel="stylesheet" type="text/css" />
+<link href='${main_css}' rel="stylesheet" type="text/css" />
 <title>Противопопугайный сайт: Архив / Never Parrot: Archive </title>
 </head>
 <body>
