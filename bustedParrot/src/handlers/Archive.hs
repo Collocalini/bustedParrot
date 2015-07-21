@@ -32,7 +32,7 @@ import qualified Heist.Interpreted as I
 ------------------------------------------------------------------------------
 import           Application
 --------------------------------------------------------------------------------
-import Main_page
+import Main_page_common
 
 
 

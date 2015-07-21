@@ -26,9 +26,11 @@ import           System.IO
 import           Site
 import           Control.Monad.State
 
-import qualified Main_page as MP
+--import qualified Main_page as MP
+import qualified Main_page_common as MPC
 import qualified Page as Pa
 import qualified Dipper as D
+import qualified Nodes as N
 
 #ifdef DEVELOPMENT
 import           Snap.Loader.Dynamic
@@ -113,17 +115,19 @@ getConf = commandLineAppConfig defaultConfig
 -- sophisticated code might.
 getActions :: Config Snap AppConfig -> IO (Snap (), IO ())
 getActions conf = do
-    p<-MP.postsT_h_io
+    p<-MPC.postsT_h_io
     pa<-Pa.pagesT_h_io
     d <-D.dippersT_io
     dr<-D.give_dippers_references
     dt<-D.give_dippers_tags
+    n <-N.nodesT_io
     (msgs, site, cleanup) <- runSnaplet
         (appEnvironment =<< getOther conf) $ evalState app (Routes { postsT   = p
                                                                     ,pagesT   = pa
                                                                     ,dippersT = d
                                                                     ,dippers_references = dr
                                                                     ,dippers_tags = dt
+                                                                    ,node_map = N.nodes_to_map n
                                                                     })
     hPutStrLn stderr $ T.unpack msgs
     return (site, cleanup)

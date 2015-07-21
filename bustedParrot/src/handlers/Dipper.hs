@@ -50,7 +50,7 @@ import qualified Codec.Picture as CPic
 ------------------------------------------------------------------------------
 import           Application
 --------------------------------------------------------------------------------
-import Main_page
+import Main_page_common
 
 
 

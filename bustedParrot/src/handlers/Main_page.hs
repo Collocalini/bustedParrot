@@ -5,13 +5,7 @@
 module Main_page
   (
     main_pageT_Handler
-   ,splicesFrom_main_postsT_h
-   ,postsT_h_io
-  -- ,Routes(..)
-   ,PostT(..)
-   ,isPostFile
-   ,number2post
-   ,number_from_post_name
+   ,main_pageT_HandlerM
   ) where
 
 ------------------------------------------------------------------------------
@@ -24,17 +18,16 @@ import qualified Heist.Interpreted as I
 import System.Directory
 import Data.List
 import Data.Monoid
+import Control.Monad.State
 --import Control.Monad
 --import qualified Page as Pa
 ------------------------------------------------------------------------------
 import           Application
 --------------------------------------------------------------------------------
-
-data PostT = PostT {
- postT :: Template
-,number :: Int
-}
-
+import NodesM
+import Main_page_common
+import Site_state
+import InsertLinks
 
 
 
@@ -43,47 +36,24 @@ data PostT = PostT {
 
 
 
+main_pageT_HandlerM :: [PostT] -> State Routes (Handler App App ())
+main_pageT_HandlerM p = do
+   (Routes {node_map=nm}) <- get
 
+   return $ renderWithSplices "main_page/main_posts"
+       (mconcat
+       [(
+       (splicesFrom_main_postsT_h) $ head p
+       ),
+       ("posts_h" ##
+       {-(I.mapSplices $ I.runChildrenWith . (\f -> splicesFrom_main_postsT_h_M f nm))
+          $ take 9 $ tail p-}
+       (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) $ take 9 $ tail p
 
+       )
+       ,insertLinks $ Just nm]
+       )
 
-postsT_h_io :: IO [PostT]
-postsT_h_io = do
-   l<- getDirectoryContents "posts"
-   mapM number2post $ reverse $ sort $ number_from_post_name $ filter isPostFile l
-{-   where
-     f :: FilePath -> Bool
-     f ('p':'o':'s':'t':_) = True
-     f _ = False
-
-     s2p :: Int -> IO PostT
-     s2p s = do
-       (Right s'@(DocumentFile {dfDoc=(TT.HtmlDocument {TT.docContent=docContent})})) <-
-                                                        getDoc $ "posts/post" ++ show s ++ ".html"
-       return $ PostT {postT=docContent, number=s}
-
-     ff :: [FilePath] -> [Int]
-     ff fp = map (read . n . (drop 4)) fp
-       where
-         n x = (take ((length x)-5) ) x
--}
-
-isPostFile :: FilePath -> Bool
-isPostFile ('p':'o':'s':'t':_) = True
-isPostFile _ = False
-
-
-
-number2post :: Int -> IO PostT
-number2post s = do
-   (Right (DocumentFile {dfDoc=(TT.HtmlDocument {TT.docContent=docContent})})) <-
-                                                getDoc $ "posts/post" ++ show s ++ ".html"
-   return $ PostT {postT=docContent, number=s}
-
-
-number_from_post_name :: [FilePath] -> [Int]
-number_from_post_name fp = map (read . n . (drop 4)) fp
-   where
-    n x = (take ((length x)-5) ) x
 
 
 
@@ -100,30 +70,6 @@ main_pageT_Handler p = renderWithSplices "main_page/main_posts"
 
 
 
-
-splicesFrom_main_postsT_h :: Monad n => PostT -> Splices (I.Splice n)
-splicesFrom_main_postsT_h t = do
-   mconcat $ (["post_h"  ## return [head $ postT t]] ++ step1 (tail $ postT t) )
-  where
-  step1 [] =
-    ["main_post_h_view_full_caption"  ## I.textSplice ""
-    ,"main_post_h_view_full_style"  ## I.textSplice "display:none"
-    ,"main_post_h_view_full_link"  ## I.textSplice $ T.pack $ "/"
-    ]
-  step1 [_] =
-    ["main_post_h_view_full_caption"  ## I.textSplice ""
-    ,"main_post_h_view_full_style"  ## I.textSplice "display:none"
-    ,"main_post_h_view_full_link"  ## I.textSplice $ T.pack $ "/"
-    ]
-  {-step1 [_,_] =
-    ["main_post_h_view_full_caption"  ## I.textSplice ""
-    ,"main_post_h_view_full_style"  ## I.textSplice "display:none"
-    ,"main_post_h_view_full_link"  ## I.textSplice $ T.pack $ ""
-    ]-}
-  step1 _ =
-    ["main_post_h_view_full_caption"  ## I.textSplice "Читать дальше / Read more"
-    ,"main_post_h_view_full_style"  ## I.textSplice ""
-    ,"main_post_h_view_full_link"  ## I.textSplice $ T.pack $ "/post" ++ show (number t) ++ ".html"    ]
 
 
 

@@ -32,46 +32,68 @@ import           Control.Monad.State
 --import           Control.Applicative
 
 import qualified Main_page as MP
+import qualified Main_page_common as MPC
 import qualified Post as P
 import qualified Page as Pa
 import qualified Archive as A
 import qualified Dipper as D
+import Site_state
 ------------------------------------------------------------------------------
 
 
-data Routes = Routes {
- postsT :: [MP.PostT]
-,pagesT :: [Pa.PageT]
-,dippersT :: D.Dippers
-,dippers_references :: [(D.Dipper,[MP.PostT])]
-,dippers_tags :: [(D.Dipper,[String])]
-}
 
-max_items_per_page:: Int
-max_items_per_page = 50
 
 -- | The application's routes.
 routes :: State Routes [(ByteString, Handler App App ())]
 routes = do
-    (Routes { postsT=postsT
-             ,pagesT=pagesT
-             ,dippersT=dippersT
-             ,dippers_references=dippers_references
-             ,dippers_tags=dippers_tags}) <- get
+   (Routes { postsT=postsT
+            ,pagesT=pagesT
+            ,dippersT=dippersT
+            ,dippers_references=dippers_references
+            ,dippers_tags=dippers_tags}) <- get
 
-    return $ [ ("", MP.main_pageT_Handler postsT)
-              ,("/archive.html", A.archive_Handler postsT)
-              ,("/static", serveDirectory "static")
-             ] ++ (generate_postN_response postsT)
-               ++ (generate_pageWTWR_response pagesT)
-               ++ (generate_dippers_pageN_response dippersT dippers_tags)
-               ++ (generate_dippers_individual_page_response dippers_references)
-               ++ (generate_dippers_tags_response dippers_tags)
+   post_r<- generate_postN_responseM
+   main_page_r<- MP.main_pageT_HandlerM postsT
 
-generate_postN_response :: [MP.PostT] -> [(ByteString, Handler App App ())]
-generate_postN_response p = map (\x@(MP.PostT {MP.number=n}) ->
+   return $ concat
+      [
+        (routes_pure postsT pagesT dippersT dippers_references dippers_tags)
+       ,post_r
+       ,[(B.pack "", main_page_r )]
+      ]
+
+   where
+   routes_pure postsT pagesT dippersT dippers_references dippers_tags =
+      [ --("", MP.main_pageT_Handler postsT)
+        ("/archive.html", A.archive_Handler postsT)
+       ,("/static", serveDirectory "static") ]
+       -- ++ (generate_postN_response postsT)
+         ++ (generate_pageWTWR_response pagesT)
+         ++ (generate_dippers_pageN_response dippersT dippers_tags)
+         ++ (generate_dippers_individual_page_response dippers_references)
+         ++ (generate_dippers_tags_response dippers_tags)
+
+
+
+
+
+generate_postN_response :: [MPC.PostT] -> [(ByteString, Handler App App ())]
+generate_postN_response p = map (\x@(MPC.PostT {MPC.number=n}) ->
     (B.pack $ "/post" ++ (show n) ++ ".html",
      P.post_Handler x))  p
+
+
+
+
+generate_postN_responseM :: State Routes [(ByteString, Handler App App ())]
+generate_postN_responseM = do
+   (Routes { postsT=p}) <- get
+   phl<- mapM (\x -> P.post_HandlerM x) p
+   return $ zip (r p) phl
+   where
+   r p = map (\MPC.PostT {MPC.number=n} -> B.pack $ "/post" ++ (show n) ++ ".html") p
+
+
 
 
 generate_pageWTWR_response :: [Pa.PageT] -> [(ByteString, Handler App App ())]
@@ -94,10 +116,10 @@ generate_dippers_pageN_response p dt = zip routes responces
 
 
 
-generate_dippers_individual_page_response :: [(D.Dipper,[MP.PostT])] -> [(ByteString, Handler App App ())]
+generate_dippers_individual_page_response :: [(D.Dipper,[MPC.PostT])] -> [(ByteString, Handler App App ())]
 generate_dippers_individual_page_response p = map step1 p
    where
-   step1 :: (D.Dipper,[MP.PostT]) -> (ByteString, Handler App App ())
+   step1 :: (D.Dipper,[MPC.PostT]) -> (ByteString, Handler App App ())
    step1 a@(d,_) =
       (
        B.pack $ ("/individual_dippers/" ++)  $ T.unpack $ D.page_url d
