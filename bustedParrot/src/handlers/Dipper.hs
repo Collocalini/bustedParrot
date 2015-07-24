@@ -17,11 +17,11 @@ module Dipper (
   Dipper(..)
  ,Dippers
  ,dippersT_io
- ,dippersT_Handler
+-- ,dippersT_Handler
  ,dippersT_HandlerM
  ,give_dippers_references
  ,give_dippers_tags
- ,dipperT_individual_page_Handler
+-- ,dipperT_individual_page_Handler
  ,dipperT_individual_page_HandlerM
  ,tag_c_groups_from_request_string
  ,tags_from_c_group
@@ -42,13 +42,13 @@ import qualified Heist.Interpreted as I
 import System.Directory
 import qualified System.FilePath.Posix as Fp
 import Data.List
---import qualified Data.Maybe as DM
+import qualified Data.Map as Dm
 import Data.Monoid
---import Control.Monad
 import Control.Applicative
 import qualified Data.ByteString.Lazy as B
 import qualified Codec.Picture as CPic
 import Control.Monad.State
+import qualified Text.ParserCombinators.Parsec as P
 ------------------------------------------------------------------------------
 import           Application
 --------------------------------------------------------------------------------
@@ -88,10 +88,10 @@ instance ToJSON Dipper_json
 
 
 
-dippersT_io :: IO Dippers
-dippersT_io = do
+dippersT_io ::  Node_map -> IO Dippers
+dippersT_io nm = do
    l<- getDirectoryContents "dippers"
-   d <- mapM dipper_from_name_suffix $ number_from_dipper_name $ filter isDipperFile l
+   d <- mapM (\x->dipper_from_name_suffix x nm) (number_from_dipper_name $ filter isDipperFile l)
    mapM dipper_check_orientation $ concat d
 
 
@@ -100,11 +100,11 @@ dippersT_io = do
 
 
 
-dippersT_for_tag_io :: IO [(String, Dippers)]
-dippersT_for_tag_io = do
+dippersT_for_tag_io ::  Node_map -> IO [(String, Dippers)]
+dippersT_for_tag_io nm = do
    l<- getDirectoryContents "tags"
    let only_files = filter (\s-> not $ ((head s) == '.') || ((take 2 s) == ".." )) l
-   d <- mapM (\s-> dipper_from_name $ "tags/" ++ s) $ only_files
+   d <- mapM (\s-> dipper_from_name  ("tags/" ++ s) nm) $ only_files
 
    --d1<- mapM (mapM dipper_check_orientation) d
    {-putStrLn "------------------------------------------"
@@ -134,23 +134,23 @@ isDipperFile _ = False
 
 
 
-dipper_from_name_suffix :: String -> IO Dippers
-dipper_from_name_suffix s = do
+dipper_from_name_suffix :: String -> Node_map -> IO Dippers
+dipper_from_name_suffix s nm = do
    d <- eitherDecode <$> B.readFile ("dippers/dipper_" ++ s ++ ".json"):: IO (Either String Dippers_json)
    case d of
       Left err -> do putStrLn err
                      return []
-      Right dl -> return $ M.catMaybes $ map give_dipper dl
+      Right dl -> return $ M.catMaybes $ map (\x->give_dipper x nm) dl
 
 
 
-dipper_from_name :: String -> IO Dippers
-dipper_from_name s = do
+dipper_from_name :: String -> Node_map -> IO Dippers
+dipper_from_name s nm = do
    d <- eitherDecode <$> B.readFile s :: IO (Either String Dippers_json)
    case d of
       Left err -> do putStrLn err
                      return []
-      Right dl -> return $ M.catMaybes $ map give_dipper dl
+      Right dl -> return $ M.catMaybes $ map (\x->give_dipper x nm) dl
 
 
 
@@ -165,23 +165,24 @@ number_from_dipper_name fp = map (n . (drop 7)) fp
 
 
 
-give_dipper :: Dipper_json -> Maybe Dipper
+give_dipper :: Dipper_json -> Node_map -> Maybe Dipper
 give_dipper     (Dipper_json {miniature_json = _
                              ,name_json      = _
                              ,url_json       = ""
                              ,comment_json   = _
-                             }) = Nothing
+                             }) _ = Nothing
 
 give_dipper     (Dipper_json {miniature_json = m
                              ,name_json      = n
                              ,url_json       = u
                              ,comment_json   = c
-                             }) =
+                             })
+                             nm =
    Just $ Dipper {
      miniature = maybe_miniature
     ,name      = maybe_name
-    ,page_url  = dipper_page_node_link' u
-    ,url       = u
+    ,page_url  = dipper_page_node_link' $ url_substitution u nm
+    ,url       = url_substitution u nm
     ,comment   = maybe_comment
     ,isVertical = False
     }
@@ -256,6 +257,46 @@ image_is_vertical  _ = False
 
 
 
+url_substitution :: T.Text -> Node_map -> T.Text
+url_substitution url nm =
+   case (P.parse (url_substitution_parse_nodes) "(unknown)" $ T.unpack url) of
+      Left e -> url
+      Right r -> url_substitution_substitute_nodes r nm
+
+
+
+
+url_substitution_parse_nodes :: P.Parser ([Either T.Text T.Text])
+url_substitution_parse_nodes = do
+  s1<- P.optionMaybe $ P.manyTill P.anyChar (P.string "${")
+  case s1 of
+     Just s -> do
+                  s2<- P.manyTill P.anyChar (P.string "}")
+                  next <- url_substitution_parse_nodes
+                  return $ [(Left $ T.pack s),(Right $ T.pack s2)] ++ next
+     Nothing -> do
+                  s2<- P.many P.anyChar
+                  return $ [Left $ T.pack s2]
+
+
+
+
+
+
+
+url_substitution_substitute_nodes :: [Either T.Text T.Text] -> Node_map -> T.Text
+url_substitution_substitute_nodes s nm = T.concat $ map step1 s
+   where
+   step1 :: Either T.Text T.Text -> T.Text
+   step1 (Left n) = n
+   step1 (Right n) = Dm.findWithDefault "" n nm
+
+
+
+
+
+
+
 
 give_all_posts :: IO [(String, T.Text)]
 give_all_posts = do
@@ -288,9 +329,9 @@ dippers_references d posts = map (dipper_is_found_in posts) d
 
 
 
-give_dippers_references :: IO [(Dipper,[PostT])]
-give_dippers_references = do
-   d   <- dippersT_io
+give_dippers_references :: Node_map -> IO [(Dipper,[PostT])]
+give_dippers_references nm = do
+   d   <- dippersT_io nm
    ps  <- give_all_posts
    pTs <- mapM step1 $ dippers_references d ps
    return $ zip d pTs
@@ -349,10 +390,10 @@ dipper_is_found_in_tags tags dipper  =
 
 
 
-give_dippers_tags :: IO [(Dipper,[String])]
-give_dippers_tags = do
-   d   <- dippersT_io
-   ps  <- dippersT_for_tag_io
+give_dippers_tags :: Node_map -> IO [(Dipper,[String])]
+give_dippers_tags nm = do
+   d   <- dippersT_io nm
+   ps  <- dippersT_for_tag_io nm
    return $ zip d $ map (dipper_is_found_in_tags ps) d
 
 
@@ -458,7 +499,7 @@ dippersT_HandlerM p tags page_number links = do
 
 
 
-
+{--
 dippersT_Handler :: Dippers -> [String] -> Int -> [String] -> Handler App App ()
 dippersT_Handler p tags page_number links = renderWithSplices "dipper/dipper_base"
    $ mconcat $ [
@@ -474,7 +515,7 @@ dippersT_Handler p tags page_number links = renderWithSplices "dipper/dipper_bas
    )
    ]
 
-
+--}
 
 
 
@@ -556,7 +597,7 @@ dipperT_individual_page_HandlerM (d,sl) = do
 
 
 
-
+{--
 
 dipperT_individual_page_Handler :: (Dipper,[PostT]) -> Handler App App ()
 dipperT_individual_page_Handler (d,sl) = renderWithSplices "dipper/dipper_individual_page_base"
@@ -571,7 +612,7 @@ dipperT_individual_page_Handler (d,sl) = renderWithSplices "dipper/dipper_indivi
    ]
 
 
-
+--}
 
 
 

@@ -121,6 +121,43 @@
 
 
 
+
+
+
+
+,{
+   "node_json" : ["twilight_eats_a_bagel_storyboard_path"]
+  ,"link_json" : "/static/twilight_eats_a_bagel_storyboard/"
+ }
+
+,{
+   "node_json" : ["twilight_eats_a_bagel_storyboard_base_name"]
+  ,"link_json" : "twilight_eats_a_bagel_storyboard_"
+ }
+
+
+,{
+   "node_json" : ["twilight_eats_a_bagel_storyboard_thm_path"]
+  ,"link_json" : "/static/thumbnails/twilight_eats_a_bagel_storyboard/"
+ }
+
+,{
+   "node_json" : ["twilight_eats_a_bagel_storyboard_thm_base_name"]
+  ,"link_json" : "twilight_eats_a_bagel_storyboard_"
+ }
+
+
+
+,{
+   "node_json" : ["twilight_eats_a_bagel_storyboard_name_suffix"]
+  ,"link_json" : ".jpg"
+ }
+
+,{
+   "node_json" : ["twilight_eats_a_bagel_storyboard_thm_name_suffix"]
+  ,"link_json" : ".jpg"
+ }
+
 ]
 
 

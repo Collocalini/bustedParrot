@@ -1,65 +1,65 @@
 [
 
  {
-   "miniature_json" : "/static/thumbnails/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0001.jpg"
-  ,"url_json"       : "/static/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0001.jpg"
+   "miniature_json" : "${twilight_eats_a_bagel_storyboard_thm_path}${twilight_eats_a_bagel_storyboard_thm_base_name}0001${twilight_eats_a_bagel_storyboard_thm_name_suffix}"
+  ,"url_json"       : "${twilight_eats_a_bagel_storyboard_path}${twilight_eats_a_bagel_storyboard_base_name}0001${twilight_eats_a_bagel_storyboard_name_suffix}"
   ,"name_json"      : "Twilight eats a bagel storyboard"
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "/static/thumbnails/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0002.jpg"
-  ,"url_json"       : "/static/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0002.jpg"
+   "miniature_json" : "${twilight_eats_a_bagel_storyboard_thm_path}${twilight_eats_a_bagel_storyboard_thm_base_name}0002${twilight_eats_a_bagel_storyboard_thm_name_suffix}"
+  ,"url_json"       : "${twilight_eats_a_bagel_storyboard_path}${twilight_eats_a_bagel_storyboard_base_name}0002${twilight_eats_a_bagel_storyboard_name_suffix}"
   ,"name_json"      : "Twilight eats a bagel storyboard"
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "/static/thumbnails/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0003.jpg"
-  ,"url_json"       : "/static/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0003.jpg"
+   "miniature_json" : "${twilight_eats_a_bagel_storyboard_thm_path}${twilight_eats_a_bagel_storyboard_thm_base_name}0003${twilight_eats_a_bagel_storyboard_thm_name_suffix}"
+  ,"url_json"       : "${twilight_eats_a_bagel_storyboard_path}${twilight_eats_a_bagel_storyboard_base_name}0003${twilight_eats_a_bagel_storyboard_name_suffix}"
   ,"name_json"      : "Twilight eats a bagel storyboard"
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "/static/thumbnails/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0004.jpg"
-  ,"url_json"       : "/static/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0004.jpg"
+   "miniature_json" : "${twilight_eats_a_bagel_storyboard_thm_path}${twilight_eats_a_bagel_storyboard_thm_base_name}0004${twilight_eats_a_bagel_storyboard_thm_name_suffix}"
+  ,"url_json"       : "${twilight_eats_a_bagel_storyboard_path}${twilight_eats_a_bagel_storyboard_base_name}0004${twilight_eats_a_bagel_storyboard_name_suffix}"
   ,"name_json"      : "Twilight eats a bagel storyboard"
   ,"comment_json"   : ""
  }
 
 
 ,{
-   "miniature_json" : "/static/thumbnails/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0005.jpg"
-  ,"url_json"       : "/static/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0005.jpg"
+   "miniature_json" : "${twilight_eats_a_bagel_storyboard_thm_path}${twilight_eats_a_bagel_storyboard_thm_base_name}0005${twilight_eats_a_bagel_storyboard_thm_name_suffix}"
+  ,"url_json"       : "${twilight_eats_a_bagel_storyboard_path}${twilight_eats_a_bagel_storyboard_base_name}0005${twilight_eats_a_bagel_storyboard_name_suffix}"
   ,"name_json"      : "Twilight eats a bagel storyboard"
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "/static/thumbnails/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0006.jpg"
-  ,"url_json"       : "/static/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0006.jpg"
+   "miniature_json" : "${twilight_eats_a_bagel_storyboard_thm_path}${twilight_eats_a_bagel_storyboard_thm_base_name}0006${twilight_eats_a_bagel_storyboard_thm_name_suffix}"
+  ,"url_json"       : "${twilight_eats_a_bagel_storyboard_path}${twilight_eats_a_bagel_storyboard_base_name}0006${twilight_eats_a_bagel_storyboard_name_suffix}"
   ,"name_json"      : "Twilight eats a bagel storyboard"
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "/static/thumbnails/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0007.jpg"
-  ,"url_json"       : "/static/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0007.jpg"
+   "miniature_json" : "${twilight_eats_a_bagel_storyboard_thm_path}${twilight_eats_a_bagel_storyboard_thm_base_name}0007${twilight_eats_a_bagel_storyboard_thm_name_suffix}"
+  ,"url_json"       : "${twilight_eats_a_bagel_storyboard_path}${twilight_eats_a_bagel_storyboard_base_name}0007${twilight_eats_a_bagel_storyboard_name_suffix}"
   ,"name_json"      : "Twilight eats a bagel storyboard"
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "/static/thumbnails/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0008.jpg"
-  ,"url_json"       : "/static/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0008.jpg"
+   "miniature_json" : "${twilight_eats_a_bagel_storyboard_thm_path}${twilight_eats_a_bagel_storyboard_thm_base_name}0008${twilight_eats_a_bagel_storyboard_thm_name_suffix}"
+  ,"url_json"       : "${twilight_eats_a_bagel_storyboard_path}${twilight_eats_a_bagel_storyboard_base_name}0008${twilight_eats_a_bagel_storyboard_name_suffix}"
   ,"name_json"      : "Twilight eats a bagel storyboard"
   ,"comment_json"   : ""
  }
 
 ,{
-   "miniature_json" : "/static/thumbnails/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0009.jpg"
-  ,"url_json"       : "/static/twilight_eats_a_bagel_storyboard/twilight_eats_a_bagel_storyboard_0009.jpg"
+   "miniature_json" : "${twilight_eats_a_bagel_storyboard_thm_path}${twilight_eats_a_bagel_storyboard_thm_base_name}0009${twilight_eats_a_bagel_storyboard_thm_name_suffix}"
+  ,"url_json"       : "${twilight_eats_a_bagel_storyboard_path}${twilight_eats_a_bagel_storyboard_base_name}0009${twilight_eats_a_bagel_storyboard_name_suffix}"
   ,"name_json"      : "Twilight eats a bagel storyboard"
   ,"comment_json"   : ""
  }
