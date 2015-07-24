@@ -14,8 +14,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Post (
- post_Handler
-,post_HandlerM
+-- post_Handler
+post_HandlerM
 ) where
 
 --import qualified Data.Text as T
@@ -43,13 +43,6 @@ post_HandlerM p = do
       ,insertLinks $ Just nm
        ]
 
-
-post_Handler :: PostT -> Handler App App ()
-post_Handler p = renderWithSplices "post/post_base" $
-   mconcat [
-    splicesFrom_post_h p
-   ,insertLinks Nothing
-   ]
 
 
 splicesFrom_post_h :: Monad n => PostT -> Splices (I.Splice n)

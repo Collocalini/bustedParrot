@@ -289,7 +289,7 @@ url_substitution_substitute_nodes s nm = T.concat $ map step1 s
    where
    step1 :: Either T.Text T.Text -> T.Text
    step1 (Left n) = n
-   step1 (Right n) = Dm.findWithDefault "" n nm
+   step1 (Right n) = node_to_link n nm
 
 
 
@@ -499,25 +499,6 @@ dippersT_HandlerM p tags page_number links = do
 
 
 
-{--
-dippersT_Handler :: Dippers -> [String] -> Int -> [String] -> Handler App App ()
-dippersT_Handler p tags page_number links = renderWithSplices "dipper/dipper_base"
-   $ mconcat $ [
-   ("tags" ##
-   (I.mapSplices $ I.runChildrenWith . splices_from_tag) tags
-   )
-  ,("entries" ##
-   (I.mapSplices $ I.runChildrenWith . splicesFrom_dippers) p
-   )
-  ,("pages" ##
-   (I.mapSplices $ I.runChildrenWith . splices_from_page_number page_number)
-      $ zip [1..length links] (links)
-   )
-   ]
-
---}
-
-
 
 
 
@@ -596,23 +577,6 @@ dipperT_individual_page_HandlerM (d,sl) = do
 
 
 
-
-{--
-
-dipperT_individual_page_Handler :: (Dipper,[PostT]) -> Handler App App ()
-dipperT_individual_page_Handler (d,sl) = renderWithSplices "dipper/dipper_individual_page_base"
-   $ mconcat [
-
-    splicesFrom_dippers d
-
-   ,("references" ##
-     (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) sl
-    )
-
-   ]
-
-
---}
 
 
 
