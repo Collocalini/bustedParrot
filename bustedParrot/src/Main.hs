@@ -115,12 +115,13 @@ getConf = commandLineAppConfig defaultConfig
 -- sophisticated code might.
 getActions :: Config Snap AppConfig -> IO (Snap (), IO ())
 getActions conf = do
+    n <-N.nodesT_io
     p<-MPC.postsT_h_io
     pa<-Pa.pagesT_h_io
-    d <-D.dippersT_io
-    dr<-D.give_dippers_references
-    dt<-D.give_dippers_tags
-    n <-N.nodesT_io
+    d <-D.dippersT_io $ N.nodes_to_map n
+    dr<-D.give_dippers_references $ N.nodes_to_map n
+    dt<-D.give_dippers_tags $ N.nodes_to_map n
+
     (msgs, site, cleanup) <- runSnaplet
         (appEnvironment =<< getOther conf) $ evalState app (Routes { postsT   = p
                                                                     ,pagesT   = pa
