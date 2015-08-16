@@ -42,6 +42,30 @@
   ,"link_json" : "/static/where_is_my_bow_top.png"
  }
 
+
+
+,{
+   "node_json" : ["stapelia_all_4"]
+  ,"link_json" : "/static/16082015_stapelia/20150816_021_stapelia_all_4.jpg"
+ }
+
+,{
+   "node_json" : ["stapelia_2_flower_closeup"]
+  ,"link_json" : "/static/16082015_stapelia/20150816_011_2_flower_closeup.jpg"
+ }
+
+,{
+   "node_json" : ["stapelia_fly"]
+  ,"link_json" : "/static/16082015_stapelia/20150816_003_stapelia_fly.jpg"
+ }
+
+,{
+   "node_json" : ["stapelia_2_flowers"]
+  ,"link_json" : "/static/16082015_stapelia/20150816_029_stapelia_2_flowers.jpg"
+ }
+
+
+
 ]
 
 
