@@ -183,6 +183,7 @@ give_dipper     (Dipper_json {miniature_json = m
     ,name      = maybe_name
     ,page_url  = dipper_page_node_link' $ url_substitution u nm
     ,url       = url_substitution u nm
+    ,url_raw   = u
     ,comment   = maybe_comment
     ,isVertical = False
     }
@@ -316,8 +317,9 @@ dipper_is_found_in posts
     ,name      = _
     ,page_url  = _
     ,url       = u
+    ,url_raw   = u_raw
     ,comment   = _
-    })  = (\(l,_) -> l) $ unzip $ filter (\(_,t) -> T.isInfixOf u t) posts
+    })  = (\(l,_) -> l) $ unzip $ filter (\(_,t) -> (T.isInfixOf u t)||(T.isInfixOf u_raw t)) posts
 
 
 
