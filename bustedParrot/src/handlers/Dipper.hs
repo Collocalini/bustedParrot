@@ -91,7 +91,8 @@ instance ToJSON Dipper_json
 dippersT_io ::  Node_map -> IO Dippers
 dippersT_io nm = do
    l<- getDirectoryContents "dippers"
-   d <- mapM (\x->dipper_from_name_suffix x nm) (number_from_dipper_name $ filter isDipperFile l)
+   d <- mapM (\x->dipper_from_name_suffix x nm)
+             (number_from_dipper_name $ filter isDipperFile $ reverse $ sort l)
    mapM dipper_check_orientation $ concat d
 
 
