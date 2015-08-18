@@ -481,6 +481,26 @@ tag_c_groups_from_request_string s = words $ map understroke2space s
 
 
 
+dippers_neighbors :: Dipper -> Dippers -> (Maybe Dipper, Maybe Dipper)
+dippers_neighbors d ds = step1 dippers_index
+   where
+   dippers_index = elemIndex d ds
+   prev_dipper i
+      |i==0 = Nothing
+      |otherwise = Just $ ds !! (i-1)
+
+   next_dipper i
+      |i < (length ds) = Just $ ds !! (i+1)
+      |otherwise = Nothing
+
+   step1 (Just i) = (prev_dipper i, next_dipper i)
+   step1 (Nothing) = (Nothing, Nothing)
+
+
+
+
+
+
 dippersT_HandlerM :: Dippers -> [String] -> Int -> [String] -> State S.Routes (Handler App App ())
 dippersT_HandlerM p tags page_number links = do
    (S.Routes {S.node_map=nm}) <- get
