@@ -14,8 +14,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Page (
- page_Handler
-,page_HandlerM
+ --page_Handler
+ page_HandlerM
 ,pagesT_h_io
 
 ) where
@@ -80,13 +80,6 @@ page_HandlerM p = do
       ]
 
 
-
-page_Handler :: PageT -> Handler App App ()
-page_Handler p = renderWithSplices "post/post_base"
-   (
-   splicesFrom_page_h p
-
-   )
 
 
 

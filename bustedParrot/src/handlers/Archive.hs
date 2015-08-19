@@ -14,8 +14,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Archive (
- archive_Handler
-,archive_HandlerM
+-- archive_Handler
+archive_HandlerM
 ) where
 
 
@@ -49,11 +49,5 @@ archive_HandlerM p = do
        )
 
 
-
-archive_Handler :: [PostT] -> Handler App App ()
-archive_Handler p = renderWithSplices "archive/archive_posts"
-   (
-   "posts_h" ## (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) $ p
-   )
 
 

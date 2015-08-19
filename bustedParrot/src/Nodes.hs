@@ -178,7 +178,15 @@ dippers_pageN_node_link'' n = "/dippers/dippers_" ++ (show n) ++ ".html"
 
 
 dipper_page_node_link' :: T.Text -> T.Text
-dipper_page_node_link' u = T.pack $ "/" ++ Fp.replaceExtension (Fp.takeFileName $ T.unpack u) ".html"
+dipper_page_node_link' u
+   |link_is_local u = replace_extention_only
+   |otherwise       = strip_path_and_replace_extention
+   where
+   replace_extention_only = T.pack $ Fp.replaceExtension (T.unpack u) ".html"
+   strip_path_and_replace_extention =
+      T.pack $ "/" ++ Fp.replaceExtension (Fp.takeFileName $ T.unpack u) ".html"
+
+
 
 
 
