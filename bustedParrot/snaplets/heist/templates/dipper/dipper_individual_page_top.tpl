@@ -14,8 +14,10 @@
 </span>
 
 <span class="top_r">
-  <img  src="/static/rarity_eyes_closed.png" alt="" align="middle" class="top_r_img">
-  
+
+  <nav_prev/>
+  <nav_next/>
+
 </span>
 
 </div>

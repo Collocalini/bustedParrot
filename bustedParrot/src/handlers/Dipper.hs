@@ -490,7 +490,7 @@ dippers_neighbors d ds = step1 dippers_index
       |otherwise = Just $ ds !! (i-1)
 
    next_dipper i
-      |i < (length ds) = Just $ ds !! (i+1)
+      |i < (length ds)-1 = Just $ ds !! (i+1)
       |otherwise = Nothing
 
    step1 (Just i) = (prev_dipper i, next_dipper i)
@@ -584,13 +584,72 @@ splices_from_page_number number (page, link)
 
 
 
+dipperT_individual_page_navigation :: Monad n => (Maybe Dipper, Maybe Dipper) -> Splices (I.Splice n)
+dipperT_individual_page_navigation (p,n) = do
+   mconcat $ [
+     "nav_prev"   ## dipperT_individual_page_nav_no_nav p $ dipperT_individual_page_nav_prev p
+    ,"nav_next"   ## dipperT_individual_page_nav_no_nav n $ dipperT_individual_page_nav_next n
+    ]
+
+
+
+
+
+dipperT_individual_page_nav_common :: Monad n => Maybe Dipper -> Splices (I.Splice n)
+dipperT_individual_page_nav_common d = do
+   mconcat $ [
+     "url"        ## I.textSplice $ nav_url d
+    ,"style"      ## I.textSplice $ nav_style d
+    ]
+   where
+   nav_url :: Maybe Dipper -> T.Text
+   nav_url (Just ( Dipper {page_url=pu})) = individual_dipper_node_link' $ T.unpack $ pu
+   nav_url Nothing = ""
+
+   nav_style (Just _ ) = "dipper_navig"
+   nav_style Nothing   = "dipper_no_navig"
+
+
+
+
+dipperT_individual_page_nav_prev :: Monad n => Maybe Dipper -> Splices (I.Splice n)
+dipperT_individual_page_nav_prev d = do
+   mconcat $ [
+     dipperT_individual_page_nav_common d
+    ,"nav"      ## I.callTemplate "dipper_individual_page_nav_prev" (return ())
+    ]
+
+
+--dipperT_individual_page_nav_no_nav :: Monad n => Maybe Dipper -> Splices (I.Splice n) -> Splices (I.Splice n)
+dipperT_individual_page_nav_no_nav (Just d) t = do
+   I.callTemplate "dipper_individual_page_nav" t
+
+dipperT_individual_page_nav_no_nav Nothing t = do
+   I.callTemplate "dipper_individual_page_no_nav" t
+
+
+
+dipperT_individual_page_nav_next :: Monad n => Maybe Dipper -> Splices (I.Splice n)
+
+dipperT_individual_page_nav_next d = do
+   mconcat $ [
+     dipperT_individual_page_nav_common d
+    ,"nav"      ## I.callTemplate "dipper_individual_page_nav_next" (return ())
+    ]
+
+
+
+
+
+
 dipperT_individual_page_HandlerM :: (Dipper,[PostT]) -> State S.Routes (Handler App App ())
 dipperT_individual_page_HandlerM (d,sl) = do
-   (S.Routes {S.node_map=nm}) <- get
+   (S.Routes {S.node_map=nm, S.dippersT=dT}) <- get
    return $ renderWithSplices "dipper/dipper_individual_page_base"
        $ mconcat [
 
-        splicesFrom_dippers d
+        dipperT_individual_page_navigation $ dippers_neighbors d dT
+       ,splicesFrom_dippers d
 
        ,("references" ##
          (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) sl
