@@ -32,11 +32,18 @@ module Nodes (
 ,individual_dipper_node_link
 ,individual_dipper_node_link'
 ,individual_dipper_node_link''
+,individual_dipper_tagged_node_link
+---,individual_dipper_tagged_node_link'
+--,individual_dipper_tagged_node_link''
+,individual_dipper_tagged_request_link
 ,tagged_node_link
 ,tagged_node_link'
 ,tagged_node_link''
 ,tagged_tag_link
+,tagged_tag_link''
 ,tagged_tag
+,tagged_dipper
+,tagged_dipper''
 ) where
 
 
@@ -203,6 +210,17 @@ individual_dipper_node_link'' ('/':n) = "/individual_dippers/" ++ n
 individual_dipper_node_link'' n = "/individual_dippers/" ++ n
 
 
+individual_dipper_tagged_node_link :: String -> String -> B8.ByteString
+individual_dipper_tagged_node_link ('/':n) tag = B8.pack $ "/tagged/" ++ tag ++ "/" ++ n
+individual_dipper_tagged_node_link n       tag = B8.pack $ "/tagged/" ++ tag ++ "/" ++ n
+
+
+individual_dipper_tagged_request_link :: B8.ByteString
+individual_dipper_tagged_request_link  =
+   B8.pack $ tagged_tag_link'' ++ "/:" ++ tagged_dipper'' ++ "/:" ++ tagged_dipper'' ++ "/:" ++ tagged_dipper''
+
+
+
 tagged_node_link :: String -> Int -> B8.ByteString
 tagged_node_link n p = B8.pack $ "/tagged/" ++ n ++ (show p) ++ ".html"
 
@@ -217,12 +235,18 @@ tagged_node_link'' n p = "/tagged/" ++ n ++ (show p) ++ ".html"
 tagged_tag_link :: B8.ByteString
 tagged_tag_link = B8.pack $ "/tagged/:tag"
 
+tagged_tag_link'' :: String
+tagged_tag_link'' = "/tagged/:tag"
 
 tagged_tag :: B8.ByteString
 tagged_tag = B8.pack $ "tag"
 
 
+tagged_dipper :: B8.ByteString
+tagged_dipper = B8.pack $ "dipper"
 
+tagged_dipper'' :: String
+tagged_dipper'' = "dipper"
 
 link_is_local :: T.Text -> Bool
 link_is_local l = T.isPrefixOf "/static/" l

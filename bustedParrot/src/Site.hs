@@ -60,6 +60,7 @@ routes = do
    pagewtwr_r<- generate_pageWTWR_responseM
    dippers_pn_r<- generate_dippers_pageN_responseM
    dippers_ip_r<- generate_dippers_individual_page_responseM
+   dippers_ti_r<- generate_dippers_tagged_individual_responseM
    dippers_tags<- generate_dippers_tags_responseM
 
    return $ concat
@@ -72,6 +73,7 @@ routes = do
        ,pagewtwr_r
        ,dippers_pn_r
        ,dippers_ip_r
+       ,dippers_ti_r
        ,dippers_tags
       ]
 
@@ -138,17 +140,71 @@ generate_dippers_pageN_responseM = do
 
 generate_dippers_individual_page_responseM :: State Routes [(ByteString, Handler App App ())]
 generate_dippers_individual_page_responseM = do
-   (Routes {dippers_references=dippers_references}) <- get
-
-   mapM step1 dippers_references
+   (Routes {dippers_references=dippers_references, dippersT=dippersT}) <- get
+   mapM (step1 dippersT) dippers_references
    where
-   step1 :: (D.Dipper,[MPC.PostT]) -> State Routes (ByteString, Handler App App ())
-   step1 a@(d,_) = do
-      idp<- D.dipperT_individual_page_HandlerM a
+   step1 ::  D.Dippers -> (D.Dipper,[MPC.PostT]) -> State Routes (ByteString, Handler App App ())
+   step1 dT a@(d,_) = do
+
+      idp<- D.dipperT_individual_page_HandlerM a dT
       return (
          individual_dipper_node_link  $ T.unpack $ D.page_url d
         ,idp
         )
+
+
+
+
+generate_dippers_tagged_individual_responseM :: State Routes [(ByteString, Handler App App ())]
+generate_dippers_tagged_individual_responseM = do
+   s@(Routes {dippers_references=dippers_references, dippers_tags=dippers_tags}) <- get
+   --return [(route , handler dippers_tags dippers_references s)]
+   return $ zip (routes dippers_references) (map (\dr-> handler' dippers_tags dr s) dippers_references)
+   --return []
+   where
+
+
+   route = individual_dipper_tagged_request_link
+
+   routes dr = map (\d-> B.pack $ tagged_tag_link'' ++ (T.unpack $ cmp d)) dr
+     where
+     cmp d = (\((D.Dipper {D.page_url  = p}), _) -> p) d
+
+   {-
+   handler :: [(D.Dipper,[String])] -> [(D.Dipper,[MPC.PostT])] -> Routes -> Handler App App ()
+   handler dt dr s = do
+     r <- getParams
+     evalState
+       (
+       do
+          case (D.dipper_by_page_url (T.pack $ B.unpack $ request_dipper r) dr) of
+             Nothing -> return $ return ()
+             Just a  -> D.dipperT_individual_page_HandlerM a
+                                          (dippers_from_request_string'' r dt)
+       )
+       s
+       -}
+
+   handler' :: [(D.Dipper,[String])] -> (D.Dipper,[MPC.PostT]) -> Routes -> Handler App App ()
+   handler' dt dr s = do
+     r <- getParams
+     evalState
+       (
+       do let sel = (dippers_from_request_string'' r dt)
+          case (find (\d->(fst dr)==d) sel) of
+             Nothing -> return $ return ()
+             Just a  -> D.dipperT_individual_page_HandlerM dr
+                                          sel
+       )
+       s
+
+
+   dippers_from_request_string'' tags p = D.dippers_from_request_string
+           (
+           request_tags_raw tags
+           ) p
+
+
 
 
 
@@ -207,8 +263,12 @@ generate_dippers_tags_responseM = do
 
 
 
-request tags = reverse $ drop 5 $ reverse $ B.unpack $ B.concat $
-                                                                  DMap.findWithDefault [] tagged_tag tags
+request tags = reverse $ drop 5 $ reverse $ B.unpack $ B.concat $ DMap.findWithDefault [] tagged_tag tags
+
+request_tags_raw tags = B.unpack $ B.concat $ DMap.findWithDefault [] tagged_tag tags
+
+request_dipper r = B.concat $ DMap.findWithDefault [] tagged_dipper r
+
 
 request_page_number tags = try_read $ reverse $ takeWhile C.isDigit $ reverse $ request tags
   where

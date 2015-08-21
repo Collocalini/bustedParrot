@@ -28,6 +28,7 @@ module Dipper (
  ,operator_from_tag_name
  ,dippers_from_request_string
  ,give_all_used_tags
+ ,dipper_by_page_url
 ) where
 
 import Data.Aeson
@@ -323,6 +324,12 @@ dipper_is_found_in posts
     })  = (\(l,_) -> l) $ unzip $ filter (\(_,t) -> (T.isInfixOf u t)||(T.isInfixOf u_raw t)) posts
 
 
+
+
+dipper_by_page_url :: T.Text -> [(Dipper, a)] -> Maybe (Dipper, a)
+dipper_by_page_url s ds = find (\d -> (cmp d) == s) ds
+   where
+   cmp d = (\((Dipper {page_url  = p}), _) -> p) d
 
 
 
@@ -642,13 +649,13 @@ dipperT_individual_page_nav_next d = do
 
 
 
-dipperT_individual_page_HandlerM :: (Dipper,[PostT]) -> State S.Routes (Handler App App ())
-dipperT_individual_page_HandlerM (d,sl) = do
-   (S.Routes {S.node_map=nm, S.dippersT=dT}) <- get
+dipperT_individual_page_HandlerM :: (Dipper,[PostT]) -> Dippers -> State S.Routes (Handler App App ())
+dipperT_individual_page_HandlerM (d,sl) selection = do
+   (S.Routes {S.node_map=nm}) <- get
    return $ renderWithSplices "dipper/dipper_individual_page_base"
        $ mconcat [
 
-        dipperT_individual_page_navigation $ dippers_neighbors d dT
+        dipperT_individual_page_navigation $ dippers_neighbors d selection
        ,splicesFrom_dippers d
 
        ,("references" ##
