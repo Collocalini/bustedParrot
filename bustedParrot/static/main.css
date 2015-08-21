@@ -241,9 +241,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
 
 .post_h {
     float: center;
-    border-radius:  10% / 2%;
+    border-radius:  10em / 1em;
     border: solid rgba(0,0,0,0.1) 0.1em;
-    padding: 1%;
+    padding: 0.5em;
     vertical-align: top; 
 
     font-size: 1.4em;
@@ -265,8 +265,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
     
     float: center;
     border: 0px solid black;
-    border-radius: 10% / 2%;
-    padding: 5%;
+    border-radius: 10em / 2em;
+    padding: 2em;
     vertical-align: top; 
     font-size: 1.4em;
     line-height: 1.4em;
