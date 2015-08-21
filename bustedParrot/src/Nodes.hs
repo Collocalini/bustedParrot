@@ -33,8 +33,10 @@ module Nodes (
 ,individual_dipper_node_link'
 ,individual_dipper_node_link''
 ,individual_dipper_tagged_node_link
----,individual_dipper_tagged_node_link'
---,individual_dipper_tagged_node_link''
+,individual_dipper_tagged_node_link'
+,individual_dipper_tagged_node_link''
+,individual_dipper_tagged_page_link
+,individual_dipper_tagged_page_link'
 ,individual_dipper_tagged_request_link
 ,tagged_node_link
 ,tagged_node_link'
@@ -59,6 +61,7 @@ import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Char8 as B8
 import qualified System.FilePath.Posix as Fp
 
+import Dipper_common
 
 type Node_map = Dm.Map T.Text T.Text
 
@@ -210,9 +213,35 @@ individual_dipper_node_link'' ('/':n) = "/individual_dippers/" ++ n
 individual_dipper_node_link'' n = "/individual_dippers/" ++ n
 
 
-individual_dipper_tagged_node_link :: String -> String -> B8.ByteString
-individual_dipper_tagged_node_link ('/':n) tag = B8.pack $ "/tagged/" ++ tag ++ "/" ++ n
-individual_dipper_tagged_node_link n       tag = B8.pack $ "/tagged/" ++ tag ++ "/" ++ n
+individual_dipper_tagged_page_link :: Dipper -> String -> B8.ByteString
+individual_dipper_tagged_page_link d tags = B8.pack $ "/tagged/" ++ tags ++ (T.unpack $ cmp d)
+     where
+     cmp d = (\(Dipper {page_url  = p}) -> p) d
+
+
+individual_dipper_tagged_page_link' :: Dipper -> String -> T.Text
+individual_dipper_tagged_page_link' d tags = T.pack $ "/tagged/" ++ tags ++ (T.unpack $ cmp d)
+     where
+     cmp d = (\(Dipper {page_url  = p}) -> p) d
+
+
+individual_dipper_tagged_node_link :: Dipper -> B8.ByteString
+individual_dipper_tagged_node_link d = B8.pack $ tagged_tag_link'' ++ (T.unpack $ cmp d)
+     where
+     cmp d = (\(Dipper {page_url  = p}) -> p) d
+
+
+individual_dipper_tagged_node_link' :: Dipper -> T.Text
+individual_dipper_tagged_node_link' d = T.pack $ tagged_tag_link'' ++ (T.unpack $ cmp d)
+     where
+     cmp d = (\(Dipper {page_url  = p}) -> p) d
+
+
+individual_dipper_tagged_node_link'' :: Dipper -> String
+individual_dipper_tagged_node_link'' d = tagged_tag_link'' ++ (T.unpack $ cmp d)
+     where
+     cmp d = (\(Dipper {page_url  = p}) -> p) d
+
 
 
 individual_dipper_tagged_request_link :: B8.ByteString

@@ -166,9 +166,7 @@ generate_dippers_tagged_individual_responseM = do
 
    route = individual_dipper_tagged_request_link
 
-   routes dr = map (\d-> B.pack $ tagged_tag_link'' ++ (T.unpack $ cmp d)) dr
-     where
-     cmp d = (\((D.Dipper {D.page_url  = p}), _) -> p) d
+   routes dr = map individual_dipper_tagged_node_link $ fst $ unzip dr
 
    {-
    handler :: [(D.Dipper,[String])] -> [(D.Dipper,[MPC.PostT])] -> Routes -> Handler App App ()
@@ -193,8 +191,9 @@ generate_dippers_tagged_individual_responseM = do
        do let sel = (dippers_from_request_string'' r dt)
           case (find (\d->(fst dr)==d) sel) of
              Nothing -> return $ return ()
-             Just a  -> D.dipperT_individual_page_HandlerM dr
+             Just a  -> D.dipperT_individual_page_HandlerM_tagged dr
                                           sel
+                                          (request_tags_raw r)
        )
        s
 
@@ -221,10 +220,11 @@ generate_dippers_tags_responseM = do
      tags <- getParams
      evalState
        (
-       D.dippersT_HandlerM (dippers_from_request_string' tags p)
-                           (D.give_all_used_tags p)
-                           (fromMaybe 1 $ request_page_number tags)
-                           (links tags (dippers_from_request_string'' tags p))
+       D.dippersT_tagged_HandlerM (dippers_from_request_string' tags p)
+                                  (D.give_all_used_tags p)
+                                  (request_with_no_page_number tags)
+                                  (fromMaybe 1 $ request_page_number tags)
+                                  (links tags (dippers_from_request_string'' tags p))
        )
        s
 

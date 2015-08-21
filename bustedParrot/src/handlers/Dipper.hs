@@ -19,6 +19,7 @@ module Dipper (
  ,dippersT_io
 -- ,dippersT_Handler
  ,dippersT_HandlerM
+ ,dippersT_tagged_HandlerM
  ,give_dippers_references
  ,give_dippers_tags
 -- ,dipperT_individual_page_Handler
@@ -29,6 +30,7 @@ module Dipper (
  ,dippers_from_request_string
  ,give_all_used_tags
  ,dipper_by_page_url
+ ,dipperT_individual_page_HandlerM_tagged
 ) where
 
 import Data.Aeson
@@ -508,17 +510,13 @@ dippers_neighbors d ds = step1 dippers_index
 
 
 
-dippersT_HandlerM :: Dippers -> [String] -> Int -> [String] -> State S.Routes (Handler App App ())
-dippersT_HandlerM p tags page_number links = do
-   (S.Routes {S.node_map=nm}) <- get
-   return $ renderWithSplices "dipper/dipper_base"
-       $ mconcat $ [
+--dippersT_HandlerM_common :: Dippers -> [String] -> Int -> [String] -> Node_map -> a
+dippersT_HandlerM_common tags page_number links nm = do
+   mconcat $ [
        ("tags" ##
        (I.mapSplices $ I.runChildrenWith . splices_from_tag) tags
        )
-      ,("entries" ##
-       (I.mapSplices $ I.runChildrenWith . splicesFrom_dippers) p
-       )
+
       ,("pages" ##
        (I.mapSplices $ I.runChildrenWith . splices_from_page_number page_number)
           $ zip [1..length links] (links)
@@ -527,18 +525,40 @@ dippersT_HandlerM p tags page_number links = do
        ]
 
 
+dippersT_HandlerM :: Dippers -> [String] -> Int -> [String] -> State S.Routes (Handler App App ())
+dippersT_HandlerM p tags page_number links = do
+   (S.Routes {S.node_map=nm}) <- get
+   return $ renderWithSplices "dipper/dipper_base"
+       $ mconcat $ [
+       dippersT_HandlerM_common tags page_number links nm
+      ,("entries" ##
+       (I.mapSplices $ I.runChildrenWith . splicesFrom_dippers) p
+       )
+       ]
+
+
+
+dippersT_tagged_HandlerM :: Dippers -> [String] -> String -> Int -> [String] -> State S.Routes (Handler App App ())
+dippersT_tagged_HandlerM p tags tag page_number links = do
+   (S.Routes {S.node_map=nm}) <- get
+   return $ renderWithSplices "dipper/dipper_base"
+       $ mconcat $ [
+       dippersT_HandlerM_common tags page_number links nm
+      ,("entries" ##
+       (I.mapSplices $ I.runChildrenWith . splicesFrom_dippers_tags tag) p
+       )
+       ]
 
 
 
 
 
 
-splicesFrom_dippers :: Monad n => Dipper -> Splices (I.Splice n)
-splicesFrom_dippers t = do
+splicesFrom_dippers_common :: Monad n => Dipper -> Splices (I.Splice n)
+splicesFrom_dippers_common t = do
    mconcat $ [
      "dipper_url"        ## I.textSplice $ url t
     ,"dipper_url_img"    ## dipper_url_img_case
-    ,"page_url"          ## I.textSplice $ individual_dipper_node_link' $ T.unpack $ page_url t
     ,"dipper_miniature"  ## I.textSplice $ M.fromJust $ miniature t
     ,"image_style"       ## image_style_case
     ,"auto_caption"      ## auto_caption_case
@@ -556,6 +576,33 @@ splicesFrom_dippers t = do
    auto_caption_case
       |link_is_local (url t) =  I.textSplice $ ""
       |otherwise             =  I.textSplice $ "Нажми для полного размера / Click for full size"
+
+
+
+
+splicesFrom_dippers :: Monad n => Dipper -> Splices (I.Splice n)
+splicesFrom_dippers t = do
+   mconcat $ [
+    "page_url"          ## I.textSplice $ individual_dipper_node_link' $ T.unpack $ page_url t
+    ,splicesFrom_dippers_common t
+    ]
+
+
+
+
+
+
+
+
+splicesFrom_dippers_tags :: Monad n => String -> Dipper -> Splices (I.Splice n)
+splicesFrom_dippers_tags tag t = do
+   mconcat $ [
+    "page_url"          ## I.textSplice $ individual_dipper_tagged_page_link' t tag
+    ,splicesFrom_dippers_common t
+    ]
+
+
+
 
 
 
@@ -600,6 +647,14 @@ dipperT_individual_page_navigation (p,n) = do
 
 
 
+dipperT_individual_page_navigation_tagged :: Monad n => (Maybe Dipper, Maybe Dipper) -> String -> Splices (I.Splice n)
+dipperT_individual_page_navigation_tagged (p,n) tags = do
+   mconcat $ [
+     "nav_prev"   ## dipperT_individual_page_nav_no_nav p $ dipperT_individual_page_nav_prev_tagged p tags
+    ,"nav_next"   ## dipperT_individual_page_nav_no_nav n $ dipperT_individual_page_nav_next_tagged n tags
+    ]
+
+
 
 
 dipperT_individual_page_nav_common :: Monad n => Maybe Dipper -> Splices (I.Splice n)
@@ -618,6 +673,21 @@ dipperT_individual_page_nav_common d = do
 
 
 
+dipperT_individual_page_nav_common_tagged :: Monad n => Maybe Dipper -> String -> Splices (I.Splice n)
+dipperT_individual_page_nav_common_tagged d tag = do
+   mconcat $ [
+     "url"        ## I.textSplice $ nav_url d
+    ,"style"      ## I.textSplice $ nav_style d
+    ]
+   where
+   nav_url :: Maybe Dipper -> T.Text
+   nav_url (Just t@( Dipper {page_url=pu})) = individual_dipper_tagged_page_link' t tag
+   nav_url Nothing = ""
+
+   nav_style (Just _ ) = "dipper_navig"
+   nav_style Nothing   = "dipper_no_navig"
+
+
 
 dipperT_individual_page_nav_prev :: Monad n => Maybe Dipper -> Splices (I.Splice n)
 dipperT_individual_page_nav_prev d = do
@@ -627,7 +697,31 @@ dipperT_individual_page_nav_prev d = do
     ]
 
 
---dipperT_individual_page_nav_no_nav :: Monad n => Maybe Dipper -> Splices (I.Splice n) -> Splices (I.Splice n)
+dipperT_individual_page_nav_next :: Monad n => Maybe Dipper -> Splices (I.Splice n)
+dipperT_individual_page_nav_next d = do
+   mconcat $ [
+     dipperT_individual_page_nav_common d
+    ,"nav"      ## I.callTemplate "dipper_individual_page_nav_next" (return ())
+    ]
+
+
+
+dipperT_individual_page_nav_prev_tagged :: Monad n => Maybe Dipper -> String -> Splices (I.Splice n)
+dipperT_individual_page_nav_prev_tagged d tags = do
+   mconcat $ [
+     dipperT_individual_page_nav_common_tagged d tags
+    ,"nav"      ## I.callTemplate "dipper_individual_page_nav_prev" (return ())
+    ]
+
+
+dipperT_individual_page_nav_next_tagged :: Monad n => Maybe Dipper -> String -> Splices (I.Splice n)
+dipperT_individual_page_nav_next_tagged d tags = do
+   mconcat $ [
+     dipperT_individual_page_nav_common_tagged d tags
+    ,"nav"      ## I.callTemplate "dipper_individual_page_nav_next" (return ())
+    ]
+
+
 dipperT_individual_page_nav_no_nav (Just d) t = do
    I.callTemplate "dipper_individual_page_nav" t
 
@@ -636,14 +730,21 @@ dipperT_individual_page_nav_no_nav Nothing t = do
 
 
 
-dipperT_individual_page_nav_next :: Monad n => Maybe Dipper -> Splices (I.Splice n)
 
-dipperT_individual_page_nav_next d = do
-   mconcat $ [
-     dipperT_individual_page_nav_common d
-    ,"nav"      ## I.callTemplate "dipper_individual_page_nav_next" (return ())
-    ]
 
+
+
+
+
+
+--dipperT_individual_page_HandlerM_common :: (Dipper,[PostT]) -> Dippers -> State S.Routes (Handler App App ())
+dipperT_individual_page_HandlerM_common (d,sl) selection nm = do
+   mconcat [
+        ("references" ##
+         (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) sl
+        )
+       ,insertLinks $ Just nm
+       ]
 
 
 
@@ -654,17 +755,20 @@ dipperT_individual_page_HandlerM (d,sl) selection = do
    (S.Routes {S.node_map=nm}) <- get
    return $ renderWithSplices "dipper/dipper_individual_page_base"
        $ mconcat [
-
         dipperT_individual_page_navigation $ dippers_neighbors d selection
        ,splicesFrom_dippers d
-
-       ,("references" ##
-         (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) sl
-        )
-       ,insertLinks $ Just nm
+       ,dipperT_individual_page_HandlerM_common (d,sl) selection nm
        ]
 
-
+dipperT_individual_page_HandlerM_tagged :: (Dipper,[PostT]) -> Dippers -> String -> State S.Routes (Handler App App ())
+dipperT_individual_page_HandlerM_tagged (d,sl) selection tags = do
+   (S.Routes {S.node_map=nm}) <- get
+   return $ renderWithSplices "dipper/dipper_individual_page_base"
+       $ mconcat [
+        dipperT_individual_page_navigation_tagged (dippers_neighbors d selection) tags
+       ,splicesFrom_dippers_tags tags d
+       ,dipperT_individual_page_HandlerM_common (d,sl) selection nm
+       ]
 
 
 
