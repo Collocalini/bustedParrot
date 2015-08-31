@@ -64,6 +64,16 @@
   ,"link_json" : "/static/16082015_stapelia/20150816_029_stapelia_2_flowers.jpg"
  }
 
+,{
+   "node_json" : ["20150829_003.jpg"]
+  ,"link_json" : "/static/29082015_stapelia/20150829_003.jpg"
+ }
+
+,{
+   "node_json" : ["20150829_007_.mp4"]
+  ,"link_json" : "https://yadi.sk/i/hWK7VqQginNZz"
+ }
+
 
 ,{
    "node_json" : ["dipper_nav_prev"]
