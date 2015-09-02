@@ -86,6 +86,16 @@
  }
 
 
+,{
+   "node_json" : ["site_stapelia_logo.svg"]
+  ,"link_json" : "/static/must_be_together/site_stapelia_logo/site_stapelia_logo.svg"
+ }
+
+,{
+   "node_json" : ["site_stapelia_logo.png"]
+  ,"link_json" : "/static/must_be_together/site_stapelia_logo/site_stapelia_logo.png"
+ }
+
 ]
 
 

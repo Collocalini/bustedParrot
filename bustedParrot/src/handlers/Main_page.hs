@@ -4,8 +4,8 @@
 
 module Main_page
   (
-    main_pageT_Handler
-   ,main_pageT_HandlerM
+    --main_pageT_Handler
+   main_pageT_HandlerM
   ) where
 
 ------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ main_pageT_HandlerM p = do
 
 
 
-
+{-
 main_pageT_Handler :: [PostT] -> Handler App App ()
 main_pageT_Handler p = renderWithSplices "main_page/main_posts"
    (mconcat
@@ -65,7 +65,7 @@ main_pageT_Handler p = renderWithSplices "main_page/main_posts"
    )]
    )
 
-
+-}
 
 
 
