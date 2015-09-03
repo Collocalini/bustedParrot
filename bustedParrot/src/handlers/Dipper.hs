@@ -212,7 +212,8 @@ dipper_check_orientation d
    |link_is_local $ url d = do
        img <- loadImage $ T.unpack $ url d
        case img of
-          Nothing  -> ioError (userError "image loading error")
+          Nothing  -> do --ioError (userError "image loading error")
+                         return $ (\de -> de {isVertical=False}) d
           Just img -> return $ (\de -> de {isVertical=image_is_vertical img}) d
 
    |otherwise = return $ (\de -> de {isVertical=False}) d
@@ -532,7 +533,8 @@ dippersT_HandlerM p tags page_number links = do
        $ mconcat $ [
        dippersT_HandlerM_common tags page_number links nm
       ,("entries" ##
-       (I.mapSplices $ I.runChildrenWith . splicesFrom_dippers) p
+       -- (I.mapSplices $ I.runChildrenWith . splicesFrom_dippers) p
+       (I.mapSplices $ I.runChildrenWith . splicesFrom_dippers_entry_case) p
        )
        ]
 
@@ -588,8 +590,21 @@ splicesFrom_dippers t = do
     ]
 
 
+splicesFrom_dippers_entry_case :: Monad n => Dipper -> Splices (I.Splice n)
+splicesFrom_dippers_entry_case t = do
+   mconcat $ [
+    "entry"          ## dipper_entry_img_obj t $ splicesFrom_dippers t
+
+    ]
 
 
+dipper_entry_img_obj (Dipper {miniature = Just m}) t = do
+   case (node_is_an_svg m) of
+      True  -> I.callTemplate "dipper_entry_obj" t
+      False -> I.callTemplate "dipper_entry_img" t
+
+dipper_entry_img_obj (Dipper {miniature = Nothing}) t = do
+   I.callTemplate "dipper_entry_img" t
 
 
 

@@ -21,7 +21,7 @@
 
 <entries>
   <span class="img_miniature">
-   <apply template="dipper_entry" />
+   <entry/>
   </span>
 </entries>
 
@@ -35,7 +35,7 @@
 
 </body>
 </html>
-
+<!--apply template="dipper_entry" /-->
 
 
 

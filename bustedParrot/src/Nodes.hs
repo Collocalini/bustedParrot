@@ -19,6 +19,7 @@ module Nodes (
 ,Node_map
 ,nodesT_io
 ,node_to_link
+,node_is_an_svg
 ,nodes_to_map
 ,link_is_local
 ,page_node_link
@@ -158,7 +159,8 @@ give_node     (Node_json {node_json = n
 node_to_link :: T.Text -> Node_map -> T.Text
 node_to_link n nm = Dm.findWithDefault "" n nm
 
-
+node_is_an_svg :: T.Text -> Bool
+node_is_an_svg m = (T.reverse $ T.take 5 $ T.reverse m) == ".svg}"
 
 
 
@@ -167,7 +169,6 @@ page_node_link n = B8.pack $ "/pages/page" ++ n ++ ".html"
 
 page_node_link' :: String -> T.Text
 page_node_link' n = T.pack $ "/pages/page" ++ n ++ ".html"
-
 
 
 post_node_link :: Int -> B8.ByteString
