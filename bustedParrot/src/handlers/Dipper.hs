@@ -540,14 +540,16 @@ dippersT_HandlerM p tags page_number links = do
 
 
 
-dippersT_tagged_HandlerM :: Dippers -> [String] -> String -> Int -> [String] -> State S.Routes (Handler App App ())
+dippersT_tagged_HandlerM :: Dippers ->
+                           [String] ->
+                             String -> Int -> [String] -> State S.Routes (Handler App App ())
 dippersT_tagged_HandlerM p tags tag page_number links = do
    (S.Routes {S.node_map=nm}) <- get
    return $ renderWithSplices "dipper/dipper_base"
        $ mconcat $ [
        dippersT_HandlerM_common tags page_number links nm
       ,("entries" ##
-       (I.mapSplices $ I.runChildrenWith . splicesFrom_dippers_tags tag) p
+       (I.mapSplices $ I.runChildrenWith . splicesFrom_dippers_entry_case_tags tag) p
        )
        ]
 
@@ -590,21 +592,42 @@ splicesFrom_dippers t = do
     ]
 
 
-splicesFrom_dippers_entry_case :: Monad n => Dipper -> Splices (I.Splice n)
+splicesFrom_dippers_entry_case :: Monad n =>  Dipper -> Splices (I.Splice n)
 splicesFrom_dippers_entry_case t = do
-   mconcat $ [
-    "entry"          ## dipper_entry_img_obj t $ splicesFrom_dippers t
+   splicesFrom_dippers_entry_case_common t $ splicesFrom_dippers t
 
-    ]
+splicesFrom_dippers_entry_case_tags :: Monad n => String -> Dipper -> Splices (I.Splice n)
+splicesFrom_dippers_entry_case_tags s t = do
+   splicesFrom_dippers_entry_case_common t $ splicesFrom_dippers_tags s t
+
+splicesFrom_dippers_entry_case_common t sfd =
+   splicesFrom_case_common "dipper_entry_img" "dipper_entry_obj" t sfd
+
+splicesFrom_individual_dipper_case :: Monad n => Dipper -> Splices (I.Splice n)
+splicesFrom_individual_dipper_case t =
+   splicesFrom_individual_dipper_case_common t $ splicesFrom_dippers t
+
+splicesFrom_individual_dipper_case_tags :: Monad n => String -> Dipper -> Splices (I.Splice n)
+splicesFrom_individual_dipper_case_tags s t =
+   splicesFrom_individual_dipper_case_common t $ splicesFrom_dippers_tags s t
+
+splicesFrom_individual_dipper_case_common t sfd =
+   splicesFrom_case_common "individual_dipper_entry_img"
+                           "individual_dipper_entry_obj" t sfd
 
 
-dipper_entry_img_obj (Dipper {miniature = Just m}) t = do
+
+splicesFrom_case_common tp_img tp_obj t sfd = do
+   "entry" ## dipper_entry_img_obj tp_img tp_obj t sfd
+
+
+dipper_entry_img_obj tp_img tp_obj (Dipper {miniature = Just m}) t = do
    case (node_is_an_svg m) of
-      True  -> I.callTemplate "dipper_entry_obj" t
-      False -> I.callTemplate "dipper_entry_img" t
+      True  -> I.callTemplate tp_obj t
+      False -> I.callTemplate tp_img t
 
-dipper_entry_img_obj (Dipper {miniature = Nothing}) t = do
-   I.callTemplate "dipper_entry_img" t
+dipper_entry_img_obj tp_img _ (Dipper {miniature = Nothing}) t = do
+   I.callTemplate tp_img t
 
 
 
@@ -771,7 +794,7 @@ dipperT_individual_page_HandlerM (d,sl) selection = do
    return $ renderWithSplices "dipper/dipper_individual_page_base"
        $ mconcat [
         dipperT_individual_page_navigation $ dippers_neighbors d selection
-       ,splicesFrom_dippers d
+       ,splicesFrom_individual_dipper_case d
        ,dipperT_individual_page_HandlerM_common (d,sl) selection nm
        ]
 
@@ -781,7 +804,7 @@ dipperT_individual_page_HandlerM_tagged (d,sl) selection tags = do
    return $ renderWithSplices "dipper/dipper_individual_page_base"
        $ mconcat [
         dipperT_individual_page_navigation_tagged (dippers_neighbors d selection) tags
-       ,splicesFrom_dippers_tags tags d
+       ,splicesFrom_individual_dipper_case_tags tags d
        ,dipperT_individual_page_HandlerM_common (d,sl) selection nm
        ]
 
