@@ -59,6 +59,7 @@ import Main_page_common
 import Nodes
 import qualified Site_state as S
 import Dipper_common
+import Dipper_entry_splices
 import InsertLinks
 
 
@@ -529,7 +530,7 @@ dippersT_HandlerM_common tags page_number links nm = do
 dippersT_HandlerM :: Dippers -> [String] -> Int -> [String] -> State S.Routes (Handler App App ())
 dippersT_HandlerM p tags page_number links = do
    (S.Routes {S.node_map=nm}) <- get
-   return $ renderWithSplices "dipper/dipper_base"
+   return $ renderWithSplices "dipper_base"
        $ mconcat $ [
        dippersT_HandlerM_common tags page_number links nm
       ,("entries" ##
@@ -545,7 +546,7 @@ dippersT_tagged_HandlerM :: Dippers ->
                              String -> Int -> [String] -> State S.Routes (Handler App App ())
 dippersT_tagged_HandlerM p tags tag page_number links = do
    (S.Routes {S.node_map=nm}) <- get
-   return $ renderWithSplices "dipper/dipper_base"
+   return $ renderWithSplices "dipper_base"
        $ mconcat $ [
        dippersT_HandlerM_common tags page_number links nm
       ,("entries" ##
@@ -557,7 +558,7 @@ dippersT_tagged_HandlerM p tags tag page_number links = do
 
 
 
-
+{--
 splicesFrom_dippers_common :: Monad n => Dipper -> Splices (I.Splice n)
 splicesFrom_dippers_common t = do
    mconcat $ [
@@ -639,7 +640,7 @@ splicesFrom_dippers_tags tag t = do
     ,splicesFrom_dippers_common t
     ]
 
-
+--}
 
 
 
@@ -791,7 +792,7 @@ dipperT_individual_page_HandlerM_common (d,sl) selection nm = do
 dipperT_individual_page_HandlerM :: (Dipper,[PostT]) -> Dippers -> State S.Routes (Handler App App ())
 dipperT_individual_page_HandlerM (d,sl) selection = do
    (S.Routes {S.node_map=nm}) <- get
-   return $ renderWithSplices "dipper/dipper_individual_page_base"
+   return $ renderWithSplices "dipper_individual_page_base"
        $ mconcat [
         dipperT_individual_page_navigation $ dippers_neighbors d selection
        ,splicesFrom_individual_dipper_case d
@@ -801,7 +802,7 @@ dipperT_individual_page_HandlerM (d,sl) selection = do
 dipperT_individual_page_HandlerM_tagged :: (Dipper,[PostT]) -> Dippers -> String -> State S.Routes (Handler App App ())
 dipperT_individual_page_HandlerM_tagged (d,sl) selection tags = do
    (S.Routes {S.node_map=nm}) <- get
-   return $ renderWithSplices "dipper/dipper_individual_page_base"
+   return $ renderWithSplices "dipper_individual_page_base"
        $ mconcat [
         dipperT_individual_page_navigation_tagged (dippers_neighbors d selection) tags
        ,splicesFrom_individual_dipper_case_tags tags d

@@ -2,6 +2,7 @@
 
 <div class="arrow_box">
 
+<!--style="height:8em; width:auto; float: left; vertical-align: top;"-->
 <span >
   <img src='${logo}' alt="busted parrot" align="top" class="top_l_img"> 
 
@@ -14,9 +15,14 @@
 
 </span>
 
-<span><a href='${dippers_page}'> <img src='${dipper_logo}' alt="we need to go dipper" style="height:8em; 
-   width:auto; float: right; vertical-align: top;" > </a> </span>
-
+<!--div style="display: inline-block;" -->
+<span class="arrow_box_dipper_galery">
+   <a href='${dippers_page}'> <img src='${dipper_logo}' alt="we need to go dipper" class="arrow_box_dipper_galery_dipper" > </a> 
+   <dippers>
+     <entry/>
+   </dippers>
+</span>
+<!--/div-->   
 
 
 </div>

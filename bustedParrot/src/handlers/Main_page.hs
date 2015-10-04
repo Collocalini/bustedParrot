@@ -28,7 +28,7 @@ import NodesM
 import Main_page_common
 import Site_state
 import InsertLinks
-
+import Dipper_entry_splices
 
 
 
@@ -38,34 +38,27 @@ import InsertLinks
 
 main_pageT_HandlerM :: [PostT] -> State Routes (Handler App App ())
 main_pageT_HandlerM p = do
-   (Routes {node_map=nm}) <- get
+   (Routes {node_map=nm, dippersT=d}) <- get
 
-   return $ renderWithSplices "main_page/main_posts"
+   return $ renderWithSplices "main_posts"
        (mconcat
-       [(
-       (splicesFrom_main_postsT_h) $ head p
-       ),
-       ("posts_h" ##
-         (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) $ take 9 $ tail p
-       )
+       [
+        ("dippers" ##
+        (I.mapSplices $ I.runChildrenWith . splicesFrom_main_page_dippers_entry_case) $ take 8 d
+        )
+
+       ,(
+        (splicesFrom_main_postsT_h) $ head p
+        )
+
+       ,("posts_h" ##
+        (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) $ take 9 $ tail p
+        )
        ,insertLinks $ Just nm]
        )
 
 
 
-{-
-main_pageT_Handler :: [PostT] -> Handler App App ()
-main_pageT_Handler p = renderWithSplices "main_page/main_posts"
-   (mconcat
-   [(
-   (splicesFrom_main_postsT_h) $ head p
-   ),
-   ("posts_h" ##
-   (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) $ take 9 $ tail p
-   )]
-   )
-
--}
 
 
 

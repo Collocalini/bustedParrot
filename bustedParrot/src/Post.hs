@@ -38,7 +38,7 @@ import InsertLinks
 post_HandlerM :: PostT -> State Routes (Handler App App ())
 post_HandlerM p = do
    (Routes {node_map=nm}) <- get
-   return $ renderWithSplices "post/post_base" $ mconcat [
+   return $ renderWithSplices "post_base" $ mconcat [
        splicesFrom_post_h p
       ,insertLinks $ Just nm
        ]

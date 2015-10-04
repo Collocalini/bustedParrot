@@ -40,7 +40,7 @@ archive_HandlerM :: [PostT] -> State Routes (Handler App App ())
 archive_HandlerM p = do
    (Routes {node_map=nm}) <- get
 
-   return $ renderWithSplices "archive/archive_posts"
+   return $ renderWithSplices "archive_posts"
        (mconcat
        [
        ("posts_h" ## (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) $ p

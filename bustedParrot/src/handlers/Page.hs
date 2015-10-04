@@ -73,7 +73,7 @@ pagesT_h_io = do
 page_HandlerM :: PageT -> State Routes (Handler App App ())
 page_HandlerM p = do
    (Routes {node_map=nm}) <- get
-   return $ renderWithSplices "post/post_base" $ mconcat
+   return $ renderWithSplices "post_base" $ mconcat
       [
       splicesFrom_page_h p
      ,insertLinks $ Just nm

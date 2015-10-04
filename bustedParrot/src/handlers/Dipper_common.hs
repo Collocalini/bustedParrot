@@ -22,7 +22,6 @@ import qualified Data.Text as T
 
 
 
-
 data Dipper = Dipper {
   miniature :: Maybe T.Text
  ,name :: Maybe T.Text
@@ -34,4 +33,23 @@ data Dipper = Dipper {
 } deriving (Show,Eq)
 
 type Dippers = [Dipper]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

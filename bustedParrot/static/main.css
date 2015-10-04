@@ -187,9 +187,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
 
 
 .arrow_box { 
+   #position:fixed;
    padding: 1%;
    vertical-align: top
-
+   height:8em;
+   overflow:hidden;
+   #width:98%;
 
 background: -moz-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(177,239,162,0.65) 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(177,239,162,0.65))); /* Chrome,Safari4+ */
@@ -199,6 +202,36 @@ background: -ms-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(177,239,162,0.65) 10
 background: linear-gradient(to right, rgba(0,0,0,0) 0%,rgba(177,239,162,0.65) 100%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6b1efa2',GradientType=1 ); /* IE6-9 */
 
+} 
+
+.arrow_box_dipper_galery { 
+position:absolute;
+#position: relative;
+#display:inline-block;
+#top:1em;
+left:40em;
+#width:80em;
+#width:inherit;
+#width:70%;
+height:8em;  
+vertical-align: top;
+overflow:hidden;
+} 
+
+
+.arrow_box_dipper_galery_dipper { 
+height:8em; 
+width:auto; 
+float:left;
+vertical-align: top;
+} 
+
+.arrow_box_dipper_galery_entry { 
+height:8em; 
+width:auto; 
+float:left;
+vertical-align: top;
+pointer-events: none;
 } 
 
 
