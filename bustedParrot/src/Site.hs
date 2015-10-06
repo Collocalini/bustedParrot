@@ -20,16 +20,17 @@ import qualified Data.Char as C
 import           Snap.Core
 --import           Snap.Http.Server
 import           Snap.Snaplet
-import           Snap.Snaplet.Heist
+import           Snap.Snaplet.Heist.Interpreted
 import           Snap.Snaplet.Session.Backends.CookieSession
 import           Snap.Util.FileServe
 ------------------------------------------------------------------------------
 import           Application
 import           Heist
-import qualified Heist.Compiled as C
+import qualified Heist.Interpreted as I
 import           Data.Monoid
 import           Control.Monad.State
 import           Control.Applicative
+import           Control.Lens
 
 import qualified Main_page as MP
 import qualified Main_page_common as MPC
@@ -293,9 +294,9 @@ give_page i d = snd $ unzip $ head $ drop (i-1) $ groupBy (\(n,_) (n1,_)-> n==n1
 
 
 ------------------------------------------------------------------------------
--- | Compose all the compiled splices imported from the handler modules
-allCompiledSplices :: Monad n => Splices (C.Splice n)
-allCompiledSplices = mconcat []
+-- | Compose all the Interpreted splices imported from the handler modules
+allInterpretedSplices :: Monad n => Splices (I.Splice n)
+allInterpretedSplices = mconcat []
 
 ------------------------------------------------------------------------------
 -- | The application initializer.
@@ -304,7 +305,7 @@ app = do
     r<- routes
     return (makeSnaplet "app" "A snap demo application." Nothing $ do
     h <- nestSnaplet "" heist $ heistInit "templates"
-    addConfig h $ mempty { hcCompiledSplices = allCompiledSplices }
+    addConfig h $ (set scInterpretedSplices allInterpretedSplices mempty)
     s <- nestSnaplet "sess" sess $
            initCookieSessionManager "site_key.txt" "sess" (Just 3600)
     addRoutes r

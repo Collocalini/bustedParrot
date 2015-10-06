@@ -1,6 +1,6 @@
 
 
-<div class="arrow_box">
+<div class="box_post">
 
 <span >
   <a href="/"><img  src='${logo}' alt="busted parrot" align="top" class="top_l_img"> </a>

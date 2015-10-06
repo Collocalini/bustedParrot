@@ -35,6 +35,10 @@
   ,"link_json" : "/static/dipper.gif"
  }
 
+,{
+   "node_json" : ["main_page_top"]
+  ,"link_json" : "/static/main_page_top.svg"
+ }
 
 ,{
    "node_json" : ["addon_implicit_this_is_how_equestria_was_made_top.png"]
