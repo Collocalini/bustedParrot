@@ -44,7 +44,7 @@ main_pageT_HandlerM p = do
        (mconcat
        [
         ("dippers" ##
-        (I.mapSplices $ I.runChildrenWith . splicesFrom_main_page_dippers_entry_case) $ take 8 d
+        (I.mapSplices $ I.runChildrenWith . splicesFrom_main_page_dippers_entry_case) $ take 10 d
         )
 
        ,(

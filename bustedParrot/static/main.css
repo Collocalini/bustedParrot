@@ -187,12 +187,23 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
 
 
 .arrow_box { 
-   #position:fixed;
    padding: 1%;
-   vertical-align: top
    height:8em;
+   width:98%; 
    overflow:hidden;
-   #width:98%;
+
+	background: url("/static/main_page_top.svg");
+   background-size: 3000px 175.57365px;
+   background-repeat: no-repeat;
+
+} 
+
+
+.box_post { 
+   padding: 1%;
+   height:8em;
+   width:98%; 
+   overflow:hidden;
 
 background: -moz-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(177,239,162,0.65) 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(177,239,162,0.65))); /* Chrome,Safari4+ */
@@ -200,39 +211,67 @@ background: -webkit-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(177,239,162,0.65
 background: -o-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(177,239,162,0.65) 100%); /* Opera 11.10+ */
 background: -ms-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(177,239,162,0.65) 100%); /* IE10+ */
 background: linear-gradient(to right, rgba(0,0,0,0) 0%,rgba(177,239,162,0.65) 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6b1efa2',GradientType=1 ); /* IE6-9 */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', #endColorstr='#a6b1efa2',GradientType=1 ); /* IE6-9 */
 
 } 
 
-.arrow_box_dipper_galery { 
-position:absolute;
-#position: relative;
-#display:inline-block;
-#top:1em;
-left:40em;
-#width:80em;
-#width:inherit;
-#width:70%;
-height:8em;  
-vertical-align: top;
+
+
+
+
+ul.arrow_box_ul { 
+display:inline;
+margin: 0;
+padding: 0;
+white-space: nowrap;
+#width:98%;
+#overflow:hidden;
+} 
+
+ul.arrow_box_ul li{
+display:inline;
+#background:black;
+} 
+
+
+
+ul.arrow_box_dipper_galery { 
+display:inline;
+margin: 0;
+padding: 0;
+white-space: nowrap;
 overflow:hidden;
+
+#width:98%;
 } 
 
 
-.arrow_box_dipper_galery_dipper { 
-height:8em; 
-width:auto; 
-float:left;
-vertical-align: top;
+
+ 
+
+arrow_box_dipper_galery_dipper { 
+display:inline;
+#height:8em; 
+#width:8em; 
+background:black;
 } 
 
-.arrow_box_dipper_galery_entry { 
+ul.arrow_box_dipper_galery li{
+display:inline;
+} 
+
+ul.arrow_box_dipper_galery img{
 height:8em; 
-width:auto; 
-float:left;
-vertical-align: top;
+width:8em; 
+}
+ul.arrow_box_dipper_galery object{
+height:8em; 
+width:8em; 
 pointer-events: none;
-} 
+
+}
+
+
 
 
 

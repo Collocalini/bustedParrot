@@ -1,8 +1,9 @@
 
 
-<div class="arrow_box">
 
-<!--style="height:8em; width:auto; float: left; vertical-align: top;"-->
+<div class="arrow_box">
+<ul class="arrow_box_ul">
+<li>
 <span >
   <img src='${logo}' alt="busted parrot" align="top" class="top_l_img"> 
 
@@ -14,18 +15,25 @@
 </ul>
 
 </span>
+</li>
 
-<!--div style="display: inline-block;" -->
-<span class="arrow_box_dipper_galery">
-   <a href='${dippers_page}'> <img src='${dipper_logo}' alt="we need to go dipper" class="arrow_box_dipper_galery_dipper" > </a> 
+<li>
+<a href='${dippers_page}' style="display: inline-block;">
+   <ul class="arrow_box_dipper_galery">
    <dippers>
-     <entry/>
+     <li><entry/></li>
    </dippers>
-</span>
-<!--/div-->   
+   </ul>
 
+</a>
+</li>
+
+</ul>
 
 </div>
+
+
+
 
 
 
