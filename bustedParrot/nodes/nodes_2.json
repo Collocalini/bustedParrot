@@ -111,6 +111,21 @@
   ,"link_json" : "/static/here_is_my_garden18012015.jpg"
  }
 
+,{
+   "node_json" : ["squirrel_26012016_shot1"]
+  ,"link_json" : "/static/squirrel_26012016/shot1.jpg"
+ }
+
+,{
+   "node_json" : ["squirrel_26012016_shot2"]
+  ,"link_json" : "/static/squirrel_26012016/shot2.jpg"
+ }
+
+,{
+   "node_json" : ["squirrel_26012016_video"]
+  ,"link_json" : "https://yadi.sk/i/PQOCGPuRnsbdL"
+ }
+
 
 
 ]
