@@ -124,7 +124,7 @@
 display: inline-block;
 vertical-align: middle;
 float: right;
-padding: 1%;
+padding: 0.5em;
 }
 
 
@@ -139,19 +139,19 @@ padding: 1%;
 .bottom { 
     //text-align: right;
     float: center;
-    border: 1px solid black;
+    //border: 1px solid black;
     border-radius: 15% 55% 40% 15%;
-    padding-top: 2%;
-    padding-bottom: 2%;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
     vertical-align: top; 
     //text-align: center;
 }
 
 
 .archive_button { 
-   padding: 1%;
-   padding-left: 5%;
-   padding-right: 10%;
+   padding: 0.1em;
+   padding-left: 0.25em;
+   padding-right: 0.5em;
    font-size: 2.0em;
    color: white;
    //border-radius: 50% 0% 0% 50%;
@@ -169,7 +169,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6a51800', e
 
 
 .read_more { 
-  padding: 1%;
+  padding: 0.05em;
   text-align: center;
   display: block;
   //background: rgba(0,0,0,0.25);
@@ -187,9 +187,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
 
 
 .arrow_box { 
-   padding: 1%;
+   padding: 0.5em;
    height:8em;
-   width:98%; 
+   //width:98%; 
    overflow:hidden;
 
 	background: url("/static/main_page_top.svg");
@@ -200,9 +200,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
 
 
 .box_post { 
-   padding: 1%;
+   padding: 0.1em;
    height:8em;
-   width:98%; 
+   //width:98%; 
    overflow:hidden;
 
 background: -moz-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(177,239,162,0.65) 100%); /* FF3.6+ */
@@ -241,7 +241,9 @@ margin: 0;
 padding: 0;
 white-space: nowrap;
 overflow:hidden;
-
+position: absolute;
+left: 680px;
+top: 1em;
 #width:98%;
 } 
 
@@ -276,8 +278,8 @@ pointer-events: none;
 
 
 .arrow_box_dipper { 
-   padding: 1%;
-   vertical-align: top
+   padding: 0.05em;
+   vertical-align: top;
 
 background: -moz-linear-gradient(left,  rgba(255,255,255,0) 0%, rgba(162,177,239,0.65) 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(162,177,239,0.65))); /* Chrome,Safari4+ */
@@ -292,7 +294,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
 
 
 .arrow_box_archive { 
-   padding: 1%;
+   padding: 0.05em;
    vertical-align: top
 
 
@@ -359,7 +361,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#40000000', e
     float: center;
     border: 1px solid black;
     //border-radius: 10% / 2%;
-    padding: 1%;
+    padding: 0.05em;
     vertical-align: top; 
     text-align: center;
     font-size: 1.4em;
