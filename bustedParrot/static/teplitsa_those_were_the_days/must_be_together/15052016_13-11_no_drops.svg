@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 1280.0001 480.00001"
+   height="480"
+   width="1280">
+  <defs
+     id="defs4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-8.5830688e-6,-443.79074)"
+     id="layer1">
+    <image
+       xlink:href="20160515_002.jpg"
+       y="-923.79077"
+       x="-640.00006"
+       id="image4214"
+       preserveAspectRatio="none"
+       height="480.00003"
+       width="640.00006"
+       transform="scale(-1,-1)" />
+    <image
+       xlink:href="20160515_005.jpg"
+       y="-923.79077"
+       x="-1280.0001"
+       id="image4276"
+       preserveAspectRatio="none"
+       height="480.00003"
+       width="640.00006"
+       transform="scale(-1,-1)" />
+    <text
+       id="text4279"
+       y="715.28009"
+       x="534.68085"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="fill:#ff0000;fill-opacity:1"
+         y="715.28009"
+         x="534.68085"
+         id="tspan4281">Нет капель</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="562.68085"
+       y="739.28009"
+       id="text4283"><tspan
+         id="tspan4285"
+         x="562.68085"
+         y="739.28009"
+         style="font-size:35.00000381px;fill:#000000;fill-opacity:1">No drops</tspan></text>
+  </g>
+</svg>

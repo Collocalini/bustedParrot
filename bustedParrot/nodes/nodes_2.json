@@ -10,6 +10,7 @@
   ,"link_json" : "/static/thumbnails/implementing_feathers_on_a_pony.png"
  }
 
+
 ,{
    "node_json" : ["pony_character_styling_is_hard_top"]
   ,"link_json" : "/static/pony_character_styling_is_hard_top.png"
@@ -50,8 +51,18 @@
  }
 
 ,{
+   "node_json" : ["stapelia_all_4_thm"]
+  ,"link_json" : "/static/thumbnails/my_garden/16082015_stapelia/20150816_021_stapelia_all_4.jpg"
+ }
+
+,{
    "node_json" : ["stapelia_2_flower_closeup"]
   ,"link_json" : "/static/16082015_stapelia/20150816_011_2_flower_closeup.jpg"
+ }
+
+,{
+   "node_json" : ["stapelia_2_flower_closeup_thm"]
+  ,"link_json" : "/static/thumbnails/my_garden/16082015_stapelia/20150816_011_2_flower_closeup.jpg"
  }
 
 ,{
@@ -60,8 +71,18 @@
  }
 
 ,{
+   "node_json" : ["stapelia_fly_thm"]
+  ,"link_json" : "/static/thumbnails/my_garden/16082015_stapelia/20150816_003_stapelia_fly.jpg"
+ }
+
+,{
    "node_json" : ["stapelia_2_flowers"]
   ,"link_json" : "/static/16082015_stapelia/20150816_029_stapelia_2_flowers.jpg"
+ }
+
+,{
+   "node_json" : ["stapelia_2_flowers_thm"]
+  ,"link_json" : "/static/thumbnails/my_garden/16082015_stapelia/20150816_029_stapelia_2_flowers.jpg"
  }
 
 ,{
@@ -70,10 +91,19 @@
  }
 
 ,{
+   "node_json" : ["20150829_003.jpg_thm"]
+  ,"link_json" : "/static/thumbnails/my_garden/29082015_stapelia/20150829_003.jpg"
+ }
+
+,{
    "node_json" : ["20150829_007_.mp4"]
   ,"link_json" : "https://yadi.sk/i/hWK7VqQginNZz"
  }
 
+,{
+   "node_json" : ["20150829_007_.mp4_thm.svg"]
+  ,"link_json" : "/static/thumbnails/my_garden/29082015_stapelia/20150829_007_.svg"
+ }
 
 ,{
    "node_json" : ["dipper_nav_prev"]
@@ -102,6 +132,11 @@
  }
 
 ,{
+   "node_json" : ["red_green_kactus_20160117_026.jpg_thm"]
+  ,"link_json" : "/static/thumbnails/my_garden/red_green_kactus/20160117_026.jpg"
+ }
+
+,{
    "node_json" : ["Scott_Kelly_How_does_your_garden_grow"]
   ,"link_json" : "https://t.co/kl1bxI96PJ"
  }
@@ -124,6 +159,95 @@
 ,{
    "node_json" : ["squirrel_26012016_video"]
   ,"link_json" : "https://yadi.sk/i/PQOCGPuRnsbdL"
+ }
+
+,{
+   "node_json" : ["squirrel_19022016_video"]
+  ,"link_json" : "https://yadi.sk/d/mvZcRcFTpCvAj"
+ }
+
+,{
+   "node_json" : ["squirrel_19022016_shot1"]
+  ,"link_json" : "/static/squirrel_19022016/shot1.jpg"
+ }
+
+
+,{
+   "node_json" : ["squirrel_top"]
+  ,"link_json" : "/static/squirrel_top.jpg"
+ }
+
+
+,{
+   "node_json" : ["mojo_jojo_hiding_at_the_bottom_expressive"]
+  ,"link_json" : "/static/ornaments/mojo_jojo_hiding_at_the_bottom_expressive.png"
+ }
+
+,{
+   "node_json" : ["Cosmonautics_Day_wiki"]
+  ,"link_json" : "https://en.wikipedia.org/wiki/Cosmonautics_Day"
+ }
+
+,{
+   "node_json" : ["first_space_flight_gagarins_radio_com_1"]
+  ,"link_json" : "https://yadi.sk/d/O6eZBndsr2kf5"
+ }
+
+,{
+   "node_json" : ["first_space_flight_gagarins_radio_com_2"]
+  ,"link_json" : "https://yadi.sk/d/JBsujBoyr2kf9"
+ }
+
+,{
+   "node_json" : ["first_space_flight_gagarins_radio_com_3"]
+  ,"link_json" : "https://yadi.sk/d/YCS9TXBRr2kmK"
+ }
+
+,{
+   "node_json" : ["first_space_flight_gagarins_radio_com_4"]
+  ,"link_json" : "https://yadi.sk/d/d2Ft07WLr2kfK"
+ }
+
+,{
+   "node_json" : ["teplitsa_those_were_the_days.png"]
+  ,"link_json" : "/static/teplitsa_those_were_the_days/teplitsa_those_were_the_days.png"
+ }
+
+,{
+   "node_json" : ["teplitsa_check_on_15.05.2016_13_11.jpg"]
+  ,"link_json" : "/static/teplitsa_those_were_the_days/teplitsa_check_on_15.05.2016_13_11.jpg"
+ }
+
+,{
+   "node_json" : ["teplitsa_check_on_15.05.2016_13_11_moisture_closeup.jpg"]
+  ,"link_json" : "/static/teplitsa_those_were_the_days/teplitsa_check_on_15.05.2016_13_11_moisture_closeup.jpg"
+ }
+
+,{
+   "node_json" : ["15052016_13-11_no_drops.svg"]
+  ,"link_json" : "/static/teplitsa_those_were_the_days/must_be_together/15052016_13-11_no_drops.svg"
+ }
+
+,{
+   "node_json" : ["post44"]
+  ,"link_json" : "/post44.html"
+ }
+
+
+,{
+   "node_json" : ["нет_не_айс"]
+  ,"link_json" : "https://www.youtube.com/watch?v=PssXejaATDw"
+ }
+
+
+,{
+   "node_json" : ["totally_not_from_a_freezer.svg"]
+  ,"link_json" : "/static/teplitsa_those_were_the_days/must_be_together/totally_not_from_a_freezer.svg"
+ }
+
+,{
+   "node_json" : ["totally_not_from_a_freezer_background"]
+  ,"link_json" : "/static/teplitsa_those_were_the_days/must_be_together/20160519_020.jpg"
  }
 
 
