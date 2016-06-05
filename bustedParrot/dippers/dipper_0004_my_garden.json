@@ -1,6 +1,13 @@
 [
 
  {
+   "miniature_json" : "${totally_not_from_a_freezer_background_thm.svg}"
+  ,"url_json"       : "${totally_not_from_a_freezer_background_dipper.svg}"
+  ,"name_json"      : "my garden"
+  ,"comment_json"   : ""
+ }
+
+,{
    "miniature_json" : "${red_green_kactus_20160117_026.jpg_thm}"
   ,"url_json"       : "${red_green_kactus_20160117_026.jpg}"
   ,"name_json"      : "my garden"

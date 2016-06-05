@@ -14,7 +14,7 @@
 </span>
 
 <span class="top_r">
-  <img  src="/static/rarity_eyes_closed.png" alt="" align="middle" class="top_r_img">
+  <img  src="${dipper_top_decor}" alt="" align="middle" class="top_r_img">
   
 </span>
 
