@@ -7,7 +7,6 @@
 module Site
   ( app
    ,Routes(..)
-   ,total_pages_archive
   ) where
 
 ------------------------------------------------------------------------------
@@ -17,7 +16,6 @@ import qualified Data.Text as T
 import qualified Data.Map as DMap
 import Data.List
 import Data.Maybe
---import Control.DeepSeq
 import qualified Data.Char as C
 import           Snap.Core
 --import           Snap.Http.Server
@@ -60,8 +58,7 @@ routes = do
    post_r<- generate_postN_responseM
    main_page_r<- MP.main_pageT_HandlerM postsT
    --archive_r<-A.archive_HandlerM postsT
-   archive_r_e<-generate_archive_pageN_responseM_earliest
-   archive_r_l<-generate_archive_pageN_responseM_latest
+   archive_r<-generate_archive_pageN_responseM
    pagewtwr_r<- generate_pageWTWR_responseM
    dippers_pn_r<- generate_dippers_pageN_responseM
    dippers_ip_r<- generate_dippers_individual_page_responseM
@@ -75,8 +72,7 @@ routes = do
          --,("/archive.html", archive_r)
          ]
        ,post_r
-       ,archive_r_e
-       ,archive_r_l
+       ,archive_r
        ,pagewtwr_r
        ,dippers_pn_r
        ,dippers_ip_r
@@ -124,70 +120,42 @@ generate_pageWTWR_responseM = do
 
 
 
-generate_archive_pageN_responseM_earliest :: State Routes [(ByteString, Handler App App ())]
-generate_archive_pageN_responseM_earliest = do
-   generate_archive_pageN_responseM_common EarliestFirst
-
-
-generate_archive_pageN_responseM_latest :: State Routes [(ByteString, Handler App App ())]
-generate_archive_pageN_responseM_latest = do
-   generate_archive_pageN_responseM_common LatestFirst
-
-
-
-
-generate_archive_pageN_responseM_common
-  :: ArchivePageOrder -- page order (earliest first/latest first)
-  -> State Routes [(ByteString, Handler App App ())]
-generate_archive_pageN_responseM_common po = do
-   r@(Routes { postsT=postsT, number_of_pages_in_archive=nopia}) <- get
-   --ar<- responces postsT r
-   --return $ zip (routes postsT) ar
-   case po of
-     EarliestFirst -> return $ zip (routes_e postsT) $ responces postsT r nopia po
-     LatestFirst   -> return $ zip (routes_l postsT) $ responces postsT r nopia po
-   
+generate_archive_pageN_responseM :: State Routes [(ByteString, Handler App App ())]
+generate_archive_pageN_responseM = do
+   r@(Routes { postsT=postsT}) <- get
+   ar<- responces postsT r
+   return $ zip (routes postsT) ar
    where
-   links_e p = map archive_pageN_node_link'' (total_responces p)
-   routes_e p = map B.pack $ links_e p
-   
-   links_l p = map archive_latest_first_pageN_node_link'' (total_responces p)
-   routes_l p = map B.pack $ links_l p
-   
-   responce i t p routes gpa links
-      |t >1 =
+   links p = map archive_pageN_node_link'' (total_responces p)
+   routes p = map B.pack $ links p
+   responce i t p routes
+      |total_pages' p >1 =
          evalState
-           A.archive_HandlerM
-           (A.Archive_Handler {
-                A.posts       = (gpa i p)
-               ,A.page_number = i
-               ,A.links       = (links p)
-               ,A.routes      = routes
+           A.archiveT_HandlerM
+           (Archive_Handler {
+                posts       = p
+               ,page_number = i
+               ,links       = (links p)
+               ,routes      = routes
                })
                   --(give_page i p) i $ links p
            
       |otherwise =
          evalState
-           A.archive_HandlerM
-           (A.Archive_Handler {
-                A.posts       = (gpa i p)
-               ,A.page_number = i
-               ,A.links       = []
-               ,A.routes      = routes
+           A.archiveT_HandlerM
+           (Archive_Handler {
+                posts       = p
+               ,page_number = i
+               ,links       = []
+               ,routes      = routes
                })
                   --(give_page i p) ) i []
 
-   responces p r t EarliestFirst =
-     map (\x-> responce x t p r give_page_archive links_e) $ total_responces p
-   responces p r t LatestFirst   =
-     map (\x-> responce x t p r give_page_archive_latest_first links_l) $ total_responces p
-
-
+   responces p r = mapM (\x-> responce x total_pages' p r) $ total_responces p
    total_responces p = [1.. total_pages' p]
    total_pages' p = (total_pages_archive p)
 
 
-data ArchivePageOrder = EarliestFirst|LatestFirst
 
 
 generate_dippers_pageN_responseM :: State Routes [(ByteString, Handler App App ())]
@@ -359,14 +327,10 @@ request_with_no_page_number tags = reverse $ dropWhile C.isDigit $ reverse $ req
 
 
 total_items d = length $ items d
-total_items_archive d = length $ items_archive d
 total_pages d = ceiling ((fromIntegral $ total_items d) / (fromIntegral max_items_per_page))
 total_pages_archive d = ceiling ((fromIntegral $ total_items_archive d) / (fromIntegral max_items_per_page_archive))
 items d = zip (concat $ map (replicate max_items_per_page) [1..]) d
-items_archive p = zip (concat $ map (replicate max_items_per_page_archive) [1..]) p
-give_page i d = snd $! unzip $ head $ drop (i-1) $ groupBy (\(n,_) (n1,_)-> n==n1) $ items d
-give_page_archive i p = snd $! unzip $ head $ drop (i-1) $ groupBy (\(n,_) (n1,_)-> n==n1) $ reverse $ items_archive p
-give_page_archive_latest_first i p = snd $! unzip $ head $ drop (i-1) $ groupBy (\(n,_) (n1,_)-> n==n1) $ items_archive p
+give_page i d = snd $ unzip $ head $ drop (i-1) $ groupBy (\(n,_) (n1,_)-> n==n1) $ items d
 
 
 

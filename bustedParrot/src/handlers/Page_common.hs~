@@ -11,7 +11,7 @@
 -- |
 --
 -----------------------------------------------------------------------------
-{-# LANGUAGE OverloadedStrings, DeriveGeneric, DeriveAnyClass #-}
+{-# LANGUAGE OverloadedStrings #-}
 module Page_common (
  PageT(..)
 
@@ -19,11 +19,9 @@ module Page_common (
 
 
 import           Heist
---import GHC.Generics (Generic)
---import Control.DeepSeq
 
 
 data PageT = PageT {
  pageT :: Template
 ,name :: String
-} --deriving (Generic, NFData)
+}

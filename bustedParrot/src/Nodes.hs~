@@ -27,7 +27,6 @@ module Nodes (
 ,page_node_link'
 ,post_node_link'
 ,archive_pageN_node_link''
-,archive_latest_first_pageN_node_link''
 ,dippers_pageN_node_link
 ,dippers_pageN_node_link'
 ,dippers_pageN_node_link''
@@ -183,9 +182,6 @@ post_node_link' n = T.pack $ "/post" ++ (show n) ++ ".html"
 
 archive_pageN_node_link'' :: Int -> String
 archive_pageN_node_link'' n = "/archive" ++ (show n) ++ ".html"
-
-archive_latest_first_pageN_node_link'' :: Int -> String
-archive_latest_first_pageN_node_link'' n = "/archive_latest_first" ++ (show n) ++ ".html"
 
 
 

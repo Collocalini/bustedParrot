@@ -21,7 +21,6 @@ module Dipper (
  ,dippersT_HandlerM
  ,dippersT_tagged_HandlerM
  ,give_dippers_references
- ,give_dippers_references'
  ,give_dippers_tags
 -- ,dipperT_individual_page_Handler
  ,dipperT_individual_page_HandlerM
@@ -316,13 +315,6 @@ give_all_posts = do
 
 
 
-give_all_posts' :: IO [(String, T.Text)]
-give_all_posts' = do
-   l<- getDirectoryContents "posts"
-   let files = sort $ filter isPostFile l
-   r<- mapM (\n-> readFile ("posts/" ++ n)) files
-   return $!! zip files $ map T.pack r
-
 
 
 dipper_is_found_in :: [(String, T.Text)] -> Dipper -> [String]
@@ -350,27 +342,13 @@ dippers_references :: Dippers -> [(String, T.Text)] -> [[String]]
 dippers_references d posts = map (dipper_is_found_in posts) d
 
 
-dippers_references' :: Dippers -> [(String, T.Text)] -> [[String]]
-dippers_references' d posts = force $ map (dipper_is_found_in posts) d
-
 
 
 give_dippers_references :: Node_map -> IO [(Dipper,[PostT])]
 give_dippers_references nm = do
    d   <- dippersT_io nm
    ps  <- give_all_posts
-   pTs <- mapM step1 $!! dippers_references d ps
-   return $ zip d pTs
-   where
-   step1 :: [String] -> IO [PostT]
-   step1 s = mapM number2post $ reverse $ sort $ number_from_post_name s
-
-
-
-give_dippers_references' :: Node_map -> Dippers -> IO [(Dipper,[PostT])]
-give_dippers_references' nm d = do
-   ps  <- give_all_posts'
-   pTs <- mapM step1 $!! dippers_references d ps
+   pTs <- mapM step1 $ dippers_references d ps
    return $ zip d pTs
    where
    step1 :: [String] -> IO [PostT]

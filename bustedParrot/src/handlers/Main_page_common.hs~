@@ -34,7 +34,7 @@ import Data.List
 import Data.Monoid
 import Nodes
 --import GHC.Generics (Generic)
-import Control.DeepSeq
+--import Control.DeepSeq
 
 data PostT = PostT {
  postT :: Template
@@ -46,7 +46,7 @@ data PostT = PostT {
 postsT_h_io :: IO [PostT]
 postsT_h_io = do
    l<- getDirectoryContents "posts"
-   mapM number2post $!! reverse $ sort $ number_from_post_name $ filter isPostFile l
+   mapM number2post $ reverse $ sort $ number_from_post_name $ filter isPostFile l
 
 
 
@@ -62,7 +62,7 @@ number2post :: Int -> IO PostT
 number2post s = do
    (Right (DocumentFile {dfDoc=(TT.HtmlDocument {TT.docContent=docContent})})) <-
                                                 getDoc $ "posts/post" ++ show s ++ ".html"
-   return $! PostT {postT=docContent, number=s}
+   return $ PostT {postT=docContent, number=s}
 
 
 number_from_post_name :: [FilePath] -> [Int]
