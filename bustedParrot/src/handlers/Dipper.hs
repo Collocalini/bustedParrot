@@ -106,7 +106,6 @@ dippersT_io nm = do
 
 
 
-
 dippersT_for_tag_io ::  Node_map -> IO [(String, Dippers)]
 dippersT_for_tag_io nm = do
    l<- getDirectoryContents "tags"
@@ -212,16 +211,12 @@ give_dipper     (Dipper_json {miniature_json = m
 
 dipper_check_orientation :: Dipper -> IO Dipper
 dipper_check_orientation d
-   |link_is_local $ url d = do
-       img <- loadImage $ T.unpack $ url d
-       case img of
-          Nothing  -> do --ioError (userError "image loading error")
-                         return $ (\de -> de {isVertical=False}) d
-          Just img -> return $ (\de -> de {isVertical=image_is_vertical img}) d
+   |link_is_local $ url d = (loadImage $ T.unpack $ url d) >>= ck
+   |otherwise = return $!! (\de -> de {isVertical=False}) d
 
-   |otherwise = return $ (\de -> de {isVertical=False}) d
-
-
+   where
+     ck Nothing    = return $!! (\de -> de {isVertical=False}) d
+     ck (Just img) = return $!! (\de -> de {isVertical=image_is_vertical img}) d
 
 
 {-- ================================================================================================
@@ -334,7 +329,7 @@ dipper_is_found_in posts
     ,url       = u
     ,url_raw   = u_raw
     ,comment   = _
-    })  = (\(l,_) -> l) $ unzip $ filter (\(_,t) -> (T.isInfixOf u t)||(T.isInfixOf u_raw t)) posts
+    })  = (\(l,_) -> l) $ unzip $! filter (\(_,t) -> (T.isInfixOf u t)||(T.isInfixOf u_raw t)) posts
 
 
 
@@ -371,12 +366,16 @@ give_dippers_references' :: Node_map -> Dippers -> IO [(Dipper,[PostT])]
 give_dippers_references' nm d = do
    ps  <- give_all_posts'
    pTs <- mapM step1 $!! dippers_references d ps
-   return $ zip d pTs
+   return $ zip d $! pTs
    where
    step1 :: [String] -> IO [PostT]
-   step1 s = mapM number2post $ reverse $ sort $ number_from_post_name s
+   step1 s = mapM number2post $! reverse $ sort $ number_from_post_name s
 
-
+   step2 x = do
+     n2p@(PostT {postT=p, number=n})<-number2post x
+     print p
+     return n2p
+     
 
 
 dipper_has_tag :: Dipper -> Dipper -> Bool
