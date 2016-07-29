@@ -11,9 +11,6 @@
 -- |
 --
 -----------------------------------------------------------------------------
-{-# LANGUAGE DeriveGeneric, DeriveAnyClass #-}
-
-
 
 module Dipper_common (
  Dipper(..)
@@ -21,8 +18,8 @@ module Dipper_common (
 ) where
 
 import qualified Data.Text as T
-import GHC.Generics (Generic)
-import Control.DeepSeq
+
+
 
 
 data Dipper = Dipper {
@@ -33,7 +30,7 @@ data Dipper = Dipper {
  ,url_raw :: T.Text
  ,comment :: Maybe T.Text
  ,isVertical :: Bool
-} deriving (Show,Eq,Generic, NFData)
+} deriving (Show,Eq)
 
 type Dippers = [Dipper]
 

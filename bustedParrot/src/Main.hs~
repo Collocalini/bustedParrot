@@ -136,6 +136,7 @@ getActions conf = do
     --let fdr = force dr 
     
     let nopia = total_pages_archive $! p
+    print $ length dr
     
     
 

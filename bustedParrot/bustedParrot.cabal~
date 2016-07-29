@@ -36,14 +36,12 @@ executable bustedParrot
                  , JuicyPixels -any
                  , containers -any
                  , parsec -any
-                 , deepseq -any
      
     
          
 
     buildable: True
-    ghc-options: -threaded -Wall -fwarn-tabs -funbox-strict-fields -O2 -fno-warn-orphans 
------  -prof -fprof-auto
+    ghc-options: -threaded -Wall -fwarn-tabs -funbox-strict-fields -O2 -fno-warn-orphans
  
     main-is: Main.hs
     buildable: True
@@ -52,5 +50,4 @@ executable bustedParrot
                    InsertLinks Main_page Main_page_common Nodes NodesM Page
                    Page_common Post Site_state
     ghc-options: -fwarn-unused-imports
-    
  

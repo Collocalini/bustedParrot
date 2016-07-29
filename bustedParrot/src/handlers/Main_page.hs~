@@ -24,7 +24,6 @@ import Control.Monad.State
 ------------------------------------------------------------------------------
 import           Application
 --------------------------------------------------------------------------------
-import Nodes
 import NodesM
 import Main_page_common
 import Site_state
@@ -43,7 +42,7 @@ main_pageT_HandlerM p = do
 
    return $ renderWithSplices "main_posts"
        (mconcat
-       [         
+       [
         ("dippers" ##
         (I.mapSplices $ I.runChildrenWith . splicesFrom_main_page_dippers_entry_case) $ take 10 d
         )
@@ -55,15 +54,6 @@ main_pageT_HandlerM p = do
        ,("posts_h" ##
         (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) $ take 9 $ tail p
         )
-
-       ,("archive_bottom" ##
-        (I.textSplice $ T.pack $ archive_latest_first_pageN_node_link'' 1) 
-        )
-
-       ,("archive" ##
-        (I.textSplice $ T.pack $ archive_pageN_node_link'' 1) 
-        )
-        
        ,insertLinks $ Just nm]
        )
 

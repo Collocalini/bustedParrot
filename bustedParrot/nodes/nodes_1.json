@@ -15,10 +15,9 @@
   ,"link_json" : "/pages/page_faq.html"
  }
 
-,{
-   "node_json" : ["archive"]
-  ,"link_json" : "/archive.html"
- }
+
+
+
 
 ,{
    "node_json" : ["main_css"]

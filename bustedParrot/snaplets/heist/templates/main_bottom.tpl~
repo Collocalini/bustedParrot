@@ -3,7 +3,7 @@
 
 <span style="" >
   
-    <a href='${archive_bottom}' class="archive_button" align="left">Архив / Archive</a> 
+    <a href='${archive}' class="archive_button" align="left">Архив / Archive</a> 
 
 </span>
 

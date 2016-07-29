@@ -38,4 +38,4 @@ max_items_per_page = 50
 
 
 max_items_per_page_archive:: Int
-max_items_per_page_archive = 50
+max_items_per_page_archive = 10
