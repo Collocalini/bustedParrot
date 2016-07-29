@@ -20,6 +20,80 @@
   ,"link_json" : "/post47.html"
  }
 
+,{
+   "node_json" : ["post48"]
+  ,"link_json" : "/post48.html"
+ }
+
+,{
+   "node_json" : ["stepnaya_kobylka_breathing.gif"]
+  ,"link_json" : "/static/stepnaya_kobylka/stepnaya_kobylka.gif"
+ }
+
+,{
+   "node_json" : ["stepnaya_kobylka1"]
+  ,"link_json" : "/static/stepnaya_kobylka/stepnaya_kobylka1.jpg"
+ }
+
+,{
+   "node_json" : ["stepnaya_kobylka2"]
+  ,"link_json" : "/static/stepnaya_kobylka/stepnaya_kobylka2.jpg"
+ }
+
+,{
+   "node_json" : ["stepnaya_kobylka3"]
+  ,"link_json" : "/static/stepnaya_kobylka/stepnaya_kobylka3.jpg"
+ }
+
+
+,{
+   "node_json" : ["belolobiy_kuznechik_est_babochku.svg"]
+  ,"link_json" : "/static/stepnaya_kobylka/must_be_together/belolobiy_kuznechik_est_babochku.svg"
+ }
+
+
+,{
+   "node_json" : ["belolobiy_kuznechik_est_babochku.jpg"]
+  ,"link_json" : "/static/stepnaya_kobylka/must_be_together/belolobiy_kuznechik_est_babochku.jpg"
+ }
+    
+
+,{
+   "node_json" : ["belolobiy_kuznechik_est_babochku.mkv"]
+  ,"link_json" : "https://yadi.sk/i/Xv-IaZ4CtQgYw"
+ }
+    
+
+,{
+   "node_json" : ["mantis_20160727.jpg"]
+  ,"link_json" : "/static/stepnaya_kobylka/20160727/mantis_20160727.jpg"
+ }
+ 
+,{
+   "node_json" : ["mantis_eats_food-grasshopper_20160727.jpg"]
+  ,"link_json" : "/static/stepnaya_kobylka/20160727/mantis_eats_food-grasshopper_20160727.jpg"
+ }
+ 
+,{
+   "node_json" : ["grasshopper_eats_grasshoper_20160727.jpg"]
+  ,"link_json" : "/static/stepnaya_kobylka/20160727/grasshopper_eats_grasshoper_20160727.jpg"
+ }
+ 
+,{
+   "node_json" : ["pedipalps_wiki"]
+  ,"link_json" : "https://en.wiktionary.org/wiki/pedipalp"
+ }
+    
+,{
+   "node_json" : ["belolobiy_kuznetchik_top.jpg"]
+  ,"link_json" : "/static/belolobiy_kuznetchik_top.jpg"
+ }
+
+,{
+   "node_json" : ["post48"]
+  ,"link_json" : "/post48.html"
+ }
+    
 ]
 
 
