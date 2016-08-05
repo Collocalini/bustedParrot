@@ -14,7 +14,7 @@
    "node_json" : ["cocroach_before_after_top.jpg"]
   ,"link_json" : "/static/cocroach_before_after_top.jpg"
  }
-
+    
 ,{
    "node_json" : ["post47"]
   ,"link_json" : "/post47.html"
@@ -92,7 +92,52 @@
 ,{
    "node_json" : ["post48"]
   ,"link_json" : "/post48.html"
+}
+
+,{
+   "node_json" : ["post51"]
+  ,"link_json" : "/post51.html"
  }
+
+,{
+   "node_json" : ["download_go-ipfs"]
+  ,"link_json" : "https://ipfs.io/docs/install/"
+ }
+
+,{
+   "node_json" : ["ipfs_neverParrot_independent_public_gw"]
+  ,"link_json" : "https://ipfs.io/ipns/QmR5jQm4taSykB3xvkcFWogXWCDZ9uh1YiNzdnyb5JieQ4"
+ }
+
+,{
+   "node_json" : ["ipfs_neverParrot_independent_local_gw"]
+  ,"link_json" : "http://127.0.0.1:8080/ipns/QmR5jQm4taSykB3xvkcFWogXWCDZ9uh1YiNzdnyb5JieQ4/"
+ }
+    
+,{
+   "node_json" : ["red_cactus_window_hit_aftermath.jpg"]
+  ,"link_json" : "/static/red_green_kactus/20160730_014.jpg"
+ }
+
+,{
+   "node_json" : ["coffee_progress_20160730_1"]
+  ,"link_json" : "/static/teplitsa_those_were_the_days/coffee_progress_20160730/20160730_042.jpg"
+ }
+
+,{
+   "node_json" : ["coffee_progress_20160730_2"]
+  ,"link_json" : "/static/teplitsa_those_were_the_days/coffee_progress_20160730/20160730_044.jpg"
+ }
+    
+,{
+   "node_json" : ["coffee_progress_20160730_3"]
+  ,"link_json" : "/static/teplitsa_those_were_the_days/coffee_progress_20160730/20160730_051.jpg"
+ }
+
+,{
+   "node_json" : ["coffee_progress_20160730_new_leafs_on_top"]
+  ,"link_json" : "/static/teplitsa_those_were_the_days/coffee_progress_20160730/20160730_054.jpg"
+ }    
     
 ]
 

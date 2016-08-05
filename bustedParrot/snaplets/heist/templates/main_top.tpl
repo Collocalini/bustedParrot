@@ -10,7 +10,8 @@
   <div class="arrow_box_left">
      <div style="font: 2.0em arial, sans-serif;"> Противопопугайный сайт</div>
      <div style="font: 1.0em arial, sans-serif;"> Never Parrot </div>
-     <div align="right"> <a href='${archive}' >Архив</a> &nbsp <a href='${faq}' >FAQ</a></div>
+     <div align="right"> <div class="site-in-ipfs-promotion"><a href='${post51}' >Следующий шаг / The next
+     step</a></div> &nbsp &nbsp <a href='${archive}' >Архив</a> &nbsp <a href='${faq}' >FAQ</a></div>
   </div> 
 
 </li>

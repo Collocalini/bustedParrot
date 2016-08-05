@@ -392,3 +392,20 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
 
 
 
+
+.site-in-ipfs-promotion {
+    margin: 0em;
+    animation: shift1em 5s infinite alternate;
+    display: inline;
+}
+
+
+@keyframes shift1em {
+  0% {
+    margin-right: 0em;
+  }
+
+  100% {
+    margin-right: 1em;
+  }
+}
