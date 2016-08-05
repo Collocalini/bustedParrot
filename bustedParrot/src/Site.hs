@@ -363,10 +363,25 @@ total_items_archive d = length $ items_archive d
 total_pages d = ceiling ((fromIntegral $ total_items d) / (fromIntegral max_items_per_page))
 total_pages_archive d = ceiling ((fromIntegral $ total_items_archive d) / (fromIntegral max_items_per_page_archive))
 items d = zip (concat $ map (replicate max_items_per_page) [1..]) d
-items_archive p = zip (concat $ map (replicate max_items_per_page_archive) [1..]) p
+
+items_archive p =
+  zip (
+       concat $ map (replicate max_items_per_page_archive) [1..]
+      ) $ reverse p
+  
 give_page i d = snd $! unzip $ head $ drop (i-1) $ groupBy (\(n,_) (n1,_)-> n==n1) $ items d
-give_page_archive i p = snd $! unzip $ head $ drop (i-1) $ groupBy (\(n,_) (n1,_)-> n==n1) $ reverse $ items_archive p
-give_page_archive_latest_first i p = snd $! unzip $ head $ drop (i-1) $ groupBy (\(n,_) (n1,_)-> n==n1) $ items_archive p
+
+give_page_archive i p =
+  snd $! unzip $ head $ drop (i-1)
+    $ groupBy (\(n,_) (n1,_)-> n==n1) $ items_archive p
+
+give_page_archive_latest_first :: Int -> [b] -> [b]
+give_page_archive_latest_first i p
+  |((length $ page i)>5)||(max_items_per_page_archive<=5)  = page i
+  |otherwise = (page i) ++ (page (i+1))
+  where
+    page i = snd $! unzip $ head $ drop (i-1)
+               $ groupBy (\(n,_) (n1,_)-> n==n1) $ reverse $ items_archive p
 
 
 
