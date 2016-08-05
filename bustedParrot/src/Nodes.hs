@@ -290,7 +290,27 @@ tagged_dipper'' :: String
 tagged_dipper'' = "dipper"
 
 link_is_local :: T.Text -> Bool
-link_is_local l = T.isPrefixOf "/static/" l
+link_is_local l
+  |T.isPrefixOf "/static/" l = True
+  |T.isPrefixOf "127.0.0.1:8080/ipfs/" l = True
+  |T.isPrefixOf "http://127.0.0.1:8080/ipfs/" l = True
+  |T.isPrefixOf "https://127.0.0.1:8080/ipfs/" l = True
+  |T.isPrefixOf "127.0.0.1:8080/ipns/" l = True
+  |T.isPrefixOf "http://127.0.0.1:8080/ipns/" l = True
+  |T.isPrefixOf "https://127.0.0.1:8080/ipns/" l = True
+  |T.isPrefixOf "ipfs.io/ipfs/" l = True
+  |T.isPrefixOf "http://ipfs.io/ipfs/" l = True
+  |T.isPrefixOf "https://ipfs.io/ipfs/" l = True
+  |T.isPrefixOf "ipfs.io/ipns/" l = True
+  |T.isPrefixOf "http://ipfs.io/ipns/" l = True
+  |T.isPrefixOf "https://ipfs.io/ipns/" l = True
+  |T.isPrefixOf "gateway.ipfs.io/ipfs/" l = True
+  |T.isPrefixOf "http://gateway.ipfs.io/ipfs/" l = True
+  |T.isPrefixOf "https://gateway.ipfs.io/ipfs/" l = True
+  |T.isPrefixOf "gateway.ipfs.io/ipns/" l = True
+  |T.isPrefixOf "http://gateway.ipfs.io/ipns/" l = True
+  |T.isPrefixOf "https://gateway.ipfs.io/ipns/" l = True
+  |otherwise = False
 
 nodes_to_map :: Nodes -> Node_map
 nodes_to_map nodes = Dm.fromList $ concat $ map node_to_list nodes

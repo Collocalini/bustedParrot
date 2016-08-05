@@ -1,4 +1,5 @@
 bustedParrot/dist/
+replaceLinksAccordingToMap/dist
 bustedParrot/.cabal-sandbox/
 bustedParrot/__.cabal-sandbox/
 bustedParrot/___.cabal-sandbox/
@@ -14,3 +15,12 @@ update_auto
 x
 bustedParrot/static/dipper_next.svg
 bustedParrot/static/dipper_prev.svg
+bustedParrot/cabal.sandbox.config
+replaceLinksAccordingToMap/cabal.sandbox.config
+bustedParrot/cabal.config
+
+find_r
+ipfs_ls_hashes
+ipfs_r
+replace_links_according_to_map.hs
+update_to_ipfs.hs
