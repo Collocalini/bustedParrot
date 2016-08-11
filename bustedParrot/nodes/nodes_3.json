@@ -138,7 +138,23 @@
    "node_json" : ["coffee_progress_20160730_new_leafs_on_top"]
   ,"link_json" : "/static/teplitsa_those_were_the_days/coffee_progress_20160730/20160730_054.jpg"
  }    
-    
+   
+,{
+   "node_json" : ["20160731_stapelia_flower"]
+  ,"link_json" : "/static/my_garden/20160731_017.jpg"
+ }
+
+,{
+   "node_json" : ["20160731_mantis_eats_acrida.jpg"]
+  ,"link_json" : "/static/stepnaya_kobylka/20160731_050.jpg"
+ }
+
+,{
+   "node_json" : ["20160731_mantis_eats_acrida.mkv"]
+  ,"link_json" : ""
+ }
+
+ 
 ]
 
 
