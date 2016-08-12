@@ -144,6 +144,55 @@
   ,"link_json" : "/static/stepnaya_kobylka/20160803_mantis_dismantled.jpg"
  }   
 
+,{
+   "node_json" : ["20160731_stapelia_flower"]
+  ,"link_json" : "/static/my_garden/20160731_017.jpg"
+ }  
+
+,{
+   "node_json" : ["pets_to_eat.svg"]
+  ,"link_json" : "/static/stepnaya_kobylka/must_be_together/pets_to_eat.svg"
+ }  
+
+,{
+   "node_json" : ["20160731_grasshoper_hunt"]
+  ,"link_json" : "https://yadi.sk/i/bHLzmX8quBHKk"
+ }  
+
+,{
+   "node_json" : ["20160731_grasshoper_hunt_blame"]
+  ,"link_json" : "/static/stepnaya_kobylka/must_be_together/who_to_blame.svg"
+ }  
+
+,{
+   "node_json" : ["20160731_grasshoper_hunt_preview"]
+  ,"link_json" : "/static/stepnaya_kobylka/20160731_grasshopper_hunt_preview1776-2420.mp4"
+ }  
+
+,{
+   "node_json" : ["20160728_grasshoper_hunt_preview"]
+  ,"link_json" : "/static/stepnaya_kobylka/20160728_grasshopper_hunt_preview0001-0247.mp4"
+ }  
+
+,{
+   "node_json" : ["20160728_grasshoper_hunt"]
+  ,"link_json" : "https://yadi.sk/i/opS5S4SfuBF5T"
+ }  
+
+,{
+   "node_json" : ["20160728_mantis_hunt"]
+  ,"link_json" : "https://yadi.sk/i/PZCzGimouBF5V"
+ }  
+
+,{
+   "node_json" : ["20160731_mantis_eats_acrida_preview"]
+  ,"link_json" : "/static/stepnaya_kobylka/20160731_008_mantis_eats_acrida_preview0961-1371.mp4"
+ }  
+
+,{
+   "node_json" : ["20160731_mantis_eats_acrida"]
+  ,"link_json" : "https://yadi.sk/i/SC8Ch9PJuBF5b"
+ }  
 
 
 
@@ -152,8 +201,48 @@
 
 
 
-    
-    
+
+,{
+   "node_json" : ["20160807_019"]
+  ,"link_json" : "/static/stepnaya_kobylka/must_be_together/20160807_019.jpg"
+ }  
+
+,{
+   "node_json" : ["20160807_024"]
+  ,"link_json" : "/static/stepnaya_kobylka/must_be_together/20160807_024.jpg"
+ }  
+
+,{
+   "node_json" : ["20160807_027"]
+  ,"link_json" : "/static/stepnaya_kobylka/must_be_together/20160807_027.jpg"
+ }  
+   
+ ,{
+   "node_json" : ["20160807_038"]
+  ,"link_json" : "/static/stepnaya_kobylka/must_be_together/20160807_038.jpg"
+ }  
+
+,{
+   "node_json" : ["20160807_053"]
+  ,"link_json" : "/static/stepnaya_kobylka/must_be_together/20160807_053.jpg"
+ }  
+
+,{
+   "node_json" : ["20160807_061"]
+  ,"link_json" : "/static/stepnaya_kobylka/must_be_together/20160807_061.jpg"
+ }  
+   
+ ,{
+   "node_json" : ["20160807_079"]
+  ,"link_json" : "/static/stepnaya_kobylka/must_be_together/20160807_079.jpg"
+ }  
+
+,{
+   "node_json" : ["20160807_084"]
+  ,"link_json" : "/static/stepnaya_kobylka/must_be_together/20160807_084.jpg"
+ }  
+
+
 ]
 
 
