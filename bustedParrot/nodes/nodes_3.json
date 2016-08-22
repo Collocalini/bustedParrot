@@ -166,12 +166,12 @@
 
 ,{
    "node_json" : ["20160731_grasshoper_hunt_preview"]
-  ,"link_json" : "/static/stepnaya_kobylka/20160731_grasshopper_hunt_preview1776-2420.mp4"
+  ,"link_json" : "http://127.0.0.1:8080/ipfs/Qmf2gGGBXwB6aTXQM8jajcWZahgRigwj5ENKH83jAPRsT5"
  }  
 
 ,{
    "node_json" : ["20160728_grasshoper_hunt_preview"]
-  ,"link_json" : "/static/stepnaya_kobylka/20160728_grasshopper_hunt_preview0001-0247.mp4"
+  ,"link_json" : "http://127.0.0.1:8080/ipfs/QmRLipmvs2nn2aXMdreicMciw5PaM9RpsYx88RSGjwCidN"
  }  
 
 ,{
@@ -186,7 +186,7 @@
 
 ,{
    "node_json" : ["20160731_mantis_eats_acrida_preview"]
-  ,"link_json" : "/static/stepnaya_kobylka/20160731_008_mantis_eats_acrida_preview0961-1371.mp4"
+  ,"link_json" : "http://127.0.0.1:8080/ipfs/Qma7LYg6iFyvsYAnFQPLAoYTo7oMLx6SqTH1G8RbmfTBZM"
  }  
 
 ,{
@@ -243,6 +243,38 @@
  }  
 
 
+,{
+   "node_json" : ["20160812_stapelia_flower"]
+  ,"link_json" : "/static/my_garden/20160812_006.jpg"
+ }  
+
+
+,{
+   "node_json" : ["20160811_grasshopper_hunt_ipfs"]
+  ,"link_json" : "http://127.0.0.1:8080/ipfs/QmXXZYLKcPoueJunmB835N2DfNBxBU2DHcoE6HK1D7KNga"
+ }  
+
+
+
+,{
+   "node_json" : ["20160811_grasshopper_hunt_yandex"]
+  ,"link_json" : "https://yadi.sk/i/nI0Oyy6HuQR8p"
+ }  
+
+    
+    
+
+
+
+    
+
+
+
+
+
+
+
+    
 ]
 
 
