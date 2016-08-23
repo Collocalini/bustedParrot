@@ -18,6 +18,7 @@ module Nodes (
 ,Node (..)
 ,Node_map
 ,nodesT_io
+,node_from_name
 ,node_to_link
 ,node_is_an_svg
 ,nodes_to_map
