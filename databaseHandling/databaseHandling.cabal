@@ -17,9 +17,26 @@ data-dir: ""
  
 executable databaseHandling
     build-depends: base -any
-                -- , text -any
-                -- , aeson -any
-                 , bustedParrot -any
+                 , lens >=3.7.6
+                 , bytestring -any 
+                 , heist >=0.14
+                 , MonadCatchIO-transformers -any
+                 , mtl -any
+                 , snap -any
+                 , snap-core -any
+                 , snap-server -any
+                 , snap-loader-static -any
+                 , text -any
+                 , time -any
+                 , transformers -any
+                 , xmlhtml -any
+                 , directory -any
+                 , filepath -any
+                 , aeson -any
+                 , JuicyPixels -any
+                 , containers -any
+                 , parsec -any
+                 , deepseq -any
          
 
     buildable: True
@@ -28,7 +45,7 @@ executable databaseHandling
  
     main-is: Main.hs
     buildable: True
-    hs-source-dirs: src
+    hs-source-dirs: src ../bustedParrot/src/ ../bustedParrot/src/handlers
     ghc-options: -fwarn-unused-imports
     
  

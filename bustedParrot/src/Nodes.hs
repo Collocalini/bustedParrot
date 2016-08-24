@@ -19,6 +19,9 @@ module Nodes (
 ,Node_map
 ,nodesT_io
 ,node_from_name
+,isNodeFile
+,node_from_name_suffix
+,number_from_node_name
 ,node_to_link
 ,node_is_an_svg
 ,nodes_to_map
