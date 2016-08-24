@@ -24,3 +24,7 @@ ipfs_ls_hashes
 ipfs_r
 replace_links_according_to_map.hs
 update_to_ipfs.hs
+
+databaseHandling/cabal.sandbox.config
+databaseHandling/.cabal-sandbox/
+databaseHandling/dist/
