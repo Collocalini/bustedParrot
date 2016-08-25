@@ -17,13 +17,11 @@ module Dipper (
   Dipper(..)
  ,Dippers
  ,dippersT_io
--- ,dippersT_Handler
  ,dippersT_HandlerM
  ,dippersT_tagged_HandlerM
  ,give_dippers_references
  ,give_dippers_references'
  ,give_dippers_tags
--- ,dipperT_individual_page_Handler
  ,dipperT_individual_page_HandlerM
  ,tag_c_groups_from_request_string
  ,tags_from_c_group
@@ -45,13 +43,13 @@ import           Snap.Snaplet.Heist
 import           Heist
 import qualified Heist.Interpreted as I
 import System.Directory
-import qualified System.FilePath.Posix as Fp
+
 import Data.List
 import qualified Data.Map as Dm
 import Data.Monoid
 import Control.Applicative
 import qualified Data.ByteString.Lazy as B
-import qualified Codec.Picture as CPic
+
 import Control.Monad.State
 import qualified Text.ParserCombinators.Parsec as P
 ------------------------------------------------------------------------------
@@ -61,6 +59,7 @@ import Main_page_common
 import Nodes
 import qualified Site_state as S
 import Dipper_common
+import Dipper_image
 import Dipper_entry_splices
 import InsertLinks
 
@@ -192,6 +191,7 @@ give_dipper     (Dipper_json {miniature_json = m
     ,url_raw   = u
     ,comment   = maybe_comment
     ,isVertical = False
+    ,scale = NotDefined
     }
    where
    maybe_miniature
@@ -209,53 +209,7 @@ give_dipper     (Dipper_json {miniature_json = m
 
 
 
-dipper_check_orientation :: Dipper -> IO Dipper
-dipper_check_orientation d
-   |link_is_local $ url d = (loadImage $ T.unpack $ url d) >>= ck
-   |otherwise = return $!! (\de -> de {isVertical=False}) d
 
-   where
-     ck Nothing    = return $!! (\de -> de {isVertical=False}) d
-     ck (Just img) = return $!! (\de -> de {isVertical=image_is_vertical img}) d
-
-
-{-- ================================================================================================
-================================================================================================ --}
-loadImage :: FilePath -> IO (Maybe (CPic.DynamicImage))
-loadImage name = do image <- CPic.readImage $ Fp.normalise ("./" ++ name)
-                    case image of
-                      (Left s) -> do
-                                    print s
-                                    return Nothing
-
-                      (Right d) ->
-                                 do
-                                    return $ Just d
-----------------------------------------------------------------------------------------------------
-
-image_is_vertical :: CPic.DynamicImage -> Bool
-image_is_vertical  (CPic.ImageRGB8
-                     (CPic.Image {
-                        CPic.imageWidth = w
-                       ,CPic.imageHeight = h
-                     })
-                   ) = h > w
-
-image_is_vertical  (CPic.ImageRGBA8
-                     (CPic.Image {
-                        CPic.imageWidth = w
-                       ,CPic.imageHeight = h
-                     })
-                   ) = h > w
-
-image_is_vertical  (CPic.ImageYCbCr8
-                     (CPic.Image {
-                        CPic.imageWidth = w
-                       ,CPic.imageHeight = h
-                     })
-                   ) = h > w
-
-image_is_vertical  _ = False
 
 
 
@@ -580,89 +534,7 @@ dippersT_tagged_HandlerM p tags tag page_number links = do
 
 
 
-{--
-splicesFrom_dippers_common :: Monad n => Dipper -> Splices (I.Splice n)
-splicesFrom_dippers_common t = do
-   mconcat $ [
-     "dipper_url"        ## I.textSplice $ url t
-    ,"dipper_url_img"    ## dipper_url_img_case
-    ,"dipper_miniature"  ## I.textSplice $ M.fromJust $ miniature t
-    ,"image_style"       ## image_style_case
-    ,"auto_caption"      ## auto_caption_case
-    ]
-   where
-   dipper_url_img_case
-      |link_is_local (url t) =  I.textSplice $ url t
-      |otherwise             =  I.textSplice $ M.fromJust $ miniature t
 
-   image_style_case
-      |(isVertical t)              = I.textSplice $ "img_fit_height"
-      |not $ link_is_local (url t) = I.textSplice $ "img_miniature"
-      |otherwise                   = I.textSplice $ "img_fit_width"
-
-   auto_caption_case
-      |link_is_local (url t) =  I.textSplice $ ""
-      |otherwise             =  I.textSplice $ "Нажми для полного размера / Click for full size"
-
-
-
-
-splicesFrom_dippers :: Monad n => Dipper -> Splices (I.Splice n)
-splicesFrom_dippers t = do
-   mconcat $ [
-    "page_url"          ## I.textSplice $ individual_dipper_node_link' $ T.unpack $ page_url t
-    ,splicesFrom_dippers_common t
-    ]
-
-
-splicesFrom_dippers_entry_case :: Monad n =>  Dipper -> Splices (I.Splice n)
-splicesFrom_dippers_entry_case t = do
-   splicesFrom_dippers_entry_case_common t $ splicesFrom_dippers t
-
-splicesFrom_dippers_entry_case_tags :: Monad n => String -> Dipper -> Splices (I.Splice n)
-splicesFrom_dippers_entry_case_tags s t = do
-   splicesFrom_dippers_entry_case_common t $ splicesFrom_dippers_tags s t
-
-splicesFrom_dippers_entry_case_common t sfd =
-   splicesFrom_case_common "dipper_entry_img" "dipper_entry_obj" t sfd
-
-splicesFrom_individual_dipper_case :: Monad n => Dipper -> Splices (I.Splice n)
-splicesFrom_individual_dipper_case t =
-   splicesFrom_individual_dipper_case_common t $ splicesFrom_dippers t
-
-splicesFrom_individual_dipper_case_tags :: Monad n => String -> Dipper -> Splices (I.Splice n)
-splicesFrom_individual_dipper_case_tags s t =
-   splicesFrom_individual_dipper_case_common t $ splicesFrom_dippers_tags s t
-
-splicesFrom_individual_dipper_case_common t sfd =
-   splicesFrom_case_common "individual_dipper_entry_img"
-                           "individual_dipper_entry_obj" t sfd
-
-
-
-splicesFrom_case_common tp_img tp_obj t sfd = do
-   "entry" ## dipper_entry_img_obj tp_img tp_obj t sfd
-
-
-dipper_entry_img_obj tp_img tp_obj (Dipper {miniature = Just m}) t = do
-   case (node_is_an_svg m) of
-      True  -> I.callTemplate tp_obj t
-      False -> I.callTemplate tp_img t
-
-dipper_entry_img_obj tp_img _ (Dipper {miniature = Nothing}) t = do
-   I.callTemplate tp_img t
-
-
-
-
-splicesFrom_dippers_tags :: Monad n => String -> Dipper -> Splices (I.Splice n)
-splicesFrom_dippers_tags tag t = do
-   mconcat $ [
-    "page_url"          ## I.textSplice $ individual_dipper_tagged_page_link' t tag
-    ,splicesFrom_dippers_common t
-    ]
-
---}
 
 
 
