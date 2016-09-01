@@ -98,7 +98,7 @@ dippersT_io nm = do
    l<- getDirectoryContents "dippers"
    d <- mapM (\x->dipper_from_name_suffix x nm)
              (number_from_dipper_name $ filter isDipperFile $ reverse $ sort l)
-   mapM dipper_check_orientation $ concat d
+   mapM dipper_secondary_pass $ concat d
 
 
 
@@ -205,6 +205,32 @@ give_dipper     (Dipper_json {miniature_json = m
    maybe_comment
      |c == "" = Nothing
      |otherwise = Just c
+
+
+
+
+
+
+dipper_secondary_pass :: Dipper -> IO Dipper
+dipper_secondary_pass d
+  |link_is_local $ url d = (loadImage $ T.unpack $ url d) >>= sp
+  |otherwise = return $!! d
+
+  where
+    sp Nothing = return
+      $!!
+      (\de ->
+        de {isVertical=False
+           ,scale     =NotDefined}) d
+
+
+      
+    sp (Just img) = return
+      $!!
+      (\de ->
+        de {isVertical=image_is_vertical img
+           ,scale     =deduceRepresentationScale img}) d
+       
 
 
 

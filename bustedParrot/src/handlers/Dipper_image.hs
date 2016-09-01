@@ -17,6 +17,8 @@ module Dipper_image (
   dipper_check_orientation
  ,loadImage
  ,image_is_vertical
+ ,deduceRepresentationScale
+ ,representationScaleGrading
 ) where
 
 
@@ -168,26 +170,27 @@ deduceRepresentationScale (Left (CPic.ImageRGB8
                         CPic.imageWidth = w
                        ,CPic.imageHeight = h
                      }))
-                   ) = h > w
+                   ) = representationScaleGrading w h
 
 deduceRepresentationScale  (Left (CPic.ImageRGBA8
                      (CPic.Image {
                         CPic.imageWidth = w
                        ,CPic.imageHeight = h
                      }))
-                   ) = h > w
+                   ) = representationScaleGrading w h
 
 deduceRepresentationScale  (Left (CPic.ImageYCbCr8
                      (CPic.Image {
                         CPic.imageWidth = w
                        ,CPic.imageHeight = h
                      }))
-                   ) = h > w
+                   ) = representationScaleGrading w h
 deduceRepresentationScale (Right (X.XmlDocument
                           {X.docContent=s})
-                  ) = (\(w,h)-> h > w) $ fromMaybe (0,0) $ svgWH s
+                  ) = (\(w,h)-> representationScaleGrading w h)
+                                            $ fromMaybe (0,0) $ svgWH s
 
-deduceRepresentationScale  _ = False
+deduceRepresentationScale  _ = NotDefined
 
 
 
