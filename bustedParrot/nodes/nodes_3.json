@@ -257,11 +257,54 @@
  }  
 
     
-    
+,{
+   "node_json" : ["wasp-spider25082016"]
+  ,"link_json" : "/static/must_be_together/20160825/spider.svg"
+ }      
+
+,{
+   "node_json" : ["20160825_010.jpg"]
+  ,"link_json" : "/static/must_be_together/20160825/20160825_010.jpg"
+ } 
+
+,{
+   "node_json" : ["20160825_011.jpg"]
+  ,"link_json" : "/static/must_be_together/20160825/20160825_011.jpg"
+ }     
+
+,{
+   "node_json" : ["20160825_014.jpg"]
+  ,"link_json" : "/static/must_be_together/20160825/20160825_014.jpg"
+ } 
+
+,{
+   "node_json" : ["20160825_015.jpg"]
+  ,"link_json" : "/static/must_be_together/20160825/20160825_015.jpg"
+ } 
+
+,{
+   "node_json" : ["20160825_019.jpg"]
+  ,"link_json" : "/static/must_be_together/20160825/20160825_019.jpg"
+ } 
+
+,{
+   "node_json" : ["20160825_025.jpg"]
+  ,"link_json" : "/static/must_be_together/20160825/20160825_025.jpg"
+}
+
+,{
+   "node_json" : ["20160825_035.jpg"]
+  ,"link_json" : "/static/must_be_together/20160825/20160825_035.jpg"
+ } 
+
+,{
+   "node_json" : ["20160825_037.jpg"]
+  ,"link_json" : "/static/must_be_together/20160825/20160825_037.jpg"
+ } 
 
 
 
-    
+
 
 
 
