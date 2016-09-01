@@ -52,7 +52,13 @@ splicesFrom_dippers_common t = do
       |otherwise             =  I.textSplice $ M.fromJust $ miniature t
 
    image_style_case
-      |(isVertical t)              = I.textSplice $ "img_fit_height"
+      |  (isVertical t)
+       &&(not ((scale t)==AsIs))
+       &&(link_is_local (url t)) = I.textSplice $ "img_fit_height"
+
+      |  ((scale t)==AsIs)
+       &&(link_is_local (url t)) = I.textSplice $ "img_as_is"
+
       |not $ link_is_local (url t) = I.textSplice $ "img_miniature"
       |otherwise                   = I.textSplice $ "img_fit_width"
 

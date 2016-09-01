@@ -107,6 +107,11 @@
    padding: 1em;
 }
 
+.img_as_is {
+   display: inline-block;
+   padding: 1em;
+}
+
 .img_fit_height {
    height:100%; 
    width:auto;
