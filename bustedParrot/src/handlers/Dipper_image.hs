@@ -19,6 +19,7 @@ module Dipper_image (
  ,image_is_vertical
  ,deduceRepresentationScale
  ,representationScaleGrading
+ ,deduceDipperType
 ) where
 
 
@@ -110,7 +111,7 @@ loadSvg f =  do
         Left s -> return Nothing
         Right d@(X.XmlDocument {X.docContent=s}) -> return $ Just $ Right d
 
-
+--loadMp4 :: 
 
 
 
@@ -196,6 +197,10 @@ deduceRepresentationScale  _ = NotDefined
 
 
 
-
+deduceDipperType :: FilePath -> DipperType
+deduceDipperType f
+  |node_is_a_raster $ T.pack f = RasterImage
+  |node_is_a_svg $ T.pack f = SvgImage
+  |otherwise = NotDefined
 
 

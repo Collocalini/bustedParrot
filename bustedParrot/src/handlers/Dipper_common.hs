@@ -19,6 +19,7 @@ module Dipper_common (
  Dipper(..)
 ,Dippers
 ,DipperScale(..)
+,DipperType(..)
 ) where
 
 import qualified Data.Text as T
@@ -35,6 +36,8 @@ data Dipper = Dipper {
  ,comment :: Maybe T.Text
  ,isVertical :: Bool
  ,scale :: DipperScale
+ ,dipperType :: DipperType
+ ,miniatureType :: DipperType
 } deriving (Show,Eq,Generic, NFData)
 
 type Dippers = [Dipper]
@@ -52,7 +55,11 @@ data DipperScale =
                  deriving (Show,Eq,Generic, NFData)
 
 
-
+data DipperType = NotDefined
+                 |RasterImage
+                 |SvgImage
+                 |Mp4Video
+                 |HtmlCode
 
 
 
