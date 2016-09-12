@@ -23,7 +23,9 @@ module Nodes (
 ,node_from_name_suffix
 ,number_from_node_name
 ,node_to_link
-,node_is_an_svg
+,node_is_a_svg
+,node_is_a_mp4
+,node_is_a_raster
 ,nodes_to_map
 ,link_is_local
 ,page_node_link
@@ -165,9 +167,57 @@ give_node     (Node_json {node_json = n
 node_to_link :: T.Text -> Node_map -> T.Text
 node_to_link n nm = Dm.findWithDefault "" n nm
 
-node_is_an_svg :: T.Text -> Bool
-node_is_an_svg m = (T.reverse $ T.take 5 $ T.reverse m) == ".svg}"
 
+node_is_a_raster :: T.Text -> Bool
+node_is_a_raster m 
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".jpg}" = True
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".JPG}" = True  
+  |(T.reverse $ T.take 6 $ T.reverse m) == ".jpeg}" = True
+  |(T.reverse $ T.take 6 $ T.reverse m) == ".JPEG}" = True  
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".gif}" = True
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".GIF}" = True  
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".png}" = True
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".PNG}" = True
+  |otherwise = False
+
+
+
+node_is_a_svg :: T.Text -> Bool
+node_is_a_svg m  
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".svg}" = True
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".SVG}" = True
+  |otherwise = False
+
+
+
+node_is_a_mp4 :: T.Text -> Bool
+node_is_a_mp4 m  
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".mp4}" = True
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".MP4}" = True
+  |otherwise = False
+
+
+node_is_in_ipfs :: T.Text -> Bool
+node_is_in_ipfs l 
+  |T.isPrefixOf "127.0.0.1:8080/ipfs/" l = True
+  |T.isPrefixOf "http://127.0.0.1:8080/ipfs/" l = True
+  |T.isPrefixOf "https://127.0.0.1:8080/ipfs/" l = True
+  |T.isPrefixOf "127.0.0.1:8080/ipns/" l = True
+  |T.isPrefixOf "http://127.0.0.1:8080/ipns/" l = True
+  |T.isPrefixOf "https://127.0.0.1:8080/ipns/" l = True
+  |T.isPrefixOf "ipfs.io/ipfs/" l = True
+  |T.isPrefixOf "http://ipfs.io/ipfs/" l = True
+  |T.isPrefixOf "https://ipfs.io/ipfs/" l = True
+  |T.isPrefixOf "ipfs.io/ipns/" l = True
+  |T.isPrefixOf "http://ipfs.io/ipns/" l = True
+  |T.isPrefixOf "https://ipfs.io/ipns/" l = True
+  |T.isPrefixOf "gateway.ipfs.io/ipfs/" l = True
+  |T.isPrefixOf "http://gateway.ipfs.io/ipfs/" l = True
+  |T.isPrefixOf "https://gateway.ipfs.io/ipfs/" l = True
+  |T.isPrefixOf "gateway.ipfs.io/ipns/" l = True
+  |T.isPrefixOf "http://gateway.ipfs.io/ipns/" l = True
+  |T.isPrefixOf "https://gateway.ipfs.io/ipns/" l = True
+  |otherwise = False
 
 
 page_node_link :: String -> B8.ByteString
@@ -296,24 +346,7 @@ tagged_dipper'' = "dipper"
 link_is_local :: T.Text -> Bool
 link_is_local l
   |T.isPrefixOf "/static/" l = True
-  |T.isPrefixOf "127.0.0.1:8080/ipfs/" l = True
-  |T.isPrefixOf "http://127.0.0.1:8080/ipfs/" l = True
-  |T.isPrefixOf "https://127.0.0.1:8080/ipfs/" l = True
-  |T.isPrefixOf "127.0.0.1:8080/ipns/" l = True
-  |T.isPrefixOf "http://127.0.0.1:8080/ipns/" l = True
-  |T.isPrefixOf "https://127.0.0.1:8080/ipns/" l = True
-  |T.isPrefixOf "ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "http://ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "https://ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "ipfs.io/ipns/" l = True
-  |T.isPrefixOf "http://ipfs.io/ipns/" l = True
-  |T.isPrefixOf "https://ipfs.io/ipns/" l = True
-  |T.isPrefixOf "gateway.ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "http://gateway.ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "https://gateway.ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "gateway.ipfs.io/ipns/" l = True
-  |T.isPrefixOf "http://gateway.ipfs.io/ipns/" l = True
-  |T.isPrefixOf "https://gateway.ipfs.io/ipns/" l = True
+  |node_is_in_ipfs l = True
   |otherwise = False
 
 nodes_to_map :: Nodes -> Node_map
