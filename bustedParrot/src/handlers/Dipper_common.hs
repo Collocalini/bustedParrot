@@ -20,6 +20,7 @@ module Dipper_common (
 ,Dippers
 ,DipperScale(..)
 ,DipperType(..)
+,DipperDisplayOnPage(..)
 ) where
 
 import qualified Data.Text as T
@@ -63,6 +64,11 @@ data DipperType = DtNotDefined
                  deriving (Show,Eq,Ord, Generic, NFData)
 
 
+data DipperDisplayOnPage = 
+                  DopNotDefined
+                 |DopUseURL
+                 |DopUseMiniature
+                 deriving (Show,Eq,Ord, Generic, NFData)
 
 
 

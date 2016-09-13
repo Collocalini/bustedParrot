@@ -192,8 +192,8 @@ give_dipper     (Dipper_json {miniature_json = m
     ,comment   = maybe_comment
     ,isVertical = False
     ,scale = DsNotDefined
-    ,dipperType = DtNotDefined
-    ,miniatureType = DtNotDefined
+    ,dipperType = deduceDipperType $ T.unpack u   
+    ,miniatureType = deduceDipperType $ T.unpack m 
     }
    where
    maybe_miniature

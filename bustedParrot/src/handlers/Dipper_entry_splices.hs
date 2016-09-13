@@ -48,8 +48,9 @@ splicesFrom_dippers_common t = do
     ]
    where
    dipper_url_img_case
-      |link_is_local (url t) =  I.textSplice $ url t
-      |otherwise             =  I.textSplice $ M.fromJust $ miniature t
+      |(dipperDisplayOnPageCase t) == DopUseURL       = I.textSplice $ url t
+      |(dipperDisplayOnPageCase t) == DopUseMiniature = I.textSplice $ M.fromJust $ miniature t
+      |otherwise                                      = I.textSplice $ M.fromJust $ miniature t
 
    image_style_case
       |  (isVertical t)
@@ -67,6 +68,13 @@ splicesFrom_dippers_common t = do
       |otherwise             =  I.textSplice $ "Нажми для полного размера / Click for full size"
 
 
+   
+   
+   
+dipperDisplayOnPageCase t
+   |link_is_local (url t) =  DopUseURL
+   |otherwise             =  DopUseMiniature
+
 
 
 splicesFrom_dippers :: Monad n => Dipper -> Splices (I.Splice n)
@@ -77,13 +85,13 @@ splicesFrom_dippers t = do
     ]
 
 splicesFrom_main_page_dippers_entry_case :: Monad n =>  Dipper -> Splices (I.Splice n)
-splicesFrom_main_page_dippers_entry_case t = do
+splicesFrom_main_page_dippers_entry_case t@(Dipper {miniatureType = dt}) = do
    splicesFrom_case_common [(DtNotDefined,  "main_dipper_entry_img")
                            ,(DtRasterImage, "main_dipper_entry_img")
                            ,(DtSvgImage, "main_dipper_entry_obj")
                            ,(DtMp4Video, "")
                            ,(DtHtmlCode, "")
-                           ]  t $ splicesFrom_dippers t
+                           ]  dt $ splicesFrom_dippers t
 
 splicesFrom_dippers_entry_case :: Monad n =>  Dipper -> Splices (I.Splice n)
 splicesFrom_dippers_entry_case t = do
@@ -93,13 +101,13 @@ splicesFrom_dippers_entry_case_tags :: Monad n => String -> Dipper -> Splices (I
 splicesFrom_dippers_entry_case_tags s t = do
    splicesFrom_dippers_entry_case_common t $ splicesFrom_dippers_tags s t
 
-splicesFrom_dippers_entry_case_common t sfd =
+splicesFrom_dippers_entry_case_common (Dipper {miniatureType = dt}) sfd =
    splicesFrom_case_common [(DtNotDefined,  "dipper_entry_img")
                            ,(DtRasterImage, "dipper_entry_img")
                            ,(DtSvgImage, "dipper_entry_obj")
                            ,(DtMp4Video, "")
                            ,(DtHtmlCode, "")
-                           ]  t sfd
+                           ]  dt sfd
 
 splicesFrom_individual_dipper_case :: Monad n => Dipper -> Splices (I.Splice n)
 splicesFrom_individual_dipper_case t =
@@ -109,19 +117,22 @@ splicesFrom_individual_dipper_case_tags :: Monad n => String -> Dipper -> Splice
 splicesFrom_individual_dipper_case_tags s t =
    splicesFrom_individual_dipper_case_common t $ splicesFrom_dippers_tags s t
 
-splicesFrom_individual_dipper_case_common t sfd =
-   splicesFrom_case_common [(DtNotDefined,  "individual_dipper_entry_img")
-                           ,(DtRasterImage, "individual_dipper_entry_img")
-                           ,(DtSvgImage, "individual_dipper_entry_obj")
-                           ,(DtMp4Video, "individual_dipper_entry_video")
-                           ,(DtHtmlCode, "")
-                           ] t sfd
+splicesFrom_individual_dipper_case_common t@(Dipper {dipperType = dt
+                                                  ,miniatureType = mt}) 
+                                          sfd 
+   |(dipperDisplayOnPageCase t) == DopUseURL       = splicesFrom_case_common dtMap dt sfd
+   |(dipperDisplayOnPageCase t) == DopUseMiniature = splicesFrom_case_common dtMap mt sfd
+   |otherwise = splicesFrom_case_common dtMap mt sfd
+   where
+   dtMap = [(DtNotDefined,  "individual_dipper_entry_img")
+           ,(DtRasterImage, "individual_dipper_entry_img")
+           ,(DtSvgImage,    "individual_dipper_entry_obj")
+           ,(DtMp4Video,    "individual_dipper_entry_video")
+           ,(DtHtmlCode, "")
+           ]
 
 
-{-splicesFrom_case_common :: Monad n => [(DipperType, B.ByteString)] 
-                           -> Dipper 
-                           -> Splices (I.Splice n) 
-                           -> Splices (I.Splice n)-}
+
 splicesFrom_case_common m t sfd = do
    "entry" ## dipper_entry_case_type (Dmap.fromList m) t sfd
 
@@ -138,11 +149,10 @@ dipper_entry_img_obj tp_img _ (Dipper {miniature = Nothing}) t = do
 -------------------------------------------------------------}
 
 
-{-dipper_entry_case_type:: Monad n => Dmap.Map DipperType B.ByteString 
-                           -> Dipper 
-                           -> Splices (I.Splice n) 
-                           -> HeistT n n Template-}
-dipper_entry_case_type m (Dipper {dipperType = dt}) t = do
+
+--(Dipper {dipperType = dt})
+
+dipper_entry_case_type m dt t = do
    I.callTemplate (M.fromJust $ Dmap.lookup dt m) t
 
 
