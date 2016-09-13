@@ -302,9 +302,15 @@
   ,"link_json" : "/static/must_be_together/20160825/20160825_037.jpg"
  } 
 
+,{
+   "node_json" : ["20160811_grasshopper_hunt_extended.mp4_ipfs"]
+  ,"link_json" : "http://127.0.0.1:8080/ipfs/QmWiSbjED2EFMD25HDXSKafxN5G8fQHetJy2NR2jxiMiE8"
+ }
 
-
-
+,{
+   "node_json" : ["20160811_grasshopper_hunt_extended.mp4_yandex"]
+  ,"link_json" : "https://yadi.sk/i/PEMynV_Ouiggb"
+ }
 
 
 

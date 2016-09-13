@@ -18,6 +18,7 @@
 module Dipper_common (
  Dipper(..)
 ,Dippers
+,DipperScale(..)
 ) where
 
 import qualified Data.Text as T
@@ -33,12 +34,22 @@ data Dipper = Dipper {
  ,url_raw :: T.Text
  ,comment :: Maybe T.Text
  ,isVertical :: Bool
+ ,scale :: DipperScale
 } deriving (Show,Eq,Generic, NFData)
 
 type Dippers = [Dipper]
 
 
-
+data DipperScale =
+                  NotDefined
+                 |FitWidth
+                 |FitHeight
+                 |FitSmallScreens
+                 |FitPostPreview
+                 |LikeTagImage
+                 |ThumbnailSize
+                 |AsIs
+                 deriving (Show,Eq,Generic, NFData)
 
 
 
