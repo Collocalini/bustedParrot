@@ -191,7 +191,9 @@ give_dipper     (Dipper_json {miniature_json = m
     ,url_raw   = u
     ,comment   = maybe_comment
     ,isVertical = False
-    ,scale = NotDefined
+    ,scale = DsNotDefined
+    ,dipperType = deduceDipperType $ T.unpack u   
+    ,miniatureType = deduceDipperType $ T.unpack m 
     }
    where
    maybe_miniature
@@ -221,18 +223,23 @@ dipper_secondary_pass d
       $!!
       (\de ->
         de {isVertical=False
-           ,scale     =NotDefined}) d
+           ,scale     = DsNotDefined
+           ,dipperType = DtNotDefined
+           ,miniatureType = DtNotDefined}) d
 
 
       
     sp (Just img) = return
       $!!
       (\de ->
-        de {isVertical=image_is_vertical img
-           ,scale     =deduceRepresentationScale img}) d
+        de {isVertical= image_is_vertical img
+           ,scale     = deduceRepresentationScale img
+           ,dipperType = deduceDipperType $ T.unpack $ url d
+           ,miniatureType = mbDipperType $ miniature d}) d
        
 
-
+    mbDipperType (Just m) = deduceDipperType $ T.unpack m
+    mbDipperType _        = DtNotDefined
 
 
 
