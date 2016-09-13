@@ -1,0 +1,171 @@
+[
+
+ {
+   "node_json" : ["stapelia_20160831.jpg_thm"]
+  ,"link_json" : "/static/thumbnails/my_garden/garden_update_2016/20160831_004.jpg"
+ }
+
+,{
+   "node_json" : ["stapelia_20160831.jpg"]
+  ,"link_json" : "/static/my_garden/20160831_004.jpg"
+ }
+
+,{
+   "node_json" : ["stapelia_20160902.jpg_thm"]
+  ,"link_json" : "/static/thumbnails/my_garden/garden_update_2016/20160902_005.jpg"
+ }
+
+,{
+   "node_json" : ["stapelia_20160902.jpg"]
+  ,"link_json" : "/static/my_garden/20160902_005.jpg"
+ }
+
+,{
+   "node_json" : ["20160515_002.jpg"]
+  ,"link_json" : "/static/teplitsa_those_were_the_days/must_be_together/20160515_002.jpg"
+ }
+
+,{
+   "node_json" : ["20160515_005.jpg"]
+  ,"link_json" : "/static/teplitsa_those_were_the_days/must_be_together/20160515_005.jpg"
+ }
+
+,{
+   "node_json" : ["db"]
+  ,"link_json" : "/pages/page_db.html"
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+,{
+   "node_json" : ["20160907_040_thm.jpg"]
+  ,"link_json" : "/static/thumbnails/my_garden/garden_update_2016/20160907_040_thm.jpg"
+ }
+
+,{
+   "node_json" : ["20160902_028"]
+  ,"link_json" : "/static/my_garden/20160902-08/20160902_028.jpg"
+ }
+
+,{
+   "node_json" : ["20160907_006"]
+  ,"link_json" : "/static/my_garden/20160902-08/20160907_006.jpg"
+ }
+
+,{
+   "node_json" : ["20160907_016"]
+  ,"link_json" : "/static/my_garden/20160902-08/20160907_016.jpg"
+ }
+
+,{
+   "node_json" : ["20160907_019"]
+  ,"link_json" : "/static/my_garden/20160902-08/20160907_019.jpg"
+ }
+
+,{
+   "node_json" : ["20160907_020"]
+  ,"link_json" : "/static/my_garden/20160902-08/20160907_020.jpg"
+ }
+
+,{
+   "node_json" : ["20160907_039"]
+  ,"link_json" : "/static/my_garden/20160902-08/20160907_039.jpg"
+ }
+
+,{
+   "node_json" : ["20160907_040"]
+  ,"link_json" : "/static/my_garden/20160902-08/20160907_040.jpg"
+ }
+
+,{
+   "node_json" : ["20160907_046"]
+  ,"link_json" : "/static/my_garden/20160902-08/20160907_046.jpg"
+ }
+
+,{
+   "node_json" : ["20160907_052"]
+  ,"link_json" : "/static/my_garden/20160902-08/20160907_052.jpg"
+ }
+
+,{
+   "node_json" : ["20160907_058"]
+  ,"link_json" : "/static/my_garden/20160902-08/20160907_058.jpg"
+ }
+
+,{
+   "node_json" : ["20160907_082"]
+  ,"link_json" : "/static/my_garden/20160902-08/20160907_082.jpg"
+ }
+
+,{
+   "node_json" : ["20160907_086"]
+  ,"link_json" : "/static/my_garden/20160902-08/20160907_086.jpg"
+ }
+
+,{
+   "node_json" : ["20160908_003"]
+  ,"link_json" : "/static/my_garden/20160902-08/20160908_003.jpg"
+ }
+
+,{
+   "node_json" : ["20160908_006"]
+  ,"link_json" : "/static/my_garden/20160902-08/20160908_006.jpg"
+ }
+
+,{
+   "node_json" : ["locusts_casual_crawling.svg"]
+  ,"link_json" : "/static/thumbnails/must_be_together/locusts_casual_crawling.svg"
+ }
+
+,{
+   "node_json" : ["locusts_casual_crawling.jpg"]
+  ,"link_json" : "/static/thumbnails/must_be_together/locusts_casual_crawling.jpg"
+ }
+
+
+
+,{
+   "node_json" : ["locusts_casual_crawling_ipfs.mp4"]
+  ,"link_json" : "http://127.0.0.1:8080/ipfs/QmbjD964XzPYfX9zBPZy9VdTYM2Qp54Da815e6AcPdiqDQ"
+ }
+
+,{
+   "node_json" : ["locusts_casual_crawling_yandex.mkv", "locusts_casual_crawling_yandex.mp4"]
+  ,"link_json" : "https://yadi.sk/i/M4VOwWaDuzMfN"
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+]
