@@ -33,7 +33,9 @@ data Dipper = Dipper {
  ,name :: Maybe T.Text
  ,page_url :: T.Text
  ,url :: T.Text
+ ,altUrls :: [T.Text]
  ,url_raw :: T.Text
+ ,altUrls_raw :: [T.Text]
  ,comment :: Maybe T.Text
  ,isVertical :: Bool
  ,scale :: DipperScale

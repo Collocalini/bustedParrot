@@ -75,6 +75,7 @@ data Dipper_json = Dipper_json {
   miniature_json :: T.Text
  ,name_json :: T.Text
  ,url_json :: T.Text
+ ,altUrls_json :: Maybe [T.Text]
  ,comment_json :: T.Text
 } deriving (Show,Generic)
 
@@ -169,30 +170,56 @@ number_from_dipper_name fp = map (n . (drop 7)) fp
 
 
 
+dipperIsSane :: Dipper_json -> Bool
+dipperIsSane dj 
+   --1
+   |     ((url_json dj)       /= "")
+      && ((miniature_json dj) /= "") = True
+      
+   --2
+   |     altUrlsAreValid
+      && ((miniature_json dj) /= "") = True
+      
+   |otherwise = False
+   where
+   altUrlsAreValid = 
+         ((altUrls_json dj)   /= Nothing)  
+            --managed to read json 
+         
+      && (not $ null $ filter (not.T.null) $ M.fromMaybe [] $ altUrls_json dj)
+            --and input was not just some ["","",...]
+
+
 
 give_dipper :: Dipper_json -> Node_map -> Maybe Dipper
-give_dipper     (Dipper_json {miniature_json = _
-                             ,name_json      = _
-                             ,url_json       = ""
-                             ,comment_json   = _
-                             }) _ = Nothing
+give_dipper dj nm
+   |dipperIsSane dj = give_dipper_common dj nm
+   |otherwise       = Nothing
 
-give_dipper     (Dipper_json {miniature_json = m
-                             ,name_json      = n
-                             ,url_json       = u
-                             ,comment_json   = c
-                             })
-                             nm =
+
+
+
+give_dipper_common :: Dipper_json -> Node_map -> Maybe Dipper
+give_dipper_common 
+   (Dipper_json {miniature_json = m
+                ,name_json      = n
+                ,url_json       = u
+                ,altUrls_json   = a
+                ,comment_json   = c
+                })
+                 nm =
    Just $ Dipper {
-     miniature = maybe_miniature
-    ,name      = maybe_name
-    ,page_url  = dipper_page_node_link' $ url_substitution u nm
-    ,url       = url_substitution u nm
-    ,url_raw   = u
-    ,comment   = maybe_comment
-    ,isVertical = False
-    ,scale = DsNotDefined
-    ,dipperType = deduceDipperType $ T.unpack u   
+     miniature   = maybe_miniature
+    ,name        = maybe_name
+    ,page_url    = dipper_page_node_link' $ url_substitution u nm
+    ,url         = whatIsMainUrl
+    ,altUrls     = maybe_altUrls
+    ,url_raw     = whatIsMainUrl_raw
+    ,altUrls_raw = maybe_altUrls_raw
+    ,comment     = maybe_comment
+    ,isVertical  = False
+    ,scale       = DsNotDefined
+    ,dipperType  = deduceDipperType $ T.unpack u   
     ,miniatureType = deduceDipperType $ T.unpack m 
     }
    where
@@ -207,6 +234,21 @@ give_dipper     (Dipper_json {miniature_json = m
    maybe_comment
      |c == "" = Nothing
      |otherwise = Just c
+     
+   maybe_altUrls = map (\au->url_substitution au nm) $ M.fromMaybe [] a
+   maybe_altUrls_raw = M.fromMaybe [] a
+   
+   
+   whatIsMainUrl
+     |u /= "" = url_substitution u nm
+     |otherwise = head maybe_altUrls
+   
+   whatIsMainUrl_raw
+     |u /= "" = u
+     |otherwise = head maybe_altUrls_raw
+   
+
+
 
 
 
@@ -234,7 +276,7 @@ dipper_secondary_pass d
       (\de ->
         de {isVertical= image_is_vertical img
            ,scale     = deduceRepresentationScale img
-           ,dipperType = deduceDipperType $ T.unpack $ url d
+           ,dipperType = deduceDipperType $ T.unpack $ url_raw d
            ,miniatureType = mbDipperType $ miniature d}) d
        
 
