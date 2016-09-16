@@ -201,6 +201,7 @@ deduceDipperType :: FilePath -> DipperType
 deduceDipperType f
   |node_is_a_raster $ T.pack f = DtRasterImage
   |node_is_a_svg $ T.pack f = DtSvgImage
+  |node_is_a_mp4 $ T.pack f = DtMp4Video
   |otherwise = DtNotDefined
   
   

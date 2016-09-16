@@ -10,7 +10,8 @@
 
 ,{
    "miniature_json" : "${locusts_casual_crawling.svg}"
-  ,"url_json"       : "${locusts_casual_crawling_yandex.mkv}"
+  ,"url_json"       : "${locusts_casual_crawling_ipfs.mp4}"
+  ,"altUrls_json"   : ["${locusts_casual_crawling_yandex.mkv}"]
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }

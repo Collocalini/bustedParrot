@@ -266,8 +266,9 @@ dipper_secondary_pass d
       (\de ->
         de {isVertical=False
            ,scale     = DsNotDefined
-           ,dipperType = DtNotDefined
-           ,miniatureType = DtNotDefined}) d
+           -- ,dipperType = DtNotDefined
+           -- ,miniatureType = DtNotDefined
+           }) d
 
 
       

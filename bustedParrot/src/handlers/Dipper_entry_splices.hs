@@ -45,6 +45,7 @@ splicesFrom_dippers_common t = do
     ,"dipper_miniature"  ## I.textSplice $ M.fromJust $ miniature t
     ,"image_style"       ## image_style_case
     ,"auto_caption"      ## auto_caption_case
+    ,"links"             ## fillInAltLinks $ altUrls t
     ]
    where
    dipper_url_img_case
@@ -75,6 +76,12 @@ dipperDisplayOnPageCase t
    |link_is_local (url t) =  DopUseURL
    |otherwise             =  DopUseMiniature
 
+
+
+
+--fillInAltLinks :: Monad n => [T.Text] -> Splices (I.Splice n)
+fillInAltLinks l = (I.mapSplices $ I.runChildrenWith . (\u-> "link" ## I.textSplice u)) l
+       
 
 
 splicesFrom_dippers :: Monad n => Dipper -> Splices (I.Splice n)

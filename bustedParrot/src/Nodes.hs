@@ -64,6 +64,7 @@ import qualified Data.Map as Dm
 import GHC.Generics
 import qualified Data.Maybe as M
 import qualified Data.Text as T
+import Data.List
 import System.Directory
 import Control.Applicative
 import qualified Data.ByteString.Lazy as B
@@ -199,25 +200,36 @@ node_is_a_mp4 m
 
 node_is_in_ipfs :: T.Text -> Bool
 node_is_in_ipfs l 
-  |T.isPrefixOf "127.0.0.1:8080/ipfs/" l = True
-  |T.isPrefixOf "http://127.0.0.1:8080/ipfs/" l = True
-  |T.isPrefixOf "https://127.0.0.1:8080/ipfs/" l = True
-  |T.isPrefixOf "127.0.0.1:8080/ipns/" l = True
-  |T.isPrefixOf "http://127.0.0.1:8080/ipns/" l = True
-  |T.isPrefixOf "https://127.0.0.1:8080/ipns/" l = True
-  |T.isPrefixOf "ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "http://ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "https://ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "ipfs.io/ipns/" l = True
-  |T.isPrefixOf "http://ipfs.io/ipns/" l = True
-  |T.isPrefixOf "https://ipfs.io/ipns/" l = True
-  |T.isPrefixOf "gateway.ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "http://gateway.ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "https://gateway.ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "gateway.ipfs.io/ipns/" l = True
-  |T.isPrefixOf "http://gateway.ipfs.io/ipns/" l = True
-  |T.isPrefixOf "https://gateway.ipfs.io/ipns/" l = True
+  |(not . T.null . node_is_in_ipfs_preffix) l = True
   |otherwise = False
+
+
+
+node_is_in_ipfs_preffix :: T.Text -> T.Text
+node_is_in_ipfs_preffix l 
+  |not $ null $ checkForPreffix = head checkForPreffix
+  |otherwise = ""
+  where 
+  checkForPreffix = filter (\p-> T.isPrefixOf p l) ipof
+  ipof =   ["127.0.0.1:8080/ipfs/"
+           ,"http://127.0.0.1:8080/ipfs/"
+           ,"https://127.0.0.1:8080/ipfs/"
+           ,"127.0.0.1:8080/ipns/"
+           ,"http://127.0.0.1:8080/ipns/"
+           ,"https://127.0.0.1:8080/ipns/"
+           ,"ipfs.io/ipfs/"
+           ,"http://ipfs.io/ipfs/"
+           ,"https://ipfs.io/ipfs/"
+           ,"ipfs.io/ipns/"
+           ,"http://ipfs.io/ipns/"
+           ,"https://ipfs.io/ipns/"
+           ,"gateway.ipfs.io/ipfs/"
+           ,"http://gateway.ipfs.io/ipfs/"
+           ,"https://gateway.ipfs.io/ipfs/"
+           ,"gateway.ipfs.io/ipns/"
+           ,"http://gateway.ipfs.io/ipns/"
+           ,"https://gateway.ipfs.io/ipns/"]
+
 
 
 page_node_link :: String -> B8.ByteString
@@ -265,18 +277,21 @@ dipper_page_node_link' u
 
 
 
+individual_dipper_node_link_common n = 
+   "/individual_dippers/" 
+   ++ (M.fromMaybe n $ stripPrefix (T.unpack $ node_is_in_ipfs_preffix $ T.pack n) n)
 
 individual_dipper_node_link :: String -> B8.ByteString
-individual_dipper_node_link ('/':n) = B8.pack $ "/individual_dippers/" ++ n
-individual_dipper_node_link n = B8.pack $ "/individual_dippers/" ++ n
+individual_dipper_node_link ('/':n) = B8.pack $ individual_dipper_node_link_common n
+individual_dipper_node_link n =       B8.pack $ individual_dipper_node_link_common n
 
 individual_dipper_node_link' :: String -> T.Text
-individual_dipper_node_link' ('/':n) = T.pack $ "/individual_dippers/" ++ n
-individual_dipper_node_link' n = T.pack $ "/individual_dippers/" ++ n
+individual_dipper_node_link' ('/':n) = T.pack $ individual_dipper_node_link_common n
+individual_dipper_node_link' n =       T.pack $ individual_dipper_node_link_common n
 
 individual_dipper_node_link'' :: String -> String
-individual_dipper_node_link'' ('/':n) = "/individual_dippers/" ++ n
-individual_dipper_node_link'' n = "/individual_dippers/" ++ n
+individual_dipper_node_link'' ('/':n) = individual_dipper_node_link_common n
+individual_dipper_node_link'' n =       individual_dipper_node_link_common n
 
 
 individual_dipper_tagged_page_link :: Dipper -> String -> B8.ByteString

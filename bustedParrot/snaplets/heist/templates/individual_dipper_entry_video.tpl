@@ -5,4 +5,8 @@
 	  Your browser does not support the video tag.
 </video>
 
-<a href="${dipper_url}" > Ссылка / Link </a>
+<links>
+  <a href="${link}" > Ссылка / Link </a>
+</links>
+
+
