@@ -110,17 +110,9 @@ dippersT_for_tag_io ::  Node_map -> IO [(String, Dippers)]
 dippersT_for_tag_io nm = do
    l<- getDirectoryContents "tags"
    let only_files = filter (\s-> not $ ((head s) == '.') || ((take 2 s) == ".." )) l
-   d <- mapM (\s-> dipper_from_name  ("tags/" ++ s) nm) $ only_files
-
-   --d1<- mapM (mapM dipper_check_orientation) d
-   {-putStrLn "------------------------------------------"
-   putStrLn $ unlines $ filter (\s-> not $ ((head s) == '.') || ((take 2 s) == ".." )) l
-   putStrLn $ show d
-   putStrLn "------------------------------------------"
-   -}
+   d <- mapM (\s-> tag_from_name  ("tags/" ++ s) nm) $ only_files
    return $ zip only_files d
 
-   --dipper_from_name $ Fp.combine "tags" l
 
 
 
@@ -160,6 +152,19 @@ dipper_from_name s nm = do
 
 
 
+
+tag_from_name :: String -> Node_map -> IO Dippers
+tag_from_name s nm = do
+   d <- eitherDecode <$> B.readFile s :: IO (Either String Dippers_json)
+   case d of
+      Left err -> do putStrLn err
+                     return []
+      Right dl -> return $ M.catMaybes $ map (\x->give_tag x nm) dl
+
+
+
+
+
 number_from_dipper_name :: [FilePath] -> [String]
 number_from_dipper_name fp = map (n . (drop 7)) fp
        where
@@ -196,6 +201,10 @@ give_dipper dj nm
    |dipperIsSane dj = give_dipper_common dj nm
    |otherwise       = Nothing
 
+
+
+give_tag (Dipper_json {url_json = ""}) _ = Nothing
+give_tag                           dj nm = give_dipper_common dj nm
 
 
 
@@ -488,7 +497,7 @@ dippers_from_request_string r dt =
    dippers_from_c_group' ot = dippers_from_c_group ot dt
 
 
-{-                                                                                                -}
+
 
 
 dippers_from_d_group :: [Dippers] -> Dippers

@@ -267,8 +267,11 @@ dippers_pageN_node_link'' n = "/dippers/dippers_" ++ (show n) ++ ".html"
 
 dipper_page_node_link' :: T.Text -> T.Text
 dipper_page_node_link' u
-   |link_is_local u = replace_extention_only
-   |otherwise       = strip_path_and_replace_extention
+   |     link_is_local u 
+      && (not $ node_is_in_ipfs u) = replace_extention_only
+      
+   |node_is_in_ipfs u = T.append "/" (sane_part_dipper_node_link_common' u)
+   |otherwise         = strip_path_and_replace_extention
    where
    replace_extention_only = T.pack $ Fp.replaceExtension (T.unpack u) ".html"
    strip_path_and_replace_extention =
@@ -276,10 +279,26 @@ dipper_page_node_link' u
 
 
 
+sane_part_dipper_node_link_common :: String -> String
+sane_part_dipper_node_link_common n = 
+   (M.fromMaybe n $ stripPrefix (T.unpack $ node_is_in_ipfs_preffix $ T.pack n) n)
+
+
+sane_part_dipper_node_link_common' :: T.Text -> T.Text
+sane_part_dipper_node_link_common' n = 
+    M.fromMaybe n $ T.stripPrefix (node_is_in_ipfs_preffix n) n
+
+
 
 individual_dipper_node_link_common n = 
    "/individual_dippers/" 
-   ++ (M.fromMaybe n $ stripPrefix (T.unpack $ node_is_in_ipfs_preffix $ T.pack n) n)
+   ++ (sane_part_dipper_node_link_common n)
+
+
+
+
+
+
 
 individual_dipper_node_link :: String -> B8.ByteString
 individual_dipper_node_link ('/':n) = B8.pack $ individual_dipper_node_link_common n
@@ -331,14 +350,20 @@ individual_dipper_tagged_request_link  =
 
 
 
+tagged_node_link_common n p = 
+   "/tagged/" 
+   ++ (sane_part_dipper_node_link_common n)
+   ++ (show p) ++ ".html"
+
+
 tagged_node_link :: String -> Int -> B8.ByteString
-tagged_node_link n p = B8.pack $ "/tagged/" ++ n ++ (show p) ++ ".html"
+tagged_node_link n p = B8.pack $ tagged_node_link_common n p
 
 tagged_node_link' :: String -> Int -> T.Text
-tagged_node_link' n p = T.pack $ "/tagged/" ++ n ++ (show p) ++ ".html"
+tagged_node_link' n p = T.pack $ tagged_node_link_common n p
 
 tagged_node_link'' :: String -> Int -> String
-tagged_node_link'' n p = "/tagged/" ++ n ++ (show p) ++ ".html"
+tagged_node_link'' n p =         tagged_node_link_common n p
 
 
 
