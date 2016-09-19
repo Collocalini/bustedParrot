@@ -270,7 +270,7 @@ dipper_page_node_link' u
    |     link_is_local u 
       && (not $ node_is_in_ipfs u) = replace_extention_only
       
-   |node_is_in_ipfs u = T.append "/" (sane_part_dipper_node_link_common' u)
+   |node_is_in_ipfs u = T.concat ["/", (sane_part_dipper_node_link_common' u), ".html"]
    |otherwise         = strip_path_and_replace_extention
    where
    replace_extention_only = T.pack $ Fp.replaceExtension (T.unpack u) ".html"
@@ -293,6 +293,7 @@ sane_part_dipper_node_link_common' n =
 individual_dipper_node_link_common n = 
    "/individual_dippers/" 
    ++ (sane_part_dipper_node_link_common n)
+   -- ++ ".html"
 
 
 
