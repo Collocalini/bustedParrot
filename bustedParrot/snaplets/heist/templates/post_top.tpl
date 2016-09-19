@@ -12,12 +12,10 @@
 
 </span>
 
-<ul class="top_r">
-  <li>Нет, я люблю попугаев</li>
-  <li>честно...</li>
-  <li>ЧЕСТНО!!!</li>
+<span class="top_r">
+   <a href="${ipfs_main_page}" ><img  src='${ipfs-logo-vector-ice-text.svg}' alt="ipfs" align="middle" class="top_r_img1"> </a>
   
-</ul>
+</span>
 
 </div>
 

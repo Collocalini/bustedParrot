@@ -12,12 +12,7 @@
 
 </span>
 
-<ul class="top_r">
-  <li>Я достаю новостями</li>
-  <li>Я изливаю сознание</li>
-  <li>Тихо сам с собой</li>
-  
-</ul>
+<a href="${ipfs_main_page}"  class="top_r"><img  src='${ipfs-logo-vector-ice-text.svg}' alt="ipfs" align="top" class="top_r_img1"> </a>
 
 </div>
 

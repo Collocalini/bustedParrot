@@ -344,10 +344,20 @@
 
 
 
+,{
+  "node_json" : ["ipfs-logo-vector-ice.svg"]
+ ,"link_json" : "/static/ornaments/ipfs-logo-vector-ice.svg"
+ }
 
+,{
+  "node_json" : ["ipfs-logo-vector-ice-text.svg"]
+ ,"link_json" : "/static/ornaments/ipfs-logo-vector-ice-text.svg"
+ }
 
-
-
+,{
+  "node_json" : ["ipfs_main_page"]
+ ,"link_json" : "http://ipfs.io"
+ }
 
 
 
