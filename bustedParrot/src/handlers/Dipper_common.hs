@@ -19,6 +19,8 @@ module Dipper_common (
  Dipper(..)
 ,Dippers
 ,DipperScale(..)
+,DipperType(..)
+,DipperDisplayOnPage(..)
 ) where
 
 import qualified Data.Text as T
@@ -31,31 +33,44 @@ data Dipper = Dipper {
  ,name :: Maybe T.Text
  ,page_url :: T.Text
  ,url :: T.Text
+ ,altUrls :: [T.Text]
  ,url_raw :: T.Text
+ ,altUrls_raw :: [T.Text]
  ,comment :: Maybe T.Text
  ,isVertical :: Bool
  ,scale :: DipperScale
+ ,dipperType :: DipperType
+ ,miniatureType :: DipperType
 } deriving (Show,Eq,Generic, NFData)
 
 type Dippers = [Dipper]
 
 
 data DipperScale =
-                  NotDefined
-                 |FitWidth
-                 |FitHeight
-                 |FitSmallScreens
-                 |FitPostPreview
-                 |LikeTagImage
-                 |ThumbnailSize
-                 |AsIs
+                  DsNotDefined
+                 |DsFitWidth
+                 |DsFitHeight
+                 |DsFitSmallScreens
+                 |DsFitPostPreview
+                 |DsLikeTagImage
+                 |DsThumbnailSize
+                 |DsAsIs
                  deriving (Show,Eq,Generic, NFData)
 
 
+data DipperType = DtNotDefined
+                 |DtRasterImage
+                 |DtSvgImage
+                 |DtMp4Video
+                 |DtHtmlCode
+                 deriving (Show,Eq,Ord, Generic, NFData)
 
 
-
-
+data DipperDisplayOnPage = 
+                  DopNotDefined
+                 |DopUseURL
+                 |DopUseMiniature
+                 deriving (Show,Eq,Ord, Generic, NFData)
 
 
 

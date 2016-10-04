@@ -1,7 +1,46 @@
 [
 
-
  {
+   "miniature_json" : "${20160928_001_thm.jpg}"
+  ,"url_json"       : "${20160928_001.jpg}"
+  ,"name_json"      : "my garden"
+  ,"comment_json"   : ""
+ }
+
+
+,{
+   "miniature_json" : "${20160804_grasshopper_hunt_thm.svg}"
+  ,"url_json"       : "${20160804_grasshopper_hunt_ipfs.mp4}"
+  ,"altUrls_json"   : ["${20160804_grasshopper_hunt_yandex.mp4}"]
+  ,"name_json"      : "insects"
+  ,"comment_json"   : ""
+ }
+ 
+,{
+   "miniature_json" : "${20160916_014_thm.jpg}"
+  ,"url_json"       : "${20160916_014.jpg}"
+  ,"name_json"      : "my garden"
+  ,"comment_json"   : ""
+ }
+
+,{
+   "miniature_json" : "${20160914_020_thm.jpg}"
+  ,"url_json"       : "${20160914_020.jpg}"
+  ,"name_json"      : "my garden"
+  ,"comment_json"   : ""
+ }
+
+,{
+   "miniature_json" : "${20160909_022_thm.jpg}"
+  ,"url_json"       : "${20160909_022.jpg}"
+  ,"name_json"      : "my garden"
+  ,"comment_json"   : ""
+ }
+
+
+
+
+,{
    "miniature_json" : "${20160907_040_thm.jpg}"
   ,"url_json"       : "${20160907_040}"
   ,"name_json"      : "my garden"
@@ -10,7 +49,8 @@
 
 ,{
    "miniature_json" : "${locusts_casual_crawling.svg}"
-  ,"url_json"       : "${locusts_casual_crawling_yandex.mkv}"
+  ,"url_json"       : "${locusts_casual_crawling_ipfs.mp4}"
+  ,"altUrls_json"   : ["${locusts_casual_crawling_yandex.mkv}"]
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }
@@ -38,21 +78,23 @@
 
 ,{
    "miniature_json" : "${20160811_grasshopper_hunt_extended.mp4_yandex_thm.svg}"
-  ,"url_json"       : "${20160811_grasshopper_hunt_extended.mp4_yandex}"
+  ,"url_json"       : "${20160811_grasshopper_hunt_extended_ipfs.mp4}"
+  ,"altUrls_json"   : ["${20160811_grasshopper_hunt_extended.mp4_yandex}"]
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }
 
 ,{
    "miniature_json" : "${wasp-spider25082016_thm.svg}"
-  ,"url_json"       : "${wasp-spider25082016}"
+  ,"url_json"       : "${wasp-spider25082016.svg}"
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }
 
 ,{
    "miniature_json" : "${20160731_mantis_eats_acrida_thm.svg}"
-  ,"url_json"       : "${20160731_mantis_eats_acrida}"
+  ,"url_json"       : "${20160731_mantis_eats_acrida_preview.mp4}"
+  ,"altUrls_json"   : ["${20160731_mantis_eats_acrida}"]
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }
@@ -66,14 +108,16 @@
 
 ,{
    "miniature_json" : "${20160728_grasshoper_hunt_thm.svg}"
-  ,"url_json"       : "${20160728_grasshoper_hunt}"
+  ,"url_json"       : "${20160728_grasshoper_hunt_preview.mp4}"
+  ,"altUrls_json"   : ["${20160728_grasshoper_hunt}"]
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }
 
 ,{
    "miniature_json" : "${20160731_grasshoper_hunt_thm.svg}"
-  ,"url_json"       : "${20160731_grasshoper_hunt}"
+  ,"url_json"       : "${20160731_grasshoper_hunt_preview.mp4}"
+  ,"altUrls_json"   : ["${20160731_grasshoper_hunt}"]
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }

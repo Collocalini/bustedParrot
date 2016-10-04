@@ -160,12 +160,12 @@
  }  
 
 ,{
-   "node_json" : ["20160731_grasshoper_hunt_preview"]
+   "node_json" : ["20160731_grasshoper_hunt_preview","20160731_grasshoper_hunt_preview.mp4"]
   ,"link_json" : "http://127.0.0.1:8080/ipfs/Qmf2gGGBXwB6aTXQM8jajcWZahgRigwj5ENKH83jAPRsT5"
  }  
 
 ,{
-   "node_json" : ["20160728_grasshoper_hunt_preview"]
+   "node_json" : ["20160728_grasshoper_hunt_preview", "20160728_grasshoper_hunt_preview.mp4"]
   ,"link_json" : "http://127.0.0.1:8080/ipfs/QmRLipmvs2nn2aXMdreicMciw5PaM9RpsYx88RSGjwCidN"
  }  
 
@@ -180,7 +180,7 @@
  }  
 
 ,{
-   "node_json" : ["20160731_mantis_eats_acrida_preview"]
+   "node_json" : ["20160731_mantis_eats_acrida_preview", "20160731_mantis_eats_acrida_preview.mp4"]
   ,"link_json" : "http://127.0.0.1:8080/ipfs/Qma7LYg6iFyvsYAnFQPLAoYTo7oMLx6SqTH1G8RbmfTBZM"
  }  
 
@@ -245,7 +245,7 @@
 
 
 ,{
-   "node_json" : ["20160811_grasshopper_hunt_ipfs"]
+   "node_json" : ["20160811_grasshopper_hunt_ipfs", "20160811_grasshopper_hunt_ipfs.mp4"]
   ,"link_json" : "http://127.0.0.1:8080/ipfs/QmXXZYLKcPoueJunmB835N2DfNBxBU2DHcoE6HK1D7KNga"
  }  
 
@@ -258,7 +258,7 @@
 
     
 ,{
-   "node_json" : ["wasp-spider25082016"]
+   "node_json" : ["wasp-spider25082016.svg"]
   ,"link_json" : "/static/must_be_together/20160825/spider.svg"
  }      
 
@@ -303,7 +303,7 @@
  } 
 
 ,{
-   "node_json" : ["20160811_grasshopper_hunt_extended.mp4_ipfs"]
+   "node_json" : ["20160811_grasshopper_hunt_extended.mp4_ipfs", "20160811_grasshopper_hunt_extended_ipfs.mp4"]
   ,"link_json" : "http://127.0.0.1:8080/ipfs/QmWiSbjED2EFMD25HDXSKafxN5G8fQHetJy2NR2jxiMiE8"
  }
 

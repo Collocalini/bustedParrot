@@ -75,6 +75,7 @@ data Dipper_json = Dipper_json {
   miniature_json :: T.Text
  ,name_json :: T.Text
  ,url_json :: T.Text
+ ,altUrls_json :: Maybe [T.Text]
  ,comment_json :: T.Text
 } deriving (Show,Generic)
 
@@ -109,17 +110,9 @@ dippersT_for_tag_io ::  Node_map -> IO [(String, Dippers)]
 dippersT_for_tag_io nm = do
    l<- getDirectoryContents "tags"
    let only_files = filter (\s-> not $ ((head s) == '.') || ((take 2 s) == ".." )) l
-   d <- mapM (\s-> dipper_from_name  ("tags/" ++ s) nm) $ only_files
-
-   --d1<- mapM (mapM dipper_check_orientation) d
-   {-putStrLn "------------------------------------------"
-   putStrLn $ unlines $ filter (\s-> not $ ((head s) == '.') || ((take 2 s) == ".." )) l
-   putStrLn $ show d
-   putStrLn "------------------------------------------"
-   -}
+   d <- mapM (\s-> tag_from_name  ("tags/" ++ s) nm) $ only_files
    return $ zip only_files d
 
-   --dipper_from_name $ Fp.combine "tags" l
 
 
 
@@ -159,6 +152,19 @@ dipper_from_name s nm = do
 
 
 
+
+tag_from_name :: String -> Node_map -> IO Dippers
+tag_from_name s nm = do
+   d <- eitherDecode <$> B.readFile s :: IO (Either String Dippers_json)
+   case d of
+      Left err -> do putStrLn err
+                     return []
+      Right dl -> return $ M.catMaybes $ map (\x->give_tag x nm) dl
+
+
+
+
+
 number_from_dipper_name :: [FilePath] -> [String]
 number_from_dipper_name fp = map (n . (drop 7)) fp
        where
@@ -169,29 +175,61 @@ number_from_dipper_name fp = map (n . (drop 7)) fp
 
 
 
+dipperIsSane :: Dipper_json -> Bool
+dipperIsSane dj 
+   --1
+   |     ((url_json dj)       /= "")
+      && ((miniature_json dj) /= "") = True
+      
+   --2
+   |     altUrlsAreValid
+      && ((miniature_json dj) /= "") = True
+      
+   |otherwise = False
+   where
+   altUrlsAreValid = 
+         ((altUrls_json dj)   /= Nothing)  
+            --managed to read json 
+         
+      && (not $ null $ filter (not.T.null) $ M.fromMaybe [] $ altUrls_json dj)
+            --and input was not just some ["","",...]
+
+
 
 give_dipper :: Dipper_json -> Node_map -> Maybe Dipper
-give_dipper     (Dipper_json {miniature_json = _
-                             ,name_json      = _
-                             ,url_json       = ""
-                             ,comment_json   = _
-                             }) _ = Nothing
+give_dipper dj nm
+   |dipperIsSane dj = give_dipper_common dj nm
+   |otherwise       = Nothing
 
-give_dipper     (Dipper_json {miniature_json = m
-                             ,name_json      = n
-                             ,url_json       = u
-                             ,comment_json   = c
-                             })
-                             nm =
+
+
+give_tag (Dipper_json {url_json = ""}) _ = Nothing
+give_tag                           dj nm = give_dipper_common dj nm
+
+
+
+give_dipper_common :: Dipper_json -> Node_map -> Maybe Dipper
+give_dipper_common 
+   (Dipper_json {miniature_json = m
+                ,name_json      = n
+                ,url_json       = u
+                ,altUrls_json   = a
+                ,comment_json   = c
+                })
+                 nm =
    Just $ Dipper {
-     miniature = maybe_miniature
-    ,name      = maybe_name
-    ,page_url  = dipper_page_node_link' $ url_substitution u nm
-    ,url       = url_substitution u nm
-    ,url_raw   = u
-    ,comment   = maybe_comment
-    ,isVertical = False
-    ,scale = NotDefined
+     miniature   = maybe_miniature
+    ,name        = maybe_name
+    ,page_url    = dipper_page_node_link' $ url_substitution u nm
+    ,url         = whatIsMainUrl
+    ,altUrls     = maybe_altUrls
+    ,url_raw     = whatIsMainUrl_raw
+    ,altUrls_raw = maybe_altUrls_raw
+    ,comment     = maybe_comment
+    ,isVertical  = False
+    ,scale       = DsNotDefined
+    ,dipperType  = deduceDipperType $ T.unpack u   
+    ,miniatureType = deduceDipperType $ T.unpack m 
     }
    where
    maybe_miniature
@@ -205,6 +243,21 @@ give_dipper     (Dipper_json {miniature_json = m
    maybe_comment
      |c == "" = Nothing
      |otherwise = Just c
+     
+   maybe_altUrls = map (\au->url_substitution au nm) $ M.fromMaybe [] a
+   maybe_altUrls_raw = M.fromMaybe [] a
+   
+   
+   whatIsMainUrl
+     |u /= "" = url_substitution u nm
+     |otherwise = head maybe_altUrls
+   
+   whatIsMainUrl_raw
+     |u /= "" = u
+     |otherwise = head maybe_altUrls_raw
+   
+
+
 
 
 
@@ -221,18 +274,24 @@ dipper_secondary_pass d
       $!!
       (\de ->
         de {isVertical=False
-           ,scale     =NotDefined}) d
+           ,scale     = DsNotDefined
+           -- ,dipperType = DtNotDefined
+           -- ,miniatureType = DtNotDefined
+           }) d
 
 
       
     sp (Just img) = return
       $!!
       (\de ->
-        de {isVertical=image_is_vertical img
-           ,scale     =deduceRepresentationScale img}) d
+        de {isVertical= image_is_vertical img
+           ,scale     = deduceRepresentationScale img
+           ,dipperType = deduceDipperType $ T.unpack $ url_raw d
+           ,miniatureType = mbDipperType $ miniature d}) d
        
 
-
+    mbDipperType (Just m) = deduceDipperType $ T.unpack m
+    mbDipperType _        = DtNotDefined
 
 
 
@@ -438,7 +497,7 @@ dippers_from_request_string r dt =
    dippers_from_c_group' ot = dippers_from_c_group ot dt
 
 
-{-                                                                                                -}
+
 
 
 dippers_from_d_group :: [Dippers] -> Dippers

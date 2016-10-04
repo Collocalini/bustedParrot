@@ -14,7 +14,7 @@
 </span>
 
 <span class="top_r">
-  <img  src="${dipper_top_decor}" alt="" align="middle" class="top_r_img">
+   <a href="${ipfs_main_page}" ><img  src='${ipfs-logo-vector-ice-text.svg}' alt="ipfs" align="middle" class="top_r_img1"> </a>
   
 </span>
 

@@ -23,7 +23,9 @@ module Nodes (
 ,node_from_name_suffix
 ,number_from_node_name
 ,node_to_link
-,node_is_an_svg
+,node_is_a_svg
+,node_is_a_mp4
+,node_is_a_raster
 ,nodes_to_map
 ,link_is_local
 ,page_node_link
@@ -62,6 +64,7 @@ import qualified Data.Map as Dm
 import GHC.Generics
 import qualified Data.Maybe as M
 import qualified Data.Text as T
+import Data.List
 import System.Directory
 import Control.Applicative
 import qualified Data.ByteString.Lazy as B
@@ -165,8 +168,67 @@ give_node     (Node_json {node_json = n
 node_to_link :: T.Text -> Node_map -> T.Text
 node_to_link n nm = Dm.findWithDefault "" n nm
 
-node_is_an_svg :: T.Text -> Bool
-node_is_an_svg m = (T.reverse $ T.take 5 $ T.reverse m) == ".svg}"
+
+node_is_a_raster :: T.Text -> Bool
+node_is_a_raster m 
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".jpg}" = True
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".JPG}" = True  
+  |(T.reverse $ T.take 6 $ T.reverse m) == ".jpeg}" = True
+  |(T.reverse $ T.take 6 $ T.reverse m) == ".JPEG}" = True  
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".gif}" = True
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".GIF}" = True  
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".png}" = True
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".PNG}" = True
+  |otherwise = False
+
+
+
+node_is_a_svg :: T.Text -> Bool
+node_is_a_svg m  
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".svg}" = True
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".SVG}" = True
+  |otherwise = False
+
+
+
+node_is_a_mp4 :: T.Text -> Bool
+node_is_a_mp4 m  
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".mp4}" = True
+  |(T.reverse $ T.take 5 $ T.reverse m) == ".MP4}" = True
+  |otherwise = False
+
+
+node_is_in_ipfs :: T.Text -> Bool
+node_is_in_ipfs l 
+  |(not . T.null . node_is_in_ipfs_preffix) l = True
+  |otherwise = False
+
+
+
+node_is_in_ipfs_preffix :: T.Text -> T.Text
+node_is_in_ipfs_preffix l 
+  |not $ null $ checkForPreffix = head checkForPreffix
+  |otherwise = ""
+  where 
+  checkForPreffix = filter (\p-> T.isPrefixOf p l) ipof
+  ipof =   ["127.0.0.1:8080/ipfs/"
+           ,"http://127.0.0.1:8080/ipfs/"
+           ,"https://127.0.0.1:8080/ipfs/"
+           ,"127.0.0.1:8080/ipns/"
+           ,"http://127.0.0.1:8080/ipns/"
+           ,"https://127.0.0.1:8080/ipns/"
+           ,"ipfs.io/ipfs/"
+           ,"http://ipfs.io/ipfs/"
+           ,"https://ipfs.io/ipfs/"
+           ,"ipfs.io/ipns/"
+           ,"http://ipfs.io/ipns/"
+           ,"https://ipfs.io/ipns/"
+           ,"gateway.ipfs.io/ipfs/"
+           ,"http://gateway.ipfs.io/ipfs/"
+           ,"https://gateway.ipfs.io/ipfs/"
+           ,"gateway.ipfs.io/ipns/"
+           ,"http://gateway.ipfs.io/ipns/"
+           ,"https://gateway.ipfs.io/ipns/"]
 
 
 
@@ -205,8 +267,11 @@ dippers_pageN_node_link'' n = "/dippers/dippers_" ++ (show n) ++ ".html"
 
 dipper_page_node_link' :: T.Text -> T.Text
 dipper_page_node_link' u
-   |link_is_local u = replace_extention_only
-   |otherwise       = strip_path_and_replace_extention
+   |     link_is_local u 
+      && (not $ node_is_in_ipfs u) = replace_extention_only
+      
+   |node_is_in_ipfs u = T.concat ["/", (sane_part_dipper_node_link_common' u), ".html"]
+   |otherwise         = strip_path_and_replace_extention
    where
    replace_extention_only = T.pack $ Fp.replaceExtension (T.unpack u) ".html"
    strip_path_and_replace_extention =
@@ -214,19 +279,39 @@ dipper_page_node_link' u
 
 
 
+sane_part_dipper_node_link_common :: String -> String
+sane_part_dipper_node_link_common n = 
+   (M.fromMaybe n $ stripPrefix (T.unpack $ node_is_in_ipfs_preffix $ T.pack n) n)
+
+
+sane_part_dipper_node_link_common' :: T.Text -> T.Text
+sane_part_dipper_node_link_common' n = 
+    M.fromMaybe n $ T.stripPrefix (node_is_in_ipfs_preffix n) n
+
+
+
+individual_dipper_node_link_common n = 
+   "/individual_dippers/" 
+   ++ (sane_part_dipper_node_link_common n)
+   -- ++ ".html"
+
+
+
+
+
 
 
 individual_dipper_node_link :: String -> B8.ByteString
-individual_dipper_node_link ('/':n) = B8.pack $ "/individual_dippers/" ++ n
-individual_dipper_node_link n = B8.pack $ "/individual_dippers/" ++ n
+individual_dipper_node_link ('/':n) = B8.pack $ individual_dipper_node_link_common n
+individual_dipper_node_link n =       B8.pack $ individual_dipper_node_link_common n
 
 individual_dipper_node_link' :: String -> T.Text
-individual_dipper_node_link' ('/':n) = T.pack $ "/individual_dippers/" ++ n
-individual_dipper_node_link' n = T.pack $ "/individual_dippers/" ++ n
+individual_dipper_node_link' ('/':n) = T.pack $ individual_dipper_node_link_common n
+individual_dipper_node_link' n =       T.pack $ individual_dipper_node_link_common n
 
 individual_dipper_node_link'' :: String -> String
-individual_dipper_node_link'' ('/':n) = "/individual_dippers/" ++ n
-individual_dipper_node_link'' n = "/individual_dippers/" ++ n
+individual_dipper_node_link'' ('/':n) = individual_dipper_node_link_common n
+individual_dipper_node_link'' n =       individual_dipper_node_link_common n
 
 
 individual_dipper_tagged_page_link :: Dipper -> String -> B8.ByteString
@@ -266,14 +351,20 @@ individual_dipper_tagged_request_link  =
 
 
 
+tagged_node_link_common n p = 
+   "/tagged/" 
+   ++ (sane_part_dipper_node_link_common n)
+   ++ (show p) ++ ".html"
+
+
 tagged_node_link :: String -> Int -> B8.ByteString
-tagged_node_link n p = B8.pack $ "/tagged/" ++ n ++ (show p) ++ ".html"
+tagged_node_link n p = B8.pack $ tagged_node_link_common n p
 
 tagged_node_link' :: String -> Int -> T.Text
-tagged_node_link' n p = T.pack $ "/tagged/" ++ n ++ (show p) ++ ".html"
+tagged_node_link' n p = T.pack $ tagged_node_link_common n p
 
 tagged_node_link'' :: String -> Int -> String
-tagged_node_link'' n p = "/tagged/" ++ n ++ (show p) ++ ".html"
+tagged_node_link'' n p =         tagged_node_link_common n p
 
 
 
@@ -296,24 +387,7 @@ tagged_dipper'' = "dipper"
 link_is_local :: T.Text -> Bool
 link_is_local l
   |T.isPrefixOf "/static/" l = True
-  |T.isPrefixOf "127.0.0.1:8080/ipfs/" l = True
-  |T.isPrefixOf "http://127.0.0.1:8080/ipfs/" l = True
-  |T.isPrefixOf "https://127.0.0.1:8080/ipfs/" l = True
-  |T.isPrefixOf "127.0.0.1:8080/ipns/" l = True
-  |T.isPrefixOf "http://127.0.0.1:8080/ipns/" l = True
-  |T.isPrefixOf "https://127.0.0.1:8080/ipns/" l = True
-  |T.isPrefixOf "ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "http://ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "https://ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "ipfs.io/ipns/" l = True
-  |T.isPrefixOf "http://ipfs.io/ipns/" l = True
-  |T.isPrefixOf "https://ipfs.io/ipns/" l = True
-  |T.isPrefixOf "gateway.ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "http://gateway.ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "https://gateway.ipfs.io/ipfs/" l = True
-  |T.isPrefixOf "gateway.ipfs.io/ipns/" l = True
-  |T.isPrefixOf "http://gateway.ipfs.io/ipns/" l = True
-  |T.isPrefixOf "https://gateway.ipfs.io/ipns/" l = True
+  |node_is_in_ipfs l = True
   |otherwise = False
 
 nodes_to_map :: Nodes -> Node_map

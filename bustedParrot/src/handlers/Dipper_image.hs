@@ -14,11 +14,12 @@
 {-# LANGUAGE OverloadedStrings, DeriveGeneric, ScopedTypeVariables #-}
 
 module Dipper_image (
-  dipper_check_orientation
- ,loadImage
+--  dipper_check_orientation
+  loadImage
  ,image_is_vertical
  ,deduceRepresentationScale
  ,representationScaleGrading
+ ,deduceDipperType
 ) where
 
 
@@ -38,7 +39,7 @@ import Nodes
 
 
 
-
+{-
 dipper_check_orientation :: Dipper -> IO Dipper
 dipper_check_orientation d
    |link_is_local $ url d = (loadImage $ T.unpack $ url d) >>= ck
@@ -53,7 +54,7 @@ dipper_check_orientation d
        putStrLn "!!!!!!!!!!!!!!!!------!!!!!!!!!!!!!!!!!!!!!"-}
        
        return $!! (\de -> de {isVertical=image_is_vertical img}) d
-
+-}
 
 
 {-- ================================================================================================
@@ -110,7 +111,7 @@ loadSvg f =  do
         Left s -> return Nothing
         Right d@(X.XmlDocument {X.docContent=s}) -> return $ Just $ Right d
 
-
+--loadMp4 :: 
 
 
 
@@ -158,10 +159,10 @@ svgWH nodes = wh $ find (\x->(X.tagName x)==(Just "svg")) nodes
 
 
 representationScaleGrading w h
-  |     (w<=256)&&(h<=256) = AsIs
+  |     (w<=256)&&(h<=256) = DsAsIs
  -- |not ((w<=256)&&(h<=256)) =
  -- |
-  |otherwise = NotDefined
+  |otherwise = DsNotDefined
 
 
 deduceRepresentationScale :: Either CPic.DynamicImage X.Document -> DipperScale
@@ -190,12 +191,30 @@ deduceRepresentationScale (Right (X.XmlDocument
                   ) = (\(w,h)-> representationScaleGrading w h)
                                             $ fromMaybe (0,0) $ svgWH s
 
-deduceRepresentationScale  _ = NotDefined
+deduceRepresentationScale  _ = DsNotDefined
 
 
 
 
 
-
+deduceDipperType :: FilePath -> DipperType
+deduceDipperType f
+  |node_is_a_raster $ T.pack f = DtRasterImage
+  |node_is_a_svg $ T.pack f = DtSvgImage
+  |node_is_a_mp4 $ T.pack f = DtMp4Video
+  |otherwise = DtNotDefined
+  
+  
+  
+{-  
+deduceDipperType :: Either CPic.DynamicImage X.Document -> DipperType
+deduceDipperType f
+  |node_is_a_raster $ T.pack f = DtRasterImage
+  |node_is_a_svg $ T.pack f = DtSvgImage
+  |otherwise = DtNotDefined  
+  -}
+  
+  
+  
 
 
