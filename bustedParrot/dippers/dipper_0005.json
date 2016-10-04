@@ -1,7 +1,22 @@
 [
 
-
  {
+   "miniature_json" : "${20160928_001_thm.jpg}"
+  ,"url_json"       : "${20160928_001.jpg}"
+  ,"name_json"      : "my garden"
+  ,"comment_json"   : ""
+ }
+
+
+,{
+   "miniature_json" : "${20160804_grasshopper_hunt_thm.svg}"
+  ,"url_json"       : "${20160804_grasshopper_hunt_ipfs.mp4}"
+  ,"altUrls_json"   : ["${20160804_grasshopper_hunt_yandex.mp4}"]
+  ,"name_json"      : "insects"
+  ,"comment_json"   : ""
+ }
+ 
+,{
    "miniature_json" : "${20160916_014_thm.jpg}"
   ,"url_json"       : "${20160916_014.jpg}"
   ,"name_json"      : "my garden"

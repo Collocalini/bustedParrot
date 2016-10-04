@@ -360,6 +360,55 @@
  }
 
 
+,{
+  "node_json" : ["20160804_grasshopper_hunt_ipfs.mp4"]
+ ,"link_json" : "http://127.0.0.1:8080/ipfs/QmaAe63HcnML9kfbCpjaGc5qUMsw6CC7YkH91DBkxbCYj9"
+ }
+
+,{
+  "node_json" : ["20160804_grasshopper_hunt_yandex.mp4"]
+ ,"link_json" : "https://yadi.sk/i/ZMSOEUWrvT3jz"
+ }
+
+,{
+  "node_json" : ["20160804_grasshopper_hunt_thm.svg"]
+ ,"link_json" : "/static/thumbnails/must_be_together/20160804_grasshopper_hunt.svg"
+ }
+
+,{
+  "node_json" : ["20160804_grasshopper_hunt_thm.jpg"]
+ ,"link_json" : "/static/thumbnails/must_be_together/20160804_grasshopper_hunt.jpg"
+ }
+
+,{
+  "node_json" : ["20160928_001_thm.jpg"]
+ ,"link_json" : "/static/thumbnails/my_garden/garden_update_2016/20160928_001.jpg"
+ }
+
+,{
+  "node_json" : ["20160928_001.jpg"]
+ ,"link_json" : "/static/my_garden/20160928_001.jpg"
+ }
+
+,{
+  "node_json" : ["20160925_006.jpg"]
+ ,"link_json" : "/static/stepnaya_kobylka/20160925_006.jpg"
+ }
+
+,{
+  "node_json" : ["20160925_007.jpg"]
+ ,"link_json" : "/static/stepnaya_kobylka/20160925_007.jpg"
+ }
+
+
+
+
+
+
+
+
+
+
 
 
 
