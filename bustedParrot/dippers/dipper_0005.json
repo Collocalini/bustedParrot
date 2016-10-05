@@ -1,12 +1,18 @@
 [
 
  {
+   "miniature_json" : "${20161004_021_thm.jpg}"
+  ,"url_json"       : "${20161004_021.jpg}"
+  ,"name_json"      : "my garden"
+  ,"comment_json"   : ""
+ }
+
+,{
    "miniature_json" : "${20160928_001_thm.jpg}"
   ,"url_json"       : "${20160928_001.jpg}"
   ,"name_json"      : "my garden"
   ,"comment_json"   : ""
  }
-
 
 ,{
    "miniature_json" : "${20160804_grasshopper_hunt_thm.svg}"

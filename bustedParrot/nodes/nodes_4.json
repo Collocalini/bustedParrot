@@ -404,6 +404,44 @@
 
 
 
+,{
+  "node_json" : ["20161004_021_thm.jpg"]
+ ,"link_json" : "/static/thumbnails/my_garden/garden_update_2016/20161004_021.jpg"
+ }
+
+,{
+  "node_json" : ["20161004_021.jpg"]
+ ,"link_json" : "/static/my_garden/20161004_021.jpg"
+ }
+
+,{
+  "node_json" : ["20161004_006.jpg"]
+ ,"link_json" : "/static/my_garden/20161004_006.jpg"
+ }
+
+,{
+  "node_json" : ["20161004_006.svg"]
+ ,"link_json" : "/static/my_garden/20161004_006.svg"
+ }
+
+,{
+  "node_json" : ["luna_the_fun_has_been_doubled.svg"]
+ ,"link_json" : "/static/ornaments/luna___the_fun_has_been_doubled__by_purpletinker-d4wy591.svg"
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
