@@ -1,5 +1,11 @@
 
 
+body, td { 
+//font:normal normal 100%/1.0 serif, sans, verdana; 
+   background-color:white;
+}
+
+
 .dipper_nav_img {
    height:5em; 
    width:auto;
@@ -197,9 +203,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
 
 .arrow_box { 
    padding: 0.5em;
-   position: position;
+   position: relative;
+   //margin: 0 auto;
    height:8em;
-   //width:98%; 
+   width:99%; 
    overflow:hidden;
    clip: rect(auto, 100%, auto, auto);
 	background: url("/static/main_page_top.svg");
@@ -332,6 +339,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
 
 .divScroll_posts {
    display: block;
+   width:   100%;
+   //margin: 0 auto;
+   
 }
 
 
@@ -386,15 +396,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
 
 
 .nailed_stuff_h {
-    
-    float: center;
-    border: 1px solid black;
-    //border-radius: 10% / 2%;
-    padding: 0.05em;
-    vertical-align: top; 
-    text-align: center;
-    font-size: 1.4em;
-    line-height: 1.4em;
+    width:100%;
+    //margin: 0 auto;
 
 }
 
@@ -404,8 +407,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
 
 .site-in-ipfs-promotion {
     margin: 0em;
-    animation: shift1em 5s infinite alternate;
+    //animation: shift1em 5s infinite alternate;
     display: inline;
+    left: 0em;
+    position: absolute;
 }
 
 

@@ -430,22 +430,47 @@
  }
 
 
+,{
+  "node_json" : ["20161006_001.jpg"]
+ ,"link_json" : "/static/stepnaya_kobylka/20161006_001.jpg"
+ }
 
 
+,{
+  "node_json" : ["20160808_grasshopper_hunt0001-20808_ipfs.mp4"]
+ ,"link_json" : "http://127.0.0.1:8080/ipfs/QmXiMGT9J1NhDq6nZTa35RfsKpNZCKjCkAHcjExjTXr7c2"
+ }
 
 
+,{
+  "node_json" : ["20160808_grasshopper_hunt0001-20808.svg"]
+ ,"link_json" : "/static/thumbnails/must_be_together/20160808_grasshopper_hunt0001-20808.svg"
+ }
 
+,{
+  "node_json" : ["20160808_grasshopper_hunt0001-20808.jpg"]
+ ,"link_json" : "/static/thumbnails/must_be_together/20160808_grasshopper_hunt0001-20808.jpg"
+ }
 
+,{
+  "node_json" : ["20160808_grasshopper_hunt0001-20808_yandex.mp4"]
+ ,"link_json" : "https://yadi.sk/i/fzf_DG4cy4DTY"
+ }
 
+,{
+  "node_json" : ["mpvsync.tar_ya"]
+ ,"link_json" : "https://yadi.sk/d/xPz0qFoj3HUZ42"
+ }
 
+,{
+  "node_json" : ["mpvsync.tar_ipfs"]
+ ,"link_json" : "http://127.0.0.1:8080/ipfs/QmbfNGCz5892BFw3CX6ych61DAm5oufdNdp8puJ9TyYsuB"
+ }
 
-
-
-
-
-
-
-
+,{
+  "node_json" : ["videoViewingBrokenTop"]
+ ,"link_json" : "/static/videoViewingBrokenTop.png"
+ }
 
 
 

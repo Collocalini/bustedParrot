@@ -1,6 +1,7 @@
 bustedParrot/dist/
 replaceLinksAccordingToMap/dist
 bustedParrot/.cabal-sandbox/
+bustedParrot/.cabal-sandbox_old/
 bustedParrot/__.cabal-sandbox/
 bustedParrot/___.cabal-sandbox/
 bustedParrot/cabal.sandbox.config
