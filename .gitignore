@@ -1,6 +1,7 @@
 bustedParrot/dist/
 replaceLinksAccordingToMap/dist
 bustedParrot/.cabal-sandbox/
+bustedParrot/.stack-work
 bustedParrot/.cabal-sandbox_old/
 bustedParrot/__.cabal-sandbox/
 bustedParrot/___.cabal-sandbox/
@@ -11,8 +12,10 @@ bustedParrot/posts/draft_post16.html
 bustedParrot/pages/____page_my_pictures.html
 bustedParrot/static_old/
 bustedParrot/static_edit/
+bustedParrot/dbsettings.json
 update
 update_auto
+runhaskell_update_site
 x
 bustedParrot/static/dipper_next.svg
 bustedParrot/static/dipper_prev.svg
@@ -28,4 +31,5 @@ update_to_ipfs.hs
 
 databaseHandling/cabal.sandbox.config
 databaseHandling/.cabal-sandbox/
+databaseHandling/.stack-work
 databaseHandling/dist/

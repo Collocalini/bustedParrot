@@ -10,42 +10,38 @@ description: Project Description Here
 category: Web
 author: Author
 data-dir: ""
- 
 
- 
 
- 
+
+
+
 executable databaseHandling
     build-depends: base -any
                  , lens >=3.7.6
-                 , bytestring -any 
+                 , bytestring -any
                  , heist >=0.14
-                 , MonadCatchIO-transformers -any
                  , mtl -any
-                 , snap -any
-                 , snap-core -any
-                 , snap-server -any
-                 , snap-loader-static -any
                  , text -any
                  , time -any
-                 , transformers -any
                  , xmlhtml -any
                  , directory -any
                  , filepath -any
                  , aeson -any
+                 , lens-aeson -any
                  , JuicyPixels -any
                  , containers -any
                  , parsec -any
                  , deepseq -any
-         
+
 
     buildable: True
-    ghc-options: -threaded -Wall -fwarn-tabs -funbox-strict-fields -O2 -fno-warn-orphans 
+    ghc-options: -threaded -Wall -fwarn-tabs -funbox-strict-fields -O2 -fno-warn-orphans
 -----  -prof -fprof-auto
- 
+
     main-is: Main.hs
+    other-modules:
+           Dipper_common
+         , Nodes
     buildable: True
     hs-source-dirs: src ../bustedParrot/src/ ../bustedParrot/src/handlers
     ghc-options: -fwarn-unused-imports
-    
- 
