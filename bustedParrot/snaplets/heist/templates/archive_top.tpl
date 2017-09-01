@@ -16,5 +16,4 @@
 
 </div>
 
-
-
+<apply template="dipper_pages"/>

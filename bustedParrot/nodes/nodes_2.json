@@ -268,21 +268,9 @@
  }
 
 ,{
-   "node_json" : ["postbg"]
+   "node_json" : ["postbg","postbg.svg"]
   ,"link_json" : "/static/postbg.svg"
  }
 
 
 ]
-
-
-
-
-
-
-
-
-
-
-
-

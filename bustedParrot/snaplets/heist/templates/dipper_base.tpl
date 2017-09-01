@@ -17,6 +17,8 @@
 
 <apply template="dipper_tags"/>
 
+<apply template="dipper_pages"/>
+
 <div align="center">
 
 <entries>
@@ -25,7 +27,7 @@
   </span>
 </entries>
 
-</div>  
+</div>
 
 
 <apply template="dipper_pages"/>
@@ -36,7 +38,3 @@
 </body>
 </html>
 <!--apply template="dipper_entry" /-->
-
-
-
-

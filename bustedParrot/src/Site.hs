@@ -126,35 +126,35 @@ generate_pageWTWR_responseM = do
 
 generate_archive_pageN_responseM_earliest :: State Routes [(ByteString, Handler App App ())]
 generate_archive_pageN_responseM_earliest = do
-   generate_archive_pageN_responseM_common EarliestFirst
+   generate_archive_pageN_responseM_common A.EarliestFirst
 
 
 generate_archive_pageN_responseM_latest :: State Routes [(ByteString, Handler App App ())]
 generate_archive_pageN_responseM_latest = do
-   generate_archive_pageN_responseM_common LatestFirst
+   generate_archive_pageN_responseM_common A.LatestFirst
 
 
 
 
 generate_archive_pageN_responseM_common
-  :: ArchivePageOrder -- page order (earliest first/latest first)
+  :: A.ArchivePageOrder -- page order (earliest first/latest first)
   -> State Routes [(ByteString, Handler App App ())]
 generate_archive_pageN_responseM_common po = do
    r@(Routes { postsT=postsT, number_of_pages_in_archive=nopia}) <- get
    --ar<- responces postsT r
    --return $ zip (routes postsT) ar
    case po of
-     EarliestFirst -> return $ zip (routes_e postsT) $ responces postsT r nopia po
-     LatestFirst   -> return $ zip (routes_l postsT) $ responces postsT r nopia po
-   
+     A.EarliestFirst -> return $ zip (routes_e postsT) $ responces postsT r nopia po
+     A.LatestFirst   -> return $ zip (routes_l postsT) $ responces postsT r nopia po
+
    where
    links_e p = map archive_pageN_node_link'' (total_responces p)
    routes_e p = map B.pack $ links_e p
-   
+
    links_l p = map archive_latest_first_pageN_node_link'' (total_responces p)
    routes_l p = map B.pack $ links_l p
-   
-   responce i t p routes gpa links
+
+   responce i po t p routes gpa links
       |t >1 =
          evalState
            A.archive_HandlerM
@@ -163,9 +163,10 @@ generate_archive_pageN_responseM_common po = do
                ,A.page_number = i
                ,A.links       = (links p)
                ,A.routes      = routes
+               ,A.page_order  = po
                })
                   --(give_page i p) i $ links p
-           
+
       |otherwise =
          evalState
            A.archive_HandlerM
@@ -174,20 +175,23 @@ generate_archive_pageN_responseM_common po = do
                ,A.page_number = i
                ,A.links       = []
                ,A.routes      = routes
+               ,A.page_order  = po
                })
                   --(give_page i p) ) i []
 
-   responces p r t EarliestFirst =
-     map (\x-> responce x t p r give_page_archive links_e) $ total_responces p
-   responces p r t LatestFirst   =
-     map (\x-> responce x t p r give_page_archive_latest_first links_l) $ total_responces p
+   responces p r t A.EarliestFirst =
+     map (\x-> responce x A.EarliestFirst t p r give_page_archive links_e)
+            $ total_responces p
+   responces p r t A.LatestFirst   =
+     map (\x-> responce x A.LatestFirst t p r give_page_archive_latest_first links_l)
+            $ total_responces p
 
 
    total_responces p = [1.. total_pages' p]
    total_pages' p = (total_pages_archive p)
 
 
-data ArchivePageOrder = EarliestFirst|LatestFirst
+--data ArchivePageOrder = EarliestFirst|LatestFirst
 
 
 generate_dippers_pageN_responseM :: State Routes [(ByteString, Handler App App ())]
@@ -368,7 +372,7 @@ items_archive p =
   zip (
        concat $ map (replicate max_items_per_page_archive) [1..]
       ) $ reverse p
-  
+
 give_page i d = snd $! unzip $ head $ drop (i-1) $ groupBy (\(n,_) (n1,_)-> n==n1) $ items d
 
 give_page_archive i p =
@@ -402,5 +406,3 @@ app = do
            initCookieSessionManager "site_key.txt" "sess" (Just 3600)
     addRoutes r
     return $ App h s)
-
-

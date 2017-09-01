@@ -26,20 +26,24 @@
 
 <references>
 
+<div class="post_h_background"></div>
+
 <div class="post_h">
   <apply template="dipper_reference" />
 </div>
 
 </references>
 
+<span class="top_r">
+
+  <nav_prev/>
+  <nav_next/>
+
+</span>
+
 <ignore>
 </ignore>
- 
+
 
 </body>
 </html>
-
-
-
-
-
