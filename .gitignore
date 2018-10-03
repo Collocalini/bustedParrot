@@ -33,3 +33,5 @@ databaseHandling/cabal.sandbox.config
 databaseHandling/.cabal-sandbox/
 databaseHandling/.stack-work
 databaseHandling/dist/
+example_auto_dipper_creation/
+
