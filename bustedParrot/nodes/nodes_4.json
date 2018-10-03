@@ -493,4 +493,15 @@
     ,"link_json" : "/static/ornaments/archive_time_axis_r.svg"
     }
 
+   ,{
+     "node_json" : ["onlyOccasionallyParrot.png"]
+    ,"link_json" : "/static/onlyOccasionallyParrot.png"
+    }
+
+   ,{
+     "node_json" : ["post72"]
+    ,"link_json" : "/post72.html"
+    }
+
+
 ]

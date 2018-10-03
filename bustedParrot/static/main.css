@@ -357,6 +357,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
 }
 
 
+.post_hf {
+    margin: 0.5em;
+    margin-bottom: 1.5em;
+    font-size: 1.4em;
+    line-height: 1.4em;
+}
+
 .first_post_h {
 
     border: 1px solid gray;

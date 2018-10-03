@@ -29,14 +29,20 @@ data RunMode =
     SanityCheck
    |NewFromInlineDry
    |NewFromInlineExec
-   --deriving (Show)
+   |MapInsertAt [(Int,Int)]
+   --deriving (Show, Read)
 
 
 stringToRunMode :: String -> RunMode
 stringToRunMode "SanityCheck" = SanityCheck
 stringToRunMode "NewFromInlineDry" = NewFromInlineDry
 stringToRunMode "NewFromInlineExec" = NewFromInlineExec
-stringToRunMode x = SanityCheck
+stringToRunMode x
+   |mapInsertAt $ words x = MapInsertAt $ (\[_,at]-> read at) $ words x
+   |otherwise= SanityCheck
+      where
+      mapInsertAt ["MapInsertAt",_] = True
+      mapInsertAt _                 = False
 
 
 instance Read RunMode where
@@ -105,11 +111,49 @@ run = do
         liftIO $ getLine
         filterOutInlineDBEntries
 
+     Just (MapInsertAt at) -> do
+        t<- liftIO $ readFile $ fromJust $ a^.dbFile
+        f<- liftIO $ (readAllCorrespondingFiles =<< (readFile $ fromJust $ a^.inlineFile))
+        
+        --liftIO $ putStrLn $ unlines $ map (insertAt at t) $ lines f
+        
+        liftIO $ putStrLn $ unlines 
+            $ foldl' applyInsertAt 
+                     (repeat t) 
+                     $ map (\(zAt,l)-> zAt l)
+                           $ zip (map (zip.repeat) at) f
+        
+        
 
      _                 -> do
         nu<- liftIO $ node_from_name "new"
         liftIO $ sanityCheck [("new",nu)]
 
+
+
+readAllCorrespondingFiles inlineFile = 
+   mapM (\x-> (return.stripNulls.lines) =<< readFile x) $ stripNulls $ lines inlineFile
+   where 
+   stripNulls = filter (not.null) 
+
+      
+
+
+
+applyInsertAt templates lines = map insertAt' $ zip lines templates
+   where
+   insertAt' ((at,s),t) = insertAt at t s
+   
+
+insertAt (l,c) template line =  unlines $ atColumn $ atLine
+   where
+   atLine = splitAt l $ lines $ template
+   atColumn (b,a) = (\lastb-> concat [ (init b)
+                                     , [lastb]
+                                     , a ] 
+                    ) 
+                     $ insert $ splitAt c $ last b
+   insert (b,a) = b ++ line ++ a
 
 
 

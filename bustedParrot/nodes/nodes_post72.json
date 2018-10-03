@@ -1,0 +1,32 @@
+[
+{
+  "node_json" : ["GenImplicit"]
+ ,"link_json" : "https://github.com/Collocalini/GenImplicit"
+ }
+
+ , 
+{
+  "node_json" : ["BMesh"]
+ ,"link_json" : "https://docs.blender.org/api/2.78a/bmesh.html"
+ }
+
+ , 
+{
+  "node_json" : ["Cork"]
+ ,"link_json" : "https://github.com/gilbo/cork"
+ }
+
+ , 
+{
+  "node_json" : ["demo_blobby_join_sequence.bjs"]
+ ,"link_json" : "https://gitlab.com/Collocalini/blobby/blob/master/demo_blobby_join_sequence.bjs"
+ }
+
+ , 
+{
+  "node_json" : ["Blobby"]
+ ,"link_json" : "https://gitlab.com/Collocalini/blobby"
+ }
+
+
+]

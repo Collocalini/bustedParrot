@@ -15,7 +15,7 @@
 
 <apply template="post_top"/>
 
-<div class="post_h">
+<div class="post_hf">
 <post_h/>
 </div>
 
