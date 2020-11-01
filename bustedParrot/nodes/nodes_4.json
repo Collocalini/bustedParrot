@@ -6,6 +6,11 @@
  }
 
 ,{
+   "node_json" : ["season2019"]
+  ,"link_json" : "/static/season2019.png"
+ }
+
+,{
    "node_json" : ["stapelia_20160831.jpg"]
   ,"link_json" : "/static/my_garden/20160831_004.jpg"
  }
@@ -501,6 +506,46 @@
    ,{
      "node_json" : ["post72"]
     ,"link_json" : "/post72.html"
+    }
+
+   ,{
+     "node_json" : ["designAndBuildToyBoat.mp4"]
+    ,"link_json" : "http://127.0.0.1:8080/ipfs/QmTH5RMMRMfthgD7PApQd7UPAwM3WnEMEdPomwT5MJvK2R"
+    }
+
+    , 
+   {
+     "node_json" : ["designAndBuildToyBoat.webm"]
+    ,"link_json" : "http://127.0.0.1:8080/ipfs/QmR2kWveE1SrFh5NfEjpY4wPGjsauPDeKjFfABWcmCG9wq"
+    }
+
+   ,
+   {
+     "node_json" : ["designAndBuildToyBoat.webm.mp4"]
+    ,"link_json" : "http://127.0.0.1:8080/ipfs/QmR2kWveE1SrFh5NfEjpY4wPGjsauPDeKjFfABWcmCG9wq"
+    }
+
+    , 
+   {
+     "node_json" : ["designAndBuildToyBoat.webm_ya"]
+    ,"link_json" : "https://yadi.sk/i/OjzGz-58c6t4DQ"
+    }
+
+   ,
+   {
+     "node_json" : ["myToyBoatTop.png"]
+    ,"link_json" : "/static/mpv-shot0006forTop.png"
+    }
+    
+    ,
+   {
+     "node_json" : ["myToyBoat1.svg"]
+    ,"link_json" : "/static/thumbnails/must_be_together/myToyBoat1.svg"
+    }
+    
+   ,{
+     "node_json" : ["blooming2019collage3-2.jpg_thm"]
+    ,"link_json" : "/static/thumbnails/my_garden/blooming2019collage3-2thm.jpg"
     }
 
 

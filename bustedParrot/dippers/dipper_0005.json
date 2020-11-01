@@ -1,6 +1,25 @@
 [
 
+
+
+
  {
+   "miniature_json" : "${blooming2019collage3-2.jpg_thm}"
+  ,"url_json"       : "${blooming2019collage3-2.jpg}"
+  ,"name_json"      : "my garden"
+  ,"comment_json"   : ""
+ }
+
+ ,{
+   "miniature_json" : "${myToyBoat1.svg}"
+  ,"url_json"       : "${designAndBuildToyBoat.webm.mp4}"
+  ,"altUrls_json"   : ["${designAndBuildToyBoat.mp4}","${designAndBuildToyBoat.webm_ya}"]
+  ,"name_json"      : ""
+  ,"comment_json"   : ""
+ }
+
+
+ ,{
    "miniature_json" : "${20180802_173052_thm.jpg}"
   ,"url_json"       : "${20180802_173052.jpg}"
   ,"name_json"      : "my garden"
@@ -308,6 +327,8 @@
   ,"name_json"      : "my garden"
   ,"comment_json"   : ""
  }
+
+
 
 
     
