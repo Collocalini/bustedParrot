@@ -2,7 +2,7 @@
 mkdir old
 cd old
 
-echo "$@"| ../../neverParrotIPFS.sh get
+echo "$@"| bash ../../neverParrotIPFS.sh get
 
 mv "$@" "0.0.0.0:8000"
 

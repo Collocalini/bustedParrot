@@ -65,12 +65,7 @@
  }
 
 
-,{
-   "miniature_json" : "/static/thumbnails/be200_29-05-2015.jpg"
-  ,"url_json"       : "${be200_29-05-2015.jpg}"
-  ,"name_json"      : ""
-  ,"comment_json"   : ""
- }
+
 
 ,{
    "miniature_json" : "/static/thumbnails/dla_otmeli_otsil.jpg"
@@ -115,12 +110,7 @@
   ,"comment_json"   : ""
  }
 
-,{
-   "miniature_json" : "/static/collage_desktop1.jpg"
-  ,"url_json"       : "${collage_desktop1_sleepy_ponies}"
-  ,"name_json"      : ""
-  ,"comment_json"   : ""
- }
+
 
 ]
 

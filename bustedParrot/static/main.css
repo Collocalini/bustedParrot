@@ -392,3 +392,56 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
     left: 0em;
     position: absolute;
 }
+
+
+.otherPage {
+   margin :0.05em;
+   border:none;
+}
+
+.currentPage {
+
+   border:0.1em solid;
+}
+
+.editOptionName {
+   display:block;
+   font-size:1em;
+   margin-top:1em;
+}
+.editOptionDisplay {
+   display:block;
+   font-size:0.7em;
+}
+
+.option{
+   margin:0.25em;
+   background:WhiteSmoke;
+}
+.option:hover{
+   border-left:solid;
+}
+.option-en{
+  color:#262673;
+}
+.option-ru{
+  color:#732626;
+}
+
+.text-en{
+  color:#262673;
+}
+.text-ru{
+  color:#732626;
+}
+
+
+
+
+
+
+
+
+
+
+

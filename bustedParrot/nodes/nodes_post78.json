@@ -1,0 +1,42 @@
+[
+{
+  "node_json" : ["twinery.org"]
+ ,"link_json" : "https://twinery.org/"
+ }
+
+ , 
+{
+  "node_json" : ["fodgToHticDemoEnRu.svg"]
+ ,"link_json" : "/static/fodgTohtic/demoEnRu.svg"
+ }
+
+ , 
+{
+  "node_json" : ["fodgToHticDemoEnRuScreen1.png"]
+ ,"link_json" : "/static/fodgTohtic/demoEnRuScreen1.png"
+ }
+ , 
+{
+  "node_json" : ["fodgToHtic_hticExtSrc"]
+ ,"link_json" : "https://gitlab.com/Collocalini/hticext"
+ }
+
+ , 
+{
+  "node_json" : ["fodgToHticDemoEnRu.fodg.html"]
+ ,"link_json" : "/static/fodgTohtic/demoEnRu.fodg.html"
+ }
+ 
+ , 
+{
+  "node_json" : ["fodgToHticDemoEnRu.tar.gz.yadi"]
+ ,"link_json" : "https://yadi.sk/d/MutXzVW_gM3RyA"
+ }
+ 
+ ,
+{
+  "node_json" : ["fodgToHticDemoEnRu.tar.gz.ipfs"]
+ ,"link_json" : "http://127.0.0.1:8080/ipfs/QmPvfTxfjgisy8Aj15qxxvBxVYqbenGoMebMCYSLyr293G"
+ }
+
+]

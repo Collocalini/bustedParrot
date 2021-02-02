@@ -1,0 +1,26 @@
+[
+
+ {
+   "node_json" : ["site_programming_logo.svg"]
+  ,"link_json" : "/static/ornaments/site_programming_logo.svg"
+ }
+ 
+
+,{
+   "node_json" : ["site_programming_logo_thm.svg"]
+  ,"link_json" : "/static/ornaments/site_programming_logo_thm.svg"
+ }
+ 
+,{
+   "node_json" : ["htic.js"]
+  ,"link_json" : "/static/htic.js"
+ }
+
+ 
+,{
+   "node_json" : ["hticExt.js"]
+  ,"link_json" : "/static/hticExt.js"
+ } 
+ 
+ 
+]

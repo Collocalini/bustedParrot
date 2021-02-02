@@ -1,0 +1,44 @@
+[
+{
+  "node_json" : ["dipperSection-LogoStapelia"]
+ ,"link_json" : "/individual_dippers/static/must_be_together/site_stapelia_logo/site_stapelia_logo.html"
+ }
+
+ , 
+{
+  "node_json" : ["dipperSection-LogoProgramming"]
+ ,"link_json" : "/individual_dippers/static/ornaments/site_programming_logo.html"
+ }
+
+ , 
+{
+  "node_json" : ["post76"]
+ ,"link_json" : "/post76.html"
+ }
+
+ , 
+{
+  "node_json" : ["dipperSection-insects"]
+ ,"link_json" : "/tagged/insects1.html"
+ }
+
+ , 
+{
+  "node_json" : ["post78"]
+ ,"link_json" : "/post78.html"
+ }
+
+ , 
+{
+  "node_json" : ["gitRepo_htic.js"]
+ ,"link_json" : "https://gitlab.com/Collocalini/htic"
+ }
+
+ , 
+{
+  "node_json" : ["dipperSection-myGarden"]
+ ,"link_json" : "/tagged/my-garden1.html"
+ }
+
+
+]

@@ -3,9 +3,8 @@
 <style>
 
 </style>
-<script>
-
-</script>
+<script type="text/javascript" src="${htic.js}"></script>
+<script type="text/javascript" src="${hticExt.js}"></script>
 <meta charset="UTF-8" />
 <link href=${main_css} rel="stylesheet" type="text/css" />
 <title>Противопопугайный сайт / Never Parrot</title>
