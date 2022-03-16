@@ -18,6 +18,12 @@
 
  , 
 {
+  "node_json" : ["post76"]
+ ,"link_json" : "/post76.html"
+ }
+
+ , 
+{
   "node_json" : ["nwn2-sz_call_me_potter"]
  ,"link_json" : "/individual_dippers/static/nwn2-sz_call_me_potter.html"
  }
@@ -26,6 +32,12 @@
 {
   "node_json" : ["nwn2-sz_call_me_potter"]
  ,"link_json" : "/individual_dippers/static/nwn2-sz_call_me_potter.html"
+ }
+
+ , 
+{
+  "node_json" : ["dipperSection-insects"]
+ ,"link_json" : "/tagged/insects1.html"
  }
 
  , 
