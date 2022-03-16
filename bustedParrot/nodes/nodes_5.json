@@ -21,6 +21,20 @@
    "node_json" : ["hticExt.js"]
   ,"link_json" : "/static/hticExt.js"
  } 
- 
- 
+
+,{
+   "node_json" : ["shaman_making-of_top"]
+  ,"link_json" : "/static/shaman_making-of.png"
+ }  
+
+ ,{
+   "node_json" : ["tagged_my-garden1"]
+  ,"link_json" : "/tagged/my-garden1.html"
+ }  
+
+ ,{
+   "node_json" : ["tagged_insects1"]
+  ,"link_json" : "/tagged/insects1.html"
+ }  
+
 ]

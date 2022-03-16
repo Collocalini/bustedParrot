@@ -1,0 +1,20 @@
+[
+{
+  "node_json" : ["neverParrotMain_fodgTohtic.fodg"]
+ ,"link_json" : "http://127.0.0.1:8080/ipfs/QmVBtAhEY59C9QsviUTf3NNWRvTpiBoHFXMaRMyuASyruV"
+ }
+
+ , 
+{
+  "node_json" : ["neverParrotMain_fodgTohtic.svg"]
+ ,"link_json" : "/static/fodgTohtic/neverParrotMain.svg"
+ }
+
+ , 
+{
+  "node_json" : ["neverParrotMain_fodgTohtic.fodg.yadisk"]
+ ,"link_json" : "https://yadi.sk/d/KmzAmp33GRvaaw"
+ }
+
+
+]

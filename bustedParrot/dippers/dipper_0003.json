@@ -3,14 +3,14 @@
  {
    "miniature_json" : "${site_stapelia_logo.svg}"
   ,"url_json"       : "${site_stapelia_logo.svg}"
-  ,"name_json"      : ""
+  ,"name_json"      : "pictag"
   ,"comment_json"   : ""
  }
  
 ,{
    "miniature_json" : "${site_programming_logo_thm.svg}"
   ,"url_json"       : "${site_programming_logo.svg}"
-  ,"name_json"      : ""
+  ,"name_json"      : "pictag"
   ,"comment_json"   : ""
  }
 

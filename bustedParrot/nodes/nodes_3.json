@@ -26,6 +26,11 @@
  }
 
 ,{
+   "node_json" : ["post25"]
+  ,"link_json" : "/post25.html"
+ }
+
+,{
    "node_json" : ["stepnaya_kobylka_breathing.gif"]
   ,"link_json" : "/static/stepnaya_kobylka/stepnaya_kobylka.gif"
  }

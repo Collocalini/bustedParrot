@@ -33,6 +33,10 @@
   "node_json" : ["myToyBoatCAD_6"]
  ,"link_json" : "/static/myToyBoat/mpv-shot0006.jpg"
  }
-
+ , 
+{
+  "node_json" : ["post76"]
+ ,"link_json" : "/post76.html"
+ }
 
 ]
