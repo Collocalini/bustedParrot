@@ -39,6 +39,8 @@ import Control.DeepSeq
 data PostT = PostT {
  postT :: Template
 ,number :: Int
+,next   :: Maybe Int
+,prev   :: Maybe Int
 } --deriving (Generic, NFData)
 
 
@@ -46,7 +48,12 @@ data PostT = PostT {
 postsT_h_io :: IO [PostT]
 postsT_h_io = do
    l<- getDirectoryContents "posts"
-   mapM number2post $!! reverse $ sort $ number_from_post_name $ filter isPostFile l
+   let lnumber = sort $ number_from_post_name $ filter isPostFile l
+   let lprev = Nothing:(map (\x-> Just x) $ take ((length lnumber) -1) lnumber)
+   let lnext = concat [(map (\x-> Just x) $ drop 1 lnumber), [Nothing]]
+   mapM number2post3 $!! zip3 (reverse $ lnumber)
+                              (reverse $ lprev)
+                              (reverse $ lnext)
 
 
 
@@ -62,7 +69,17 @@ number2post :: Int -> IO PostT
 number2post s = do
    (Right (DocumentFile {dfDoc=(TT.HtmlDocument {TT.docContent=docContent})})) <-
                                                 getDoc $ "posts/post" ++ show s ++ ".html"
-   return $! PostT {postT=docContent, number=s}
+   return $! PostT {postT=docContent, number=s, next=Nothing, prev=Nothing}
+   
+   
+number2post3 :: (Int,Maybe Int, Maybe Int) -> IO PostT
+number2post3 (s,prev,next) = do
+   postTpl <- number2post s
+   return $ result postTpl
+   where
+   result :: PostT -> PostT
+   result (PostT {postT=docContent, number=s, next=n, prev=p}) = 
+      PostT {postT=docContent, number=s, next=next, prev=prev}
 
 
 number_from_post_name :: [FilePath] -> [Int]

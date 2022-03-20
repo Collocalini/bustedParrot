@@ -17,8 +17,7 @@ body, td {
   border-radius: 0px;
   color: #000000;
   padding: 0.1em;
-  background: #d5dafa;
-  //border: solid #1f628d 2px;
+  background: #aaaaaa50;
   text-decoration: none;
 
 }
@@ -39,6 +38,13 @@ body, td {
 
 }
 
+.to_nav_r {
+vertical-align: middle;
+float: right;
+padding: 0.5em;
+margin-top:1em;
+font-size: 5em;
+}
 
 
 
@@ -137,7 +143,6 @@ vertical-align: middle;
 float: right;
 padding: 0.5em;
 }
-
 
 .top_r_img {
    height:auto;
