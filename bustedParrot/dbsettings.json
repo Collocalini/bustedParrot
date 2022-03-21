@@ -1,0 +1,6 @@
+{
+   "mode--"       : "SanityCheck"
+  ,"mode"       : "NewFromInlineExec"
+  ,"inlineFile" : "posts/post80.html"
+  ,"dbFile"     : "nodes/nodes_post80.json"
+}
