@@ -1,0 +1,9 @@
+{
+ "inputFile"    : "neverParrotMain.fodg"
+,"outputFile--"   : "neverParrotMain.fodg.html"
+,"outputFile--"   : "../snaplets/heist/templates/main_nailed_stuff.tpl"
+,"outputFile"   : "../snaplets/heist/templates/main_nailed_stuff.tpl"
+,"templateFile" : "main_nailed_stuff.tpl"
+,"templateFile--" : "tmp.html"
+,"verbosity"    : ["all"]
+}
