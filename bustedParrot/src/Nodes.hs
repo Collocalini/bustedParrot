@@ -33,6 +33,9 @@ module Nodes (
 ,post_node_link
 ,page_node_link'
 ,post_node_link'
+,post_node_link_tagged
+,post_node_link_tagged'
+,post_node_link_tagged''
 ,archive_pageN_node_link''
 ,archive_latest_first_pageN_node_link''
 ,dippers_pageN_node_link
@@ -248,11 +251,28 @@ page_node_link' :: String -> T.Text
 page_node_link' n = T.pack $ "/pages/page" ++ n ++ ".html"
 
 
+post_node_link_base :: Int -> String
+post_node_link_base n = "/post" ++ (show n) ++ ".html"
+
 post_node_link :: Int -> B8.ByteString
-post_node_link n = B8.pack $ "/post" ++ (show n) ++ ".html"
+post_node_link n = B8.pack $ post_node_link_base n
 
 post_node_link' :: Int -> T.Text
-post_node_link' n = T.pack $ "/post" ++ (show n) ++ ".html"
+post_node_link' n = T.pack $ post_node_link_base n
+
+
+post_node_link_tagged :: Int -> String -> String
+post_node_link_tagged n tags = "/tagged/posts/"++ tags'' ++ (post_node_link_base n)
+  where
+  tags' ('/':rest) = rest
+  tags' x = x
+  tags'' = tags' tags
+
+post_node_link_tagged' :: Int -> String -> B8.ByteString
+post_node_link_tagged' n tags =  B8.pack $ post_node_link_tagged n tags 
+
+post_node_link_tagged'' :: Int -> String -> T.Text
+post_node_link_tagged'' n tags = T.pack $ post_node_link_tagged n tags 
 
 
 

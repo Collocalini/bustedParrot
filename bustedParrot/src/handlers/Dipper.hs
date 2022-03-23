@@ -344,16 +344,22 @@ url_substitution_substitute_nodes s nm = T.concat $ map step1 s
 give_all_posts :: IO [(String, T.Text)]
 give_all_posts = do
    l<- getDirectoryContents "posts"
-   let files = sort $ filter isPostFile l
+   let l' = filter isPostFile l
+   let files = map snd $ sortBy give_all_posts_sortingFunction $ zip (number_from_post_name l') 
+                                                                      l'
    r<- mapM (\n-> readFile ("posts/" ++ n)) files
    return $ zip files $ map T.pack r
 
+
+give_all_posts_sortingFunction (n1,_) (n2,_) = compare n1 n2
 
 
 give_all_posts' :: IO [(String, T.Text)]
 give_all_posts' = do
    l<- getDirectoryContents "posts"
-   let files = sort $ filter isPostFile l
+   let l' = filter isPostFile l
+   let files = map snd $ sortBy give_all_posts_sortingFunction $ zip (number_from_post_name l') 
+                                                                      l'
    r<- mapM (\n-> readFile ("posts/" ++ n)) files
    return $!! zip files $ map T.pack r
 
@@ -756,10 +762,10 @@ dipperT_individual_page_nav_no_nav Nothing t = do
 
 
 --dipperT_individual_page_HandlerM_common :: (Dipper,[PostT]) -> Dippers -> State S.Routes (Handler App App ())
-dipperT_individual_page_HandlerM_common (d,sl) selection nm = do
+dipperT_individual_page_HandlerM_common (d,sl) selection nm tag = do
    mconcat [
         ("references" ##
-         (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h) sl
+         (I.mapSplices $ I.runChildrenWith . splicesFrom_main_postsT_h_common tag) sl
         )
        ,insertLinks $ Just nm
        ]
@@ -775,8 +781,11 @@ dipperT_individual_page_HandlerM (d,sl) selection = do
        $ mconcat [
         dipperT_individual_page_navigation $ dippers_neighbors d selection
        ,splicesFrom_individual_dipper_case d
-       ,dipperT_individual_page_HandlerM_common (d,sl) selection nm
+       ,dipperT_individual_page_HandlerM_common (d,sl) selection nm (Just $ cmp d)
        ]
+   where
+   cmp d = T.unpack $ (\(Dipper {page_url  = p}) -> p) d
+    
 
 dipperT_individual_page_HandlerM_tagged :: (Dipper,[PostT]) -> Dippers -> String -> State S.Routes (Handler App App ())
 dipperT_individual_page_HandlerM_tagged (d,sl) selection tags = do
@@ -785,8 +794,11 @@ dipperT_individual_page_HandlerM_tagged (d,sl) selection tags = do
        $ mconcat [
         dipperT_individual_page_navigation_tagged (dippers_neighbors d selection) tags
        ,splicesFrom_individual_dipper_case_tags tags d
-       ,dipperT_individual_page_HandlerM_common (d,sl) selection nm
+       ,dipperT_individual_page_HandlerM_common (d,sl) selection nm (Just $ cmp d)
        ]
+  
+   where
+   cmp d = T.unpack $ (\(Dipper {page_url  = p}) -> p) d
 
 
 

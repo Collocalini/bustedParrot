@@ -126,14 +126,11 @@ getActions conf = do
     d <-D.dippersT_io fn
     let fd = force d
     
-    dr<-D.give_dippers_references' fn fd
+    dr<- (return.(map (\(d,ps)->(d, MPC.postsT_derive_neigbours False ps)))) 
+             =<< (D.give_dippers_references' fn fd)
     dt<-D.give_dippers_tags fn 
     let fdt = force dt
     
-    --
-    --let fpa = force pa
-    
-    --let fdr = force dr 
     
     let nopia = total_pages_archive $! p
     

@@ -218,18 +218,32 @@ generate_dippers_pageN_responseM = do
 generate_dippers_individual_page_responseM :: State Routes [(ByteString, Handler App App ())]
 generate_dippers_individual_page_responseM = do
    (Routes {dippers_references=dippers_references, dippersT=dippersT}) <- get
-   mapM (step1 dippersT) dippers_references
+   (return.concat) =<< (mapM (step1 dippersT) dippers_references)
    where
-   step1 ::  D.Dippers -> (D.Dipper,[MPC.PostT]) -> State Routes (ByteString, Handler App App ())
-   step1 dT a@(d,_) = do
+   step1 ::  D.Dippers -> (D.Dipper,[MPC.PostT]) -> State Routes [(ByteString, Handler App App ())]
+   step1 dT a@(d,ps) = do
 
       idp<- D.dipperT_individual_page_HandlerM a dT
-      return (
+      idpDR <- mapM step2 $ zip (repeat d) 
+                                ps
+      return ((
          individual_dipper_node_link  $ T.unpack $ D.page_url d
         ,idp
+        ):idpDR
         )
 
+   step2 :: (D.Dipper,MPC.PostT) -> State Routes (ByteString, Handler App App ())
+   step2 (d,p) = do
+      
+      pht<- P.post_HandlerM_tagged p $ T.unpack $ D.page_url d
+      
+      return (
+           post_node_link_tagged' (postNumber p) $ T.unpack $ D.page_url d
+          ,pht
+         )
+   
 
+   postNumber p = (\(MPC.PostT {MPC.number  = n}) -> n) p
 
 
 generate_dippers_tagged_individual_responseM :: State Routes [(ByteString, Handler App App ())]
