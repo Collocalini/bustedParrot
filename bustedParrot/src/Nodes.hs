@@ -262,7 +262,7 @@ post_node_link' n = T.pack $ post_node_link_base n
 
 
 post_node_link_tagged :: Int -> String -> String
-post_node_link_tagged n tags = "/tagged/posts/"++ tags'' ++ (post_node_link_base n)
+post_node_link_tagged n tags = "/taggedPosts/"++ tags'' ++ (post_node_link_base n)
   where
   tags' ('/':rest) = rest
   tags' x = x
