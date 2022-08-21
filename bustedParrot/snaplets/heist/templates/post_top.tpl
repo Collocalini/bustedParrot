@@ -15,6 +15,7 @@
 
 <span id="nav" class="top_r">
   
+  <nav_parent/>
   <nav_prev/>
   <nav_next/>
   

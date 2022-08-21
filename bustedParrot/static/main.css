@@ -46,7 +46,9 @@ margin-top:1em;
 font-size: 5em;
 }
 
-
+.to_parent {
+font-size: 5em;
+}
 
 
 .tag {

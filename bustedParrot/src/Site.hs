@@ -235,7 +235,7 @@ generate_dippers_individual_page_responseM = do
    step2 :: (D.Dipper,MPC.PostT) -> State Routes (ByteString, Handler App App ())
    step2 (d,p) = do
       
-      pht<- P.post_HandlerM_tagged p $ T.unpack $ D.page_url d
+      pht<- P.post_HandlerM_tagged_parented p (T.unpack $ D.page_url d) (individual_dipper_node_link''  $ T.unpack $ D.page_url d)
       
       return (
            post_node_link_tagged' (postNumber p) $ T.unpack $ D.page_url d

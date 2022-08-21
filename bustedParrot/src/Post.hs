@@ -17,6 +17,7 @@ module Post (
 -- post_Handler
 post_HandlerM
 ,post_HandlerM_tagged
+,post_HandlerM_tagged_parented
 ) where
 
 import qualified Data.Text as T
@@ -38,16 +39,20 @@ import Nodes (post_node_link', post_node_link_tagged'')
 
 
 post_HandlerM :: PostT -> State Routes (Handler App App ())
-post_HandlerM p = post_HandlerM_common p Nothing
+post_HandlerM p = post_HandlerM_common p Nothing Nothing
        
 post_HandlerM_tagged :: PostT -> String -> State Routes (Handler App App ())
-post_HandlerM_tagged p tags = post_HandlerM_common p $ Just tags
+post_HandlerM_tagged p tags = post_HandlerM_common p (Just tags) Nothing
 
-post_HandlerM_common :: PostT -> Maybe String -> State Routes (Handler App App ())
-post_HandlerM_common p tags = do
+post_HandlerM_tagged_parented :: PostT -> String -> String -> State Routes (Handler App App ())
+post_HandlerM_tagged_parented p tags parent = post_HandlerM_common p (Just tags) (Just parent)
+
+post_HandlerM_common :: PostT -> Maybe String -> Maybe String -> State Routes (Handler App App ())
+post_HandlerM_common p tags parent_url = do
    (Routes {node_map=nm}) <- get
    return $ renderWithSplices "post_base" $ mconcat [
-       postTIndividualPageNavigation p tags
+       postT_parent_no_parent parent_url
+      ,postTIndividualPageNavigation p tags
       ,splicesFrom_post_h p
       ,insertLinks $ Just nm
        ]
@@ -55,7 +60,7 @@ post_HandlerM_common p tags = do
    where
    postTIndividualPageNavigation p Nothing = postT_individual_page_navigation p
    postTIndividualPageNavigation p (Just t) = postT_individual_page_navigation_tagged p t
-
+   
 
 
 splicesFrom_post_h :: Monad n => PostT -> Splices (I.Splice n)
@@ -159,6 +164,18 @@ postT_individual_page_nav_no_nav (Just d) t = do
 postT_individual_page_nav_no_nav Nothing t = do
    I.callTemplate "dipper_individual_page_no_nav" t
 
+
+postT_parent :: Monad n => String -> Splices (I.Splice n)
+postT_parent parent_url = do
+  mconcat $ [
+   "parent_url" ## I.textSplice $ T.pack parent_url
+   ]
+
+postT_parent_no_parent (Just parent_url) = do
+   "nav_parent" ## I.callTemplate "post_nav_to_parent" $ postT_parent parent_url
+
+postT_parent_no_parent Nothing = do
+   "nav_parent" ## I.callTemplate "post_nav_no_parent" (return ())
 
 
 

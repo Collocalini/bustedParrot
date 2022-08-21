@@ -114,7 +114,11 @@
    "node_json" : ["dipper_nav_next"]
   ,"link_json" : "/static/dipper_next.svg"
  }
-
+ 
+,{
+   "node_json" : ["nav_parent_img"]
+  ,"link_json" : "/static/nav_parent.svg"
+ }
 
 ,{
    "node_json" : ["site_stapelia_logo.svg"]
