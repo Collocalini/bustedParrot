@@ -12,8 +12,8 @@
 
  ,{
    "miniature_json" : "${myToyBoat1.svg}"
-  ,"url_json"       : "${designAndBuildToyBoat.webm.mp4}"
-  ,"altUrls_json"   : ["${designAndBuildToyBoat.mp4}","${designAndBuildToyBoat.webm_ya}"]
+  ,"url_json"       : "${designAndBuildToyBoat_peerTubeEmbed}"
+  ,"altUrls_json"   : ["${designAndBuildToyBoat.webm.mp4}","${designAndBuildToyBoat.mp4}","${designAndBuildToyBoat.webm_ya}"]
   ,"name_json"      : ""
   ,"comment_json"   : ""
  }
@@ -138,8 +138,8 @@
 
 ,{
    "miniature_json" : "${20160808_grasshopper_hunt0001-20808.svg}"
-  ,"url_json"       : "${20160808_grasshopper_hunt0001-20808_ipfs.mp4}"
-  ,"altUrls_json"   : ["${20160808_grasshopper_hunt0001-20808_yandex.mp4}"]
+  ,"url_json"       : "${20160808_grasshopper_hunt0001-20808_peerTubeEmbed}"
+  ,"altUrls_json"   : ["${20160808_grasshopper_hunt0001-20808_ipfs.mp4}","${20160808_grasshopper_hunt0001-20808_yandex.mp4}"]
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }
@@ -160,8 +160,8 @@
 
 ,{
    "miniature_json" : "${20160804_grasshopper_hunt_thm.svg}"
-  ,"url_json"       : "${20160804_grasshopper_hunt_ipfs.mp4}"
-  ,"altUrls_json"   : ["${20160804_grasshopper_hunt_yandex.mp4}"]
+  ,"url_json"       : "${20160804_grasshopper_hunt_peerTubeEmbed}"
+  ,"altUrls_json"   : ["${20160804_grasshopper_hunt_ipfs.mp4}","${20160804_grasshopper_hunt_yandex.mp4}"]
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }
@@ -199,8 +199,8 @@
 
 ,{
    "miniature_json" : "${locusts_casual_crawling.svg}"
-  ,"url_json"       : "${locusts_casual_crawling_ipfs.mp4}"
-  ,"altUrls_json"   : ["${locusts_casual_crawling_yandex.mkv}"]
+  ,"url_json"       : "${locusts_casual_crawling_peerTubeEmbed}"
+  ,"altUrls_json"   : ["${locusts_casual_crawling_ipfs.mp4}","${locusts_casual_crawling_yandex.mkv}"]
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }
@@ -228,8 +228,8 @@
 
 ,{
    "miniature_json" : "${20160811_grasshopper_hunt_extended.mp4_yandex_thm.svg}"
-  ,"url_json"       : "${20160811_grasshopper_hunt_extended_ipfs.mp4}"
-  ,"altUrls_json"   : ["${20160811_grasshopper_hunt_extended.mp4_yandex}"]
+  ,"url_json"       : "${20160811_grasshopper_hunt_extended_peerTubeEmbed}"
+  ,"altUrls_json"   : ["${20160811_grasshopper_hunt_extended_ipfs.mp4}","${20160811_grasshopper_hunt_extended.mp4_yandex}"]
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }
@@ -243,8 +243,8 @@
 
 ,{
    "miniature_json" : "${20160731_mantis_eats_acrida_thm.svg}"
-  ,"url_json"       : "${20160731_mantis_eats_acrida_preview.mp4}"
-  ,"altUrls_json"   : ["${20160731_mantis_eats_acrida}"]
+  ,"url_json"       : "${20160731_mantis_eats_acrida_preview_peerTubeEmbed}"
+  ,"altUrls_json"   : ["${20160731_mantis_eats_acrida_preview.mp4}","${20160731_mantis_eats_acrida}"]
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }
@@ -258,16 +258,16 @@
 
 ,{
    "miniature_json" : "${20160728_grasshoper_hunt_thm.svg}"
-  ,"url_json"       : "${20160728_grasshoper_hunt_preview.mp4}"
-  ,"altUrls_json"   : ["${20160728_grasshoper_hunt}"]
+  ,"url_json"       : "${20160728_grasshoper_hunt_preview_peerTubeEmbed}"
+  ,"altUrls_json"   : ["${20160728_grasshoper_hunt_preview.mp4}","${20160728_grasshoper_hunt}"]
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }
 
 ,{
    "miniature_json" : "${20160731_grasshoper_hunt_thm.svg}"
-  ,"url_json"       : "${20160731_grasshoper_hunt_preview.mp4}"
-  ,"altUrls_json"   : ["${20160731_grasshoper_hunt}"]
+  ,"url_json"       : "${20160731_grasshoper_hunt_preview_peerTubeEmbed}"
+  ,"altUrls_json"   : ["${20160731_grasshoper_hunt_preview.mp4}","${20160731_grasshoper_hunt}"]
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }
@@ -288,7 +288,8 @@
 
 ,{
    "miniature_json" : "${belolobiy_kuznechik_est_babochku.mkv_thm.svg}"
-  ,"url_json"       : "${belolobiy_kuznechik_est_babochku.mkv}"
+  ,"url_json"       : "${belolobiy_kuznechik_est_babochku_peerTubeEmbed}"
+  ,"altUrls_json"   : ["${belolobiy_kuznechik_est_babochku.mkv}"]
   ,"name_json"      : "insects"
   ,"comment_json"   : ""
  }

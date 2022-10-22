@@ -26,6 +26,8 @@ module Nodes (
 ,node_to_link
 ,node_is_a_svg
 ,node_is_a_mp4
+,node_is_a_peerTubeEmbed
+,node_raw_is_a_peerTubeEmbed
 ,node_is_a_raster
 ,nodes_to_map
 ,link_is_local
@@ -241,8 +243,27 @@ node_is_in_ipfs_preffix l
            ,"gateway.ipfs.io/ipns/"
            ,"http://gateway.ipfs.io/ipns/"
            ,"https://gateway.ipfs.io/ipns/"]
+           
+node_is_a_peerTubeEmbed_preffix :: T.Text -> T.Text
+node_is_a_peerTubeEmbed_preffix l
+  |not $ null $ checkForPreffix = head checkForPreffix
+  |otherwise = ""
+  where
+  checkForPreffix = filter (\p-> T.isPrefixOf p l) ipof
+  ipof =   ["peertube.chatinbit.com/videos/embed/"
+           ,"http://peertube.chatinbit.com/videos/embed/"
+           ,"https://peertube.chatinbit.com/videos/embed/"
+           ]
 
+node_is_a_peerTubeEmbed :: T.Text -> Bool
+node_is_a_peerTubeEmbed l
+  |(not . T.null . node_is_a_peerTubeEmbed_preffix) l = True
+  |otherwise = False
 
+node_raw_is_a_peerTubeEmbed :: T.Text -> Bool
+node_raw_is_a_peerTubeEmbed m
+  |(T.reverse $ T.take 15 $ T.reverse m) == "_peerTubeEmbed}" = True
+  |otherwise = False
 
 page_node_link :: String -> B8.ByteString
 page_node_link n = B8.pack $ "/pages/page" ++ n ++ ".html"
@@ -300,6 +321,7 @@ dipper_page_node_link' u
       && (not $ node_is_in_ipfs u) = replace_extention_only
 
    |node_is_in_ipfs u = T.concat ["/", (sane_part_dipper_node_link_common' u), ".html"]
+   |node_is_a_peerTubeEmbed u = T.concat ["/peerTubeEmbed_", (sane_part_dipper_node_link_common' u), ".html"]
    |otherwise         = strip_path_and_replace_extention
    where
    replace_extention_only = T.pack $ Fp.replaceExtension (T.unpack u) ".html"
@@ -310,14 +332,28 @@ dipper_page_node_link' u
 
 sane_part_dipper_node_link_common :: String -> String
 sane_part_dipper_node_link_common n =
-   (M.fromMaybe n $ stripPrefix (T.unpack $ node_is_in_ipfs_preffix $ T.pack n) n)
-
+  strip_one_preffix (stripPrefix) 
+                    n
+                    (filter (not . (=="")) 
+                      [T.unpack $ node_is_in_ipfs_preffix $ T.pack n
+                      ,T.unpack $ node_is_a_peerTubeEmbed_preffix $ T.pack n])
+                    
 
 sane_part_dipper_node_link_common' :: T.Text -> T.Text
 sane_part_dipper_node_link_common' n =
-    M.fromMaybe n $ T.stripPrefix (node_is_in_ipfs_preffix n) n
+  strip_one_preffix (T.stripPrefix)
+                    n 
+                    (filter (not . T.null) 
+                      [node_is_in_ipfs_preffix n
+                      ,node_is_a_peerTubeEmbed_preffix n])
+                    
 
-
+strip_one_preffix :: (a-> a -> Maybe a) -> a -> [a] -> a
+strip_one_preffix strip n [] = n
+strip_one_preffix strip n (preffix:rest) = tryNext $ strip preffix n
+  where
+  tryNext Nothing = strip_one_preffix strip n rest
+  tryNext (Just something) = something
 
 individual_dipper_node_link_common n =
    "/individual_dippers/"

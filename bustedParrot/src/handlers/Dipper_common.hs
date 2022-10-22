@@ -62,6 +62,7 @@ data DipperType = DtNotDefined
                  |DtRasterImage
                  |DtSvgImage
                  |DtMp4Video
+                 |DtPeerTubeVideoEmbed
                  |DtHtmlCode
                  deriving (Show,Eq,Ord, Generic, NFData)
 

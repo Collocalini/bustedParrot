@@ -46,6 +46,7 @@ splicesFrom_dippers_common t = do
     ,"image_style"       ## image_style_case
     ,"auto_caption"      ## auto_caption_case
     ,"links"             ## fillInAltLinks $ altUrls t
+    ,"dipper_title"      ## I.textSplice $ ""
     ]
    where
    dipper_url_img_case
@@ -66,6 +67,7 @@ splicesFrom_dippers_common t = do
 
    auto_caption_case
       |link_is_local (url t) =  I.textSplice $ ""
+      |(dipperType t) == DtPeerTubeVideoEmbed = I.textSplice $ ""
       |otherwise             =  I.textSplice $ "Нажми для полного размера / Click for full size"
 
 
@@ -73,8 +75,9 @@ splicesFrom_dippers_common t = do
    
    
 dipperDisplayOnPageCase t
-   |link_is_local (url t) =  DopUseURL
-   |otherwise             =  DopUseMiniature
+  |link_is_local (url t)           =  DopUseURL
+  |node_is_a_peerTubeEmbed (url t) =  DopUseURL
+  |otherwise                       =  DopUseMiniature
 
 
 
@@ -97,6 +100,7 @@ splicesFrom_main_page_dippers_entry_case t@(Dipper {miniatureType = dt}) = do
                            ,(DtRasterImage, "main_dipper_entry_img")
                            ,(DtSvgImage, "main_dipper_entry_obj")
                            ,(DtMp4Video, "")
+                           ,(DtPeerTubeVideoEmbed, "")
                            ,(DtHtmlCode, "")
                            ]  dt $ splicesFrom_dippers t
 
@@ -113,6 +117,7 @@ splicesFrom_dippers_entry_case_common (Dipper {miniatureType = dt}) sfd =
                            ,(DtRasterImage, "dipper_entry_img")
                            ,(DtSvgImage, "dipper_entry_obj")
                            ,(DtMp4Video, "")
+                           ,(DtPeerTubeVideoEmbed, "")
                            ,(DtHtmlCode, "")
                            ]  dt sfd
 
@@ -135,6 +140,7 @@ splicesFrom_individual_dipper_case_common t@(Dipper {dipperType = dt
            ,(DtRasterImage, "individual_dipper_entry_img")
            ,(DtSvgImage,    "individual_dipper_entry_obj")
            ,(DtMp4Video,    "individual_dipper_entry_video")
+           ,(DtPeerTubeVideoEmbed, "individual_dipper_entry_peerTubeEmbed")
            ,(DtHtmlCode, "")
            ]
 

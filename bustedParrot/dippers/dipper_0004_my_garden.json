@@ -23,7 +23,8 @@
 
 ,{
    "miniature_json" : "${20150829_007_.mp4_thm.svg}"
-  ,"url_json"       : "${20150829_007_.mp4}"
+  ,"url_json"       : "${20150829_007_peerTubeEmbed}"
+  ,"altUrls_json"   : ["${20150829_007_.mp4}"]
   ,"name_json"      : "my garden"
   ,"comment_json"   : ""
  }

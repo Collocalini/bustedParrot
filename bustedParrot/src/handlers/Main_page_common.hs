@@ -111,6 +111,7 @@ isPostFile _ = False
 
 number2post :: Int -> IO PostT
 number2post s = do
+   putStrLn $ "number2post " ++ show s
    (Right (DocumentFile {dfDoc=(TT.HtmlDocument {TT.docContent=docContent})})) <-
                                                 getDoc $ "posts/post" ++ show s ++ ".html"
    return $! PostT {postT=docContent, number=s, next=Nothing, prev=Nothing}
