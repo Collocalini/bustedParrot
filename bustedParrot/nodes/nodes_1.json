@@ -28,7 +28,12 @@
    "node_json" : ["logo"]
   ,"link_json" : "/static/logo.jpg"
  }
-
+ 
+,{
+   "node_json" : ["siteMirror"]
+  ,"link_json" : "/static/siteMirror.svg"
+ }
+ 
 ,{
    "node_json" : ["dipper_logo"]
   ,"link_json" : "/static/dipper.gif"

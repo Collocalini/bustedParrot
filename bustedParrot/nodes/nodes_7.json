@@ -1,0 +1,15 @@
+[
+
+ {
+   "node_json" : ["neocitiesSiteMirror"]
+  ,"link_json" : "https://hokum.neocities.org/"
+ }
+ 
+
+,{
+   "node_json" : ["replitSiteMirror"]
+  ,"link_json" : "https://neverparrot--hokum.repl.co/"
+ }
+ 
+
+]
