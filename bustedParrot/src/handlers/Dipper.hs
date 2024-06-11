@@ -117,17 +117,8 @@ dippersT_io nm = do
       case j of
         Nothing -> doSecondPassFullUpdate d
         Just cached_d -> do
-          
-          new_cached_d <- doSecondPass 
-            $ foldl 
-              (\notInCache cachedDipper -> 
-                filter (not.(sameDipper cachedDipper)) notInCache
-              )
-              d
-              cached_d
-          
-          let d' = concat [cached_d,new_cached_d]
-          
+          d' <- doSecondPassWithCache cached_d d
+
           B8.writeFile 
             cacheFileName 
             $ encode d'
@@ -143,6 +134,17 @@ dippersT_io nm = do
     d' <- doSecondPass d
     B8.writeFile cacheFileName $ encode d'
     return d'
+  
+  doSecondPassWithCache :: [Dipper] -> [Dipper] -> IO [Dipper]
+  doSecondPassWithCache 
+    cached_d 
+    d = mapM
+          (\x -> M.maybe 
+                  (dipper_secondary_pass x)
+                  (return)
+                  $ find (sameDipper x) cached_d
+          )
+          d
   
   sameDipper
     l@(Dipper 
