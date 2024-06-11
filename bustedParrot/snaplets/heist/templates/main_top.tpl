@@ -17,22 +17,25 @@
             <entry/>
          </dippers>
       </div>
-   </a>
-
-  <a href='${neocitiesSiteMirror}'>
-    <img src='${siteMirror}' 
-         alt="neocities" 
-         class="top_siteMirror" 
-         style="left:17em" 
-         title="зеркало сайта на neocities / site mirror on neocities">
-  </a>
-  
-  <a href='${replitSiteMirror}'>
-    <img src='${siteMirror}' 
-         alt="replit" 
-         class="top_siteMirror" 
-         style="left:21em" 
-         title="зеркало сайта на replit / site mirror on replit">
   </a>
 
 </div>
+
+
+
+<a href='${neocitiesSiteMirror}'>
+    <img src='${siteMirror}' 
+         alt="neocities" 
+         class="top_siteMirror" 
+         style="left:270" 
+         title="зеркало сайта на neocities / site mirror on neocities">
+</a>
+  
+<a href='${replitSiteMirror}'>
+    <img src='${siteMirror}' 
+         alt="replit" 
+         class="top_siteMirror" 
+         style="left:340" 
+         title="зеркало сайта на replit / site mirror on replit">
+</a>
+

@@ -1,5 +1,25 @@
 
 <script>
+
+function confirmGoTo(msg , dst) {
+  if (confirm(msg) == true) {
+    window.location.href = dst;
+  }
+}
+
+function confirmGoToNeocitiesMirror(dstConfirmGoToNeocitiesMirror){
+  msgConfirmGoToNeocitiesMirror = "Перейти на зеркало на Neocities / go to Neocities mirror?";
+  //dstConfirmGoToNeocitiesMirror = ${neocitiesSiteMirror};
+  confirmGoTo(msgConfirmGoToNeocitiesMirror, dstConfirmGoToNeocitiesMirror);
+}
+
+function confirmGoToReplitMirror(dstConfirmGoToReplitMirror){
+  msgConfirmGoToReplitMirror = "Перейти на зеркало на replit / go to replit mirror?";
+  //dstConfirmGoToReplitMirror = ${replitSiteMirror};
+  confirmGoTo(msgConfirmGoToReplitMirror,dstConfirmGoToReplitMirror );
+}
+
+
 function autostart(e){
   //alert("autostart ");
   document.getElementById("display").children[1].children[0].click();
@@ -22,7 +42,7 @@ window.addEventListener('load', autostart, false);
 
 <div id="pagesTop" style="margin:2em;overflow-wrap: break-word;"></div>
 
-<div id="display"></div>
+<div id="display" style="position:relative;left:0em;"></div>
        
 <div id="pagesBottom" style="margin:2em;overflow-wrap: break-word;"></div>
             
