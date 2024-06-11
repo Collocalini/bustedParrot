@@ -49,6 +49,7 @@ import qualified Data.Map as Dm
 import Data.Monoid
 import Control.Applicative
 import qualified Data.ByteString.Lazy as B
+import qualified Data.ByteString.Lazy.Char8 as B8
 
 import Control.Monad.State
 import qualified Text.ParserCombinators.Parsec as P
@@ -96,11 +97,64 @@ instance ToJSON Dipper_json
 
 dippersT_io ::  Node_map -> IO Dippers
 dippersT_io nm = do
-   l<- getDirectoryContents "dippers"
-   d <- mapM (\x->dipper_from_name_suffix x nm)
-             (number_from_dipper_name $ filter isDipperFile $ reverse $ sort l)
-   mapM dipper_secondary_pass $ concat d
-
+  l<- getDirectoryContents "dippers"
+  d <- (return.concat) 
+        =<< (mapM (\x->dipper_from_name_suffix x nm)
+              (number_from_dipper_name 
+                $ filter isDipperFile 
+                         $ reverse 
+                         $ sort l
+              )
+            )
+   
+  cacheExists <- doesFileExist cacheFileName
+  case cacheExists of
+    False -> doSecondPassFullUpdate d
+    True -> do
+      j <- (return . decode) 
+            =<< (B8.readFile cacheFileName)
+      
+      case j of
+        Nothing -> doSecondPassFullUpdate d
+        Just cached_d -> do
+          
+          new_cached_d <- doSecondPass 
+            $ foldl 
+              (\notInCache cachedDipper -> 
+                filter (not.(sameDipper cachedDipper)) notInCache
+              )
+              d
+              cached_d
+          
+          let d' = concat [cached_d,new_cached_d]
+          
+          B8.writeFile 
+            cacheFileName 
+            $ encode d'
+            
+          return d'
+       
+  where
+  cacheFileName = "dippers/meta.cache"
+  
+  doSecondPass d = mapM dipper_secondary_pass d
+  
+  doSecondPassFullUpdate d = do
+    d' <- doSecondPass d
+    B8.writeFile cacheFileName $ encode d'
+    return d'
+  
+  sameDipper
+    l@(Dipper 
+        {url       = urlL
+        ,altUrls   = altUrlsL
+        }
+      )
+    r@(Dipper
+        {url       = urlR
+        ,altUrls   = altUrlsR
+        }
+      ) = (urlL == urlR) && (altUrlsL == altUrlsR)
 
 
 
