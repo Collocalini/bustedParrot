@@ -31,7 +31,7 @@
          title="зеркало сайта на neocities / site mirror on neocities">
 </a>
   
-<a href='${replitSiteMirror}'>
+<a href='${replitSiteMirror}' style="display: none;">
     <img src='${siteMirror}' 
          alt="replit" 
          class="top_siteMirror" 

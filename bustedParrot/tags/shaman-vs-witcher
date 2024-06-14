@@ -2,7 +2,7 @@
 
  {
    "miniature_json" : "/static/thumbnails/dla_otmeli_otsil.jpg"
-  ,"url_json"       : "/static/dla_otmeli_otsil.jpg"
+  ,"url_json"       : "${dla_otmeli_otsil.jpg}"
   ,"name_json"      : ""
   ,"comment_json"   : ""
  }
