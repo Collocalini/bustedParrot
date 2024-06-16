@@ -6,7 +6,7 @@
 </video>
 
 <links>
-  <a href="${link}" > Ссылка / Link </a>
+  <a href="${link}" style="margin:0.5em;"> Ссылка / Link </a>
 </links>
 
 

@@ -70,9 +70,11 @@ import qualified Data.Map as Dm
 import GHC.Generics
 import qualified Data.Maybe as M
 import qualified Data.Text as T
+import Data.Text.Encoding
 import Data.List
 import System.Directory
 import Control.Applicative
+import           Data.ByteString (ByteString)
 import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Char8 as B8
 import qualified Data.ByteString.Builder as Bd
@@ -379,16 +381,18 @@ individual_dipper_node_link'' ('/':n) = individual_dipper_node_link_common n
 individual_dipper_node_link'' n =       individual_dipper_node_link_common n
 
 
-individual_dipper_tagged_page_link :: Dipper -> String -> B8.ByteString
-individual_dipper_tagged_page_link d tags = B8.pack $ "/tagged/" ++ tags ++ (T.unpack $ cmp d)
-     where
-     cmp d = (\(Dipper {page_url  = p}) -> p) d
+individual_dipper_tagged_page_link :: Dipper -> T.Text -> ByteString
+individual_dipper_tagged_page_link d tags = encodeUtf8
+  $ T.concat ["/tagged/" , tags , cmp d]
+  where
+  cmp d = (\(Dipper {page_url  = p}) -> p) d
 
 
-individual_dipper_tagged_page_link' :: Dipper -> String -> T.Text
-individual_dipper_tagged_page_link' d tags = T.pack $ "/tagged/" ++ tags ++ (T.unpack $ cmp d)
-     where
-     cmp d = (\(Dipper {page_url  = p}) -> p) d
+individual_dipper_tagged_page_link' :: Dipper -> T.Text -> T.Text
+individual_dipper_tagged_page_link' d tags = T.concat 
+  ["/tagged/" , tags , cmp d]
+  where
+  cmp d = (\(Dipper {page_url  = p}) -> p) d
 
 
 individual_dipper_tagged_node_link :: Dipper -> B8.ByteString
@@ -416,20 +420,26 @@ individual_dipper_tagged_request_link  =
 
 
 
-tagged_node_link_common n p =
-   "/tagged/"
-   ++ (sane_part_dipper_node_link_common n)
-   ++ (show p) ++ ".html"
+tagged_node_link_common n p = T.concat
+  ["/tagged/"
+  ,(sane_part_dipper_node_link_common' n)
+  ,(T.pack $ show p) 
+  ,".html"
+  ]
 
 
-tagged_node_link :: String -> Int -> B8.ByteString
-tagged_node_link n p = B8.pack $ tagged_node_link_common n p
+tagged_node_link :: T.Text -> Int -> B8.ByteString
+tagged_node_link n p = B8.pack $ T.unpack $ tagged_node_link_common n p
 
-tagged_node_link' :: String -> Int -> T.Text
-tagged_node_link' n p = T.pack $ tagged_node_link_common n p
 
-tagged_node_link'' :: String -> Int -> String
-tagged_node_link'' n p =         tagged_node_link_common n p
+
+tagged_node_link' :: T.Text -> Int -> T.Text
+tagged_node_link' n p = tagged_node_link_common n p
+
+
+
+tagged_node_link'' :: T.Text -> Int -> String
+tagged_node_link'' n p = T.unpack $ tagged_node_link_common n p
 
 
 

@@ -37,7 +37,7 @@ executable bustedParrot
                  , containers -any
                  , parsec -any
                  , deepseq -any
-     
+              --   , dataenc -any
     
          
 

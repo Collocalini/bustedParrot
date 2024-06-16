@@ -14,9 +14,11 @@ module Site
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Text as T
+import Data.Text.Encoding
 import qualified Data.Map as DMap
 import Data.List
 import Data.Maybe
+import Data.Either
 --import Control.DeepSeq
 import qualified Data.Char as C
 import           Snap.Core
@@ -25,6 +27,7 @@ import           Snap.Snaplet
 import           Snap.Snaplet.Heist.Interpreted
 import           Snap.Snaplet.Session.Backends.CookieSession
 import           Snap.Util.FileServe
+
 ------------------------------------------------------------------------------
 import           Application
 import           Heist
@@ -205,8 +208,16 @@ generate_dippers_pageN_responseM = do
    links p = map dippers_pageN_node_link'' (total_responces p)
    routes p = map B.pack $ links p
    responce i t p dt
-      |total_pages' p >1= D.dippersT_HandlerM (give_page i p) (D.give_all_used_tags dt) i $ links p
-      |otherwise     = D.dippersT_HandlerM (give_page i p) (D.give_all_used_tags dt) i []
+      |total_pages' p >1 = D.dippersT_HandlerM 
+        (give_page i p) 
+        (D.give_all_used_tags dt) 
+        i 
+        $ links p
+      |otherwise = D.dippersT_HandlerM 
+        (give_page i p) 
+        (D.give_all_used_tags dt) 
+        i 
+        []
    --responces :: D.Dippers -> [(D.Dipper,[String])] -> State Routes [ Handler App App ()]
    responces p dt = mapM (\x-> responce x total_pages' p dt) $ total_responces p
    total_responces p = [1.. total_pages' p]
@@ -248,16 +259,16 @@ generate_dippers_individual_page_responseM = do
 
 generate_dippers_tagged_individual_responseM :: State Routes [(ByteString, Handler App App ())]
 generate_dippers_tagged_individual_responseM = do
-   s@(Routes {dippers_references=dippers_references, dippers_tags=dippers_tags}) <- get
-   --return [(route , handler dippers_tags dippers_references s)]
-   return $ zip (routes dippers_references) (map (\dr-> handler' dippers_tags dr s) dippers_references)
-   --return []
-   where
+  s@(Routes {dippers_references=dippers_references, dippers_tags=dippers_tags}) <- get
+  --return [(route , handler dippers_tags dippers_references s)]
+  return $ zip (routes dippers_references) (map (\dr-> handler' dippers_tags dr s) dippers_references)
+  --return []
+  where
 
 
-   route = individual_dipper_tagged_request_link
+  route = individual_dipper_tagged_request_link
 
-   routes dr = map individual_dipper_tagged_node_link $ fst $ unzip dr
+  routes dr = map individual_dipper_tagged_node_link $ fst $ unzip dr
 
    {-
    handler :: [(D.Dipper,[String])] -> [(D.Dipper,[MPC.PostT])] -> Routes -> Handler App App ()
@@ -274,25 +285,29 @@ generate_dippers_tagged_individual_responseM = do
        s
        -}
 
-   handler' :: [(D.Dipper,[String])] -> (D.Dipper,[MPC.PostT]) -> Routes -> Handler App App ()
-   handler' dt dr s = do
-     r <- getParams
-     evalState
-       (
-       do let sel = (dippers_from_request_string'' r dt)
-          case (find (\d->(fst dr)==d) sel) of
-             Nothing -> return $ return ()
-             Just a  -> D.dipperT_individual_page_HandlerM_tagged dr
+  handler'  :: [(D.Dipper,[Either String ByteString])] 
+            -> (D.Dipper,[MPC.PostT]) 
+            -> Routes 
+            -> Handler App App ()
+  handler' dt dr s = do
+    r <- getParams
+    evalState
+      (
+      do 
+        let sel = (dippers_from_request_string'' r dt)
+        case (find (\d->(fst dr)==d) sel) of
+            Nothing -> return $ return ()
+            Just a  -> D.dipperT_individual_page_HandlerM_tagged dr
                                           sel
                                           (request_tags_raw r)
-       )
-       s
+      )
+      s
 
 
-   dippers_from_request_string'' tags p = D.dippers_from_request_string
-           (
-           request_tags_raw tags
-           ) p
+  dippers_from_request_string'' tags p = D.dippers_from_request_string
+          (
+          request_tags_raw tags
+          ) p
 
 
 
@@ -300,81 +315,121 @@ generate_dippers_tagged_individual_responseM = do
 
 generate_dippers_tags_responseM :: State Routes [(ByteString, Handler App App ())]
 generate_dippers_tags_responseM = do
-   s@(Routes {dippers_tags=dippers_tags}) <- get
-   return [(route , handler dippers_tags s)]
-   where
+  s@(Routes {dippers_tags=dippers_tags}) <- get
+  return [(route , handler dippers_tags s)]
+  where
 
-   route = tagged_tag_link
+  route = tagged_tag_link
 
-   handler :: [(D.Dipper,[String])] -> Routes ->  Handler App App ()
-   handler p s = do
-     tags <- getParams
-     evalState
-       (
-       D.dippersT_tagged_HandlerM (dippers_from_request_string' tags p)
+  handler :: [(D.Dipper,[Either String ByteString])] 
+          -> Routes 
+          -> Handler App App ()
+  handler p s = do
+    tags <- getParams
+    {-liftIO 
+      $ putStrLn 
+      $ show 
+      $ map
+      (map (B.length)
+      ) 
+      $ DMap.elems tags
+      
+    liftIO $ print tags-}
+
+--    [[20]]
+--    [["\1088\1080\1089\1091\1085\1082\1080\&1.html"]]
+-- fromList [("tag",["\209\128\208\184\209\129\209\131\208\189\208\186\208\184\&1.html"])]
+    
+    evalState
+      (
+      D.dippersT_tagged_HandlerM  (dippers_from_request_string' tags p)
                                   (D.give_all_used_tags p)
                                   (request_with_no_page_number tags)
                                   (fromMaybe 1 $ request_page_number tags)
                                   (links tags (dippers_from_request_string'' tags p))
-       )
-       s
+      )
+      s
 
 
 
 
-   links tags d
+  links tags d
       |(total_pages d) > 1 = map (tagged_node_link''
                                        (request_with_no_page_number tags)
                                   ) [1..total_pages d]
       |otherwise = []
 
-   dippers_on_page_n :: Int -> D.Dippers -> D.Dippers
-   dippers_on_page_n i d
+  dippers_on_page_n :: Int -> D.Dippers -> D.Dippers
+  dippers_on_page_n i d
       |i<=1 = take max_items_per_page d
       |(fromIntegral i)<=total_pages d = give_page i d
       |otherwise = take max_items_per_page $ reverse d
       where
 
 
-   dippers_from_request_string' tags p =
-           dippers_on_page_n (fromMaybe 1 $ request_page_number tags)
-                             (dippers_from_request_string'' tags p)
+  dippers_from_request_string' tags p =
+          dippers_on_page_n (fromMaybe 1 $ request_page_number tags)
+                            (dippers_from_request_string'' tags p)
 
 
 
 
 
-   dippers_from_request_string'' tags p = D.dippers_from_request_string
-           (
-           request_with_no_page_number tags
-           ) p
+  dippers_from_request_string'' tags p = D.dippers_from_request_string
+          (
+          request_with_no_page_number tags
+          ) p
 
 
 
 
 
 
-request tags = reverse $ drop 5 $ reverse $ B.unpack $ B.concat $ DMap.findWithDefault [] tagged_tag tags
+request tags = T.reverse 
+  $ T.drop 5 
+  $ T.reverse 
+  $ T.concat 
+  $ map (decodeUtf8) 
+  $ DMap.findWithDefault [] tagged_tag tags
 
-request_tags_raw tags = B.unpack $ B.concat $ DMap.findWithDefault [] tagged_tag tags
+--request_tags_raw tags = B.unpack $ B.concat $ DMap.findWithDefault [] tagged_tag tags
+request_tags_raw tags = T.concat 
+  $ map (decodeUtf8) 
+  $ DMap.findWithDefault 
+    [] 
+    tagged_tag 
+    tags
 
 request_dipper r = B.concat $ DMap.findWithDefault [] tagged_dipper r
 
 
-request_page_number tags = try_read $ reverse $ takeWhile C.isDigit $ reverse $ request tags
+request_page_number tags = try_read $ T.reverse $ T.takeWhile C.isDigit $ T.reverse $ request tags
   where
-  try_read :: String -> Maybe Int
-  try_read [] = Nothing
-  try_read x  = Just $ sane $ read x
+  try_read :: T.Text -> Maybe Int
+  try_read x
+    |T.null x = Nothing
+    |otherwise = Just $ sane $ read $ T.unpack x
 
   sane i
      |i<=1 = 1
      |otherwise = i
 
 
-request_with_no_page_number tags = reverse $ dropWhile C.isDigit $ reverse $ request tags
+request_with_no_page_number tags = T.reverse $ T.dropWhile C.isDigit $ T.reverse $ request tags
 
 
+{-
+urlDecode :: String -> Maybe String
+urlDecode [] = Just []
+urlDecode ('%':xs) =
+  case xs of
+    (a:b:xss) ->
+      urlDecode xss
+      >>= return . ((C.chr . read $ "0x" ++ [a,b]) :)
+    _ -> Nothing
+urlDecode ('+':xs) = urlDecode xs >>= return . (' ' :)
+urlDecode (x:xs) = urlDecode xs >>= return . (x :)
+-}
 
 total_items d = length $ items d
 total_items_archive d = length $ items_archive d

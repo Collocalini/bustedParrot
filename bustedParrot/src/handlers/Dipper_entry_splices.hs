@@ -108,7 +108,7 @@ splicesFrom_dippers_entry_case :: Monad n =>  Dipper -> Splices (I.Splice n)
 splicesFrom_dippers_entry_case t = do
    splicesFrom_dippers_entry_case_common t $ splicesFrom_dippers t
 
-splicesFrom_dippers_entry_case_tags :: Monad n => String -> Dipper -> Splices (I.Splice n)
+splicesFrom_dippers_entry_case_tags :: Monad n => T.Text -> Dipper -> Splices (I.Splice n)
 splicesFrom_dippers_entry_case_tags s t = do
    splicesFrom_dippers_entry_case_common t $ splicesFrom_dippers_tags s t
 
@@ -125,7 +125,7 @@ splicesFrom_individual_dipper_case :: Monad n => Dipper -> Splices (I.Splice n)
 splicesFrom_individual_dipper_case t =
    splicesFrom_individual_dipper_case_common t $ splicesFrom_dippers t
 
-splicesFrom_individual_dipper_case_tags :: Monad n => String -> Dipper -> Splices (I.Splice n)
+splicesFrom_individual_dipper_case_tags :: Monad n => T.Text -> Dipper -> Splices (I.Splice n)
 splicesFrom_individual_dipper_case_tags s t =
    splicesFrom_individual_dipper_case_common t $ splicesFrom_dippers_tags s t
 
@@ -174,7 +174,7 @@ dipper_entry_case_type m dt t = do
 
 
 
-splicesFrom_dippers_tags :: Monad n => String -> Dipper -> Splices (I.Splice n)
+splicesFrom_dippers_tags :: Monad n => T.Text -> Dipper -> Splices (I.Splice n)
 splicesFrom_dippers_tags tag t = do
    mconcat $ [
     "page_url"          ## I.textSplice $ individual_dipper_tagged_page_link' t tag

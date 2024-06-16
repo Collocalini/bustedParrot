@@ -36,18 +36,22 @@ import Data.Aeson
 import GHC.Generics
 import Control.DeepSeq
 import qualified Data.Maybe as M
+import Data.Either
 import qualified Data.Text as T
+import Data.Text.Encoding
 --import qualified Text.XmlHtml as TT
 import           Snap.Snaplet (Handler)
 import           Snap.Snaplet.Heist
 import           Heist
 import qualified Heist.Interpreted as I
 import System.Directory
+import qualified System.FilePath.Posix as Fp
 
 import Data.List
 import qualified Data.Map as Dm
 import Data.Monoid
 import Control.Applicative
+import           Data.ByteString (ByteString)
 import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Lazy.Char8 as B8
 
@@ -162,12 +166,21 @@ dippersT_io nm = do
 
 
 
-dippersT_for_tag_io ::  Node_map -> IO [(String, Dippers)]
+dippersT_for_tag_io :: Node_map 
+                    -> IO [(Either String ByteString, Dippers)]
 dippersT_for_tag_io nm = do
-   l<- getDirectoryContents "tags"
-   let only_files = filter (\s-> not $ ((head s) == '.') || ((take 2 s) == ".." )) l
-   d <- mapM (\s-> tag_from_name  ("tags/" ++ s) nm) $ only_files
-   return $ zip only_files d
+  l<- getDirectoryContents "tags"
+  let only_files = filter (\s-> not $ ((head s) == '.') || ((take 2 s) == ".." )) l
+  d <- mapM (\s-> tag_from_name  ("tags/" ++ s) nm) $ only_files
+   
+  return 
+    $ map
+      (\(filename,t)-> either 
+        (\dippers-> (Left filename,dippers))
+        (\(utf8filename,dippers)-> (Right utf8filename,dippers))
+        t
+      )
+    $ zip only_files d
 
 
 
@@ -209,15 +222,48 @@ dipper_from_name s nm = do
 
 
 
-tag_from_name :: String -> Node_map -> IO Dippers
+tag_from_name :: String 
+              -> Node_map 
+              -> IO (Either Dippers (ByteString, Dippers))
 tag_from_name s nm = do
-   d <- eitherDecode <$> B.readFile s :: IO (Either String Dippers_json)
-   case d of
-      Left err -> do putStrLn err
-                     return []
-      Right dl -> return $ M.catMaybes $ map (\x->give_tag x nm) dl
-
-
+  f <- B.readFile s
+  --d <- eitherDecode f :: IO (Either String Dippers_json)
+  case ((eitherDecode f):: Either String Dippers_json) of
+    Right dl -> return $ Left $ M.catMaybes $ map (\x->give_tag x nm) dl
+    Left _ -> do 
+      d <- tagFromReference $ M.listToMaybe $ lines $ B8.unpack f 
+      case d of
+        Right dl -> do 
+          
+          return 
+            $ Right 
+            $ (encodeUtf8 $ T.pack $ Fp.takeFileName s
+              ,M.catMaybes $ map (\x->give_tag x nm) dl
+              )
+        
+        Left err -> do  putStrLn err
+                        return 
+                          $ Right 
+                          $ (encodeUtf8 $ T.pack $ Fp.takeFileName s
+                            ,[]
+                            )
+    
+  where
+  tagFromReference :: Maybe String -> IO (Either String Dippers_json)
+  tagFromReference (Just ref) = do
+    let s' = Fp.joinPath 
+              [Fp.takeDirectory s
+              ,ref
+              ]
+    putStrLn $ unwords [s, s']
+    (return.eitherDecode) =<< (B.readFile s')
+    
+  tagFromReference _ = return 
+                        $ Left 
+                        $ unwords 
+                        ["tag_from_name: tagFromReference: bad reference s="
+                        ,s
+                        ]
 
 
 
@@ -496,8 +542,9 @@ dipper_has_tag (Dipper {miniature = mt  -- tag
    where
    miniature_match
      -- |mt == Nothing = True
-      |m  == mt      = True
-      |otherwise     = False
+      |m  == mt  = True
+      |isAnyMiniature mt = True
+      |otherwise = False
 
    name_match
       |nt == Nothing = False
@@ -513,11 +560,15 @@ dipper_has_tag (Dipper {miniature = mt  -- tag
     --  |ct == Nothing = True
       |c  == ct      = True
       |otherwise     = False
+   
+   isAnyMiniature (Just "*") = True
+   isAnyMiniature _ = False
 
 
 
-
-dipper_is_found_in_tags :: [(String, Dippers)] -> Dipper -> [String]
+dipper_is_found_in_tags :: [(Either String ByteString, Dippers)]
+                        -> Dipper 
+                        -> [Either String ByteString]
 dipper_is_found_in_tags tags dipper  =
    (\(l,_) -> l) $ unzip $ filter (\(_,t) ->  any dipper_has_tag' t) tags
    where
@@ -527,7 +578,7 @@ dipper_is_found_in_tags tags dipper  =
 
 
 
-give_dippers_tags :: Node_map -> IO [(Dipper,[String])]
+give_dippers_tags :: Node_map -> IO [(Dipper,[Either String ByteString])]
 give_dippers_tags nm = do
    d   <- dippersT_io nm
    ps  <- dippersT_for_tag_io nm
@@ -535,27 +586,37 @@ give_dippers_tags nm = do
 
 
 
-give_all_used_tags ::[(Dipper,[String])] -> [String]
+give_all_used_tags :: [(Dipper,[Either String ByteString])] 
+                   -> [Either String ByteString]
 give_all_used_tags dippers_with_tags = foldl' union [] $ snd $ unzip dippers_with_tags
 
 
 
-give_dippers_of_a_tag :: String -> [(Dipper,[String])] -> Dippers
+give_dippers_of_a_tag :: T.Text -> [(Dipper,[Either String ByteString])] -> Dippers
 give_dippers_of_a_tag tag dippers_with_tags =
-   (\(l,_) -> l) $ unzip $ filter (\(_,t)-> elem tag t) dippers_with_tags
+  (\(l,_) -> l) $ unzip $ filter (\(_,t)-> elem tag t) 
+    $ map dipperWithTags_To_DipperWithTextTags 
+      dippers_with_tags
 
 
+dipperWithTags_To_DipperWithTextTags :: (Dipper,[Either String ByteString])
+                                     -> (Dipper,[T.Text])
+dipperWithTags_To_DipperWithTextTags (d,l) = 
+  (d
+  ,rights $ map (either (Right . T.pack) (decodeUtf8')) l
+  )
 
-dippers_from_request_string :: String -> [(Dipper,[String])] -> Dippers
+
+dippers_from_request_string :: T.Text -> [(Dipper,[Either String ByteString])] -> Dippers
 dippers_from_request_string r dt =
    dippers_from_d_group $
      map (dippers_from_c_group' . operator_and_tag . tags_from_c_group) $
      tag_c_groups_from_request_string r
    where
-   operator_and_tag :: [String] -> [(Tag_operator, String)]
+   operator_and_tag :: [T.Text] -> [(Tag_operator, T.Text)]
    operator_and_tag t = zip (map operator_from_tag_name t) t
 
-   dippers_from_c_group' :: [(Tag_operator, String)] -> Dippers
+   dippers_from_c_group' :: [(Tag_operator, T.Text)] -> Dippers
    dippers_from_c_group' ot = dippers_from_c_group ot dt
 
 
@@ -567,25 +628,27 @@ dippers_from_d_group c = foldl' union [] c
 
 
 
-dippers_from_c_group :: [(Tag_operator, String)] -> [(Dipper,[String])] -> Dippers
+dippers_from_c_group :: [(Tag_operator, T.Text)] 
+                     -> [(Dipper,[Either String ByteString])] 
+                     -> Dippers
 dippers_from_c_group c dt = foldl' op_and
                                    (give_dippers_of_a_tag (snd $ head c) dt)
                                    c
    where
-   op_and :: Dippers -> (Tag_operator, String) -> Dippers
+   op_and :: Dippers -> (Tag_operator, T.Text) -> Dippers
    op_and p (Not, t) = (\\)      p $ give_dippers_of_a_tag t dt
    op_and p (_  , t) = intersect p $ give_dippers_of_a_tag t dt
 
 
 
-operator_from_tag_name :: String -> Tag_operator
-operator_from_tag_name s = s2op $ head $ words $ map dash2space s
+operator_from_tag_name :: T.Text -> Tag_operator
+operator_from_tag_name s = s2op $ head $ T.words $ T.map dash2space s
    where
    dash2space :: Char -> Char
    dash2space '-' = ' '
    dash2space  x  =  x
 
-   s2op :: String -> Tag_operator
+   s2op :: T.Text -> Tag_operator
    s2op "not" = Not
    s2op "and" = And
    s2op "or"  = Or
@@ -594,8 +657,8 @@ operator_from_tag_name s = s2op $ head $ words $ map dash2space s
 
 
 
-tags_from_c_group :: String -> [String]
-tags_from_c_group s = words $ map dot2space s
+tags_from_c_group :: T.Text -> [T.Text]
+tags_from_c_group s = T.words $ T.map dot2space s
    where
    dot2space :: Char -> Char
    dot2space '.' = ' '
@@ -605,8 +668,8 @@ tags_from_c_group s = words $ map dot2space s
 
 
 --conjunctive groups from disjunctive normal form
-tag_c_groups_from_request_string :: String -> [String]
-tag_c_groups_from_request_string s = words $ map understroke2space s
+tag_c_groups_from_request_string :: T.Text -> [T.Text]
+tag_c_groups_from_request_string s = T.words $ T.map understroke2space s
    where
    understroke2space :: Char -> Char
    understroke2space '_' = ' '
@@ -637,20 +700,29 @@ dippers_neighbors d ds = step1 dippers_index
 
 --dippersT_HandlerM_common :: Dippers -> [String] -> Int -> [String] -> Node_map -> a
 dippersT_HandlerM_common tags page_number links nm = do
-   mconcat $ [
-       ("tags" ##
-       (I.mapSplices $ I.runChildrenWith . splices_from_tag) tags
-       )
+  mconcat 
+    [
+    ("tags" ##
+    (I.mapSplices $ I.runChildrenWith . splices_from_tag) 
+      $ rights
+      $ map 
+      (either (Right . T.pack) (decodeUtf8'))
+      tags
+    )
 
-      ,("pages" ##
+    ,("pages" ##
        (I.mapSplices $ I.runChildrenWith . splices_from_page_number page_number)
           $ zip [1..length links] (links)
        )
-      ,insertLinks $ Just nm
-       ]
+    ,insertLinks $ Just nm
+    ]
 
 
-dippersT_HandlerM :: Dippers -> [String] -> Int -> [String] -> State S.Routes (Handler App App ())
+dippersT_HandlerM :: Dippers 
+                  -> [Either String ByteString] 
+                  -> Int 
+                  -> [String] 
+                  -> State S.Routes (Handler App App ())
 dippersT_HandlerM p tags page_number links = do
    (S.Routes {S.node_map=nm}) <- get
    return $ renderWithSplices "dipper_base"
@@ -664,9 +736,12 @@ dippersT_HandlerM p tags page_number links = do
 
 
 
-dippersT_tagged_HandlerM :: Dippers ->
-                           [String] ->
-                             String -> Int -> [String] -> State S.Routes (Handler App App ())
+dippersT_tagged_HandlerM  :: Dippers 
+                          -> [Either String ByteString] 
+                          -> T.Text
+                          -> Int 
+                          -> [String] 
+                          -> State S.Routes (Handler App App ())
 dippersT_tagged_HandlerM p tags tag page_number links = do
    (S.Routes {S.node_map=nm}) <- get
    return $ renderWithSplices "dipper_base"
@@ -687,12 +762,12 @@ dippersT_tagged_HandlerM p tags tag page_number links = do
 
 
 
-splices_from_tag :: Monad n => String -> Splices (I.Splice n)
+splices_from_tag :: Monad n => T.Text -> Splices (I.Splice n)
 splices_from_tag tag = do
    mconcat $ [
      "tag_url"        ## I.textSplice $ tagged_node_link' tag 1
-    ,"tag_style"        ## I.textSplice $ T.pack $ "tag"
-    ,"tag"            ## I.textSplice $ T.pack $ tag
+    ,"tag_style"      ## I.textSplice $ T.pack $ "tag"
+    ,"tag"            ## I.textSplice tag
     ]
 
 
@@ -727,7 +802,10 @@ dipperT_individual_page_navigation (p,n) = do
 
 
 
-dipperT_individual_page_navigation_tagged :: Monad n => (Maybe Dipper, Maybe Dipper) -> String -> Splices (I.Splice n)
+dipperT_individual_page_navigation_tagged :: Monad n 
+                                          => (Maybe Dipper, Maybe Dipper) 
+                                          -> T.Text
+                                          -> Splices (I.Splice n)
 dipperT_individual_page_navigation_tagged (p,n) tags = do
    mconcat $ [
      "nav_prev"   ## dipperT_individual_page_nav_no_nav p $ dipperT_individual_page_nav_prev_tagged p tags
@@ -737,7 +815,9 @@ dipperT_individual_page_navigation_tagged (p,n) tags = do
 
 
 
-dipperT_individual_page_nav_common :: Monad n => Maybe Dipper -> Splices (I.Splice n)
+dipperT_individual_page_nav_common :: Monad n 
+                                   => Maybe Dipper 
+                                   -> Splices (I.Splice n)
 dipperT_individual_page_nav_common d = do
    mconcat $ [
      "url"        ## I.textSplice $ nav_url d
@@ -753,7 +833,10 @@ dipperT_individual_page_nav_common d = do
 
 
 
-dipperT_individual_page_nav_common_tagged :: Monad n => Maybe Dipper -> String -> Splices (I.Splice n)
+dipperT_individual_page_nav_common_tagged :: Monad n 
+                                          => Maybe Dipper 
+                                          -> T.Text
+                                          -> Splices (I.Splice n)
 dipperT_individual_page_nav_common_tagged d tag = do
    mconcat $ [
      "url"        ## I.textSplice $ nav_url d
@@ -786,7 +869,10 @@ dipperT_individual_page_nav_next d = do
 
 
 
-dipperT_individual_page_nav_prev_tagged :: Monad n => Maybe Dipper -> String -> Splices (I.Splice n)
+dipperT_individual_page_nav_prev_tagged :: Monad n 
+                                        => Maybe Dipper 
+                                        -> T.Text
+                                        -> Splices (I.Splice n)
 dipperT_individual_page_nav_prev_tagged d tags = do
    mconcat $ [
      dipperT_individual_page_nav_common_tagged d tags
@@ -794,7 +880,10 @@ dipperT_individual_page_nav_prev_tagged d tags = do
     ]
 
 
-dipperT_individual_page_nav_next_tagged :: Monad n => Maybe Dipper -> String -> Splices (I.Splice n)
+dipperT_individual_page_nav_next_tagged :: Monad n 
+                                        => Maybe Dipper 
+                                        -> T.Text 
+                                        -> Splices (I.Splice n)
 dipperT_individual_page_nav_next_tagged d tags = do
    mconcat $ [
      dipperT_individual_page_nav_common_tagged d tags
@@ -843,7 +932,10 @@ dipperT_individual_page_HandlerM (d,sl) selection = do
    cmp d = T.unpack $ (\(Dipper {page_url  = p}) -> p) d
     
 
-dipperT_individual_page_HandlerM_tagged :: (Dipper,[PostT]) -> Dippers -> String -> State S.Routes (Handler App App ())
+dipperT_individual_page_HandlerM_tagged :: (Dipper,[PostT]) 
+                                        -> Dippers 
+                                        -> T.Text
+                                        -> State S.Routes (Handler App App ())
 dipperT_individual_page_HandlerM_tagged (d,sl) selection tags = do
    (S.Routes {S.node_map=nm}) <- get
    return $ renderWithSplices "dipper_individual_page_base"
